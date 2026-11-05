@@ -49,16 +49,23 @@
 </div>
 
 <script>
-    let money = 0;
-    let clickPower = 10;
-    let upgradeCost = 100;
+    // Загружаем сохранение при старте
+    let money = parseInt(localStorage.getItem('phoneMoney')) || 0;
+    let clickPower = parseInt(localStorage.getItem('phoneClickPower')) || 10;
+    let upgradeCost = parseInt(localStorage.getItem('phoneUpgradeCost')) || 100;
+
+    // Обновляем интерфейс при загрузке
+    document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+    updateUI();
 
     function clickPhone() {
         money += clickPower;
         updateUI();
+        saveGame(); // Сохраняем после каждого клика
+        
         let txt = document.getElementById("clickText");
         txt.textContent = "+" + clickPower + " ₽ 💰";
-        setTimeout(() => { txt.textContent = ""; }, 800); // Текст исчезает через 0.8 сек
+        setTimeout(() => { txt.textContent = ""; }, 800);
     }
 
     function buyUpgrade() {
@@ -68,6 +75,7 @@
             upgradeCost = Math.floor(upgradeCost * 1.5);
             document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
             updateUI();
+            saveGame(); // Сохраняем после покупки
         }
     }
 
@@ -80,6 +88,12 @@
         }
     }
 
+    function saveGame() {
+        localStorage.setItem('phoneMoney', money);
+        localStorage.setItem('phoneClickPower', clickPower);
+        localStorage.setItem('phoneUpgradeCost', upgradeCost);
+    }
+
     function resetGame() {
         if(confirm("Точно сбросить весь прогресс?")) {
             money = 0;
@@ -88,6 +102,7 @@
             document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
             updateUI();
             document.getElementById("clickText").textContent = "";
+            localStorage.clear(); // Очищаем сохранение
         }
     }
 </script>
