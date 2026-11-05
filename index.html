@@ -3,45 +3,92 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ремонт телефонов</title>
+<title>Phone Master Studio</title>
 <style>
     * { box-sizing: border-box; }
-    body { margin: 0; background: white; font-family: Arial, sans-serif; text-align: center; color: #222; }
-    h1 { margin-top: 30px; }
-    #money { font-size: 28px; font-weight: bold; color: #16a34a; margin: 25px; }
-    .phone { width: 190px; height: 350px; background: #222; border: 8px solid #111; border-radius: 30px; margin: 40px auto; cursor: pointer; position: relative; transition: transform 0.1s; box-shadow: 0 8px 20px #0003; }
-    .phone:active { transform: scale(0.94); }
-    .screen { background: linear-gradient(145deg, #60a5fa, #2563eb); width: 100%; height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 35px; }
+    body { margin: 0; background: #f0f4f8; font-family: Arial, sans-serif; text-align: center; color: #222; }
+    h1 { margin-top: 20px; font-size: 24px; color: #1e3a8a; }
+    #money { font-size: 32px; font-weight: bold; color: #16a34a; margin: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .phone-container { position: relative; display: inline-block; }
+    .phone { width: 170px; height: 320px; background: #222; border: 8px solid #111; border-radius: 30px; margin: 20px auto; cursor: pointer; position: relative; transition: transform 0.1s; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .phone:active { transform: scale(0.92); }
+    .screen { background: linear-gradient(145deg, #60a5fa, #2563eb); width: 100%; height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; }
     .camera { position: absolute; width: 45px; height: 6px; background: #111; border-radius: 10px; top: 5px; left: 50%; transform: translateX(-50%); z-index: 2; }
-    .hint { color: #777; font-size: 17px; }
-    button { background: #2563eb; color: white; border: none; padding: 15px 25px; border-radius: 12px; font-size: 17px; cursor: pointer; }
-    button:hover { background: #1d4ed8; }
-    #clickText { height: 25px; color: #16a34a; font-weight: bold; }
+    .hint { color: #64748b; font-size: 16px; margin-bottom: 20px; }
+    
+    .buttons { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 20px; }
+    button { width: 100%; max-width: 300px; border: none; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:active { transform: scale(0.98); }
+    
+    #upgradeBtn { background: #eab308; color: #000; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.4); display: none; }
+    #upgradeBtn:active { background: #ca8a04; }
+    
+    .reset-btn { background: #ef4444; color: white; margin-top: 20px; font-size: 14px; padding: 10px; width: auto; }
+    
+    #clickText { height: 25px; color: #16a34a; font-weight: bold; font-size: 20px; margin-top: 10px; }
 </style>
 </head>
 <body>
 
-<h1>🔧 Ремонт телефонов</h1>
+<h1>🔧 Phone Master Studio</h1>
 <div id="money">Деньги: 0 ₽</div>
-<div class="phone" onclick="clickPhone()">
-    <div class="camera"></div>
-    <div class="screen">📱</div>
+
+<div class="phone-container">
+    <div class="phone" onclick="clickPhone()">
+        <div class="camera"></div>
+        <div class="screen">📱</div>
+    </div>
 </div>
-<p class="hint">Нажимай на телефон, чтобы ремонтировать его!</p>
-<p id="clickText"></p>
-<button onclick="resetGame()">Сбросить игру</button>
+
+<div id="clickText"></div>
+<p class="hint">Нажимай на телефон, чтобы чинить его!</p>
+
+<div class="buttons">
+    <button id="upgradeBtn" onclick="buyUpgrade()">Купить улучшение (100 ₽)</button>
+    <button class="reset-btn" onclick="resetGame()">Сбросить прогресс</button>
+</div>
 
 <script>
     let money = 0;
+    let clickPower = 10;
+    let upgradeCost = 100;
+
     function clickPhone() {
-        money += 10;
-        document.getElementById("money").textContent = "Деньги: " + money + " ₽";
-        document.getElementById("clickText").textContent = "+10 ₽ 💰";
+        money += clickPower;
+        updateUI();
+        let txt = document.getElementById("clickText");
+        txt.textContent = "+" + clickPower + " ₽ 💰";
+        setTimeout(() => { txt.textContent = ""; }, 800); // Текст исчезает через 0.8 сек
     }
+
+    function buyUpgrade() {
+        if (money >= upgradeCost) {
+            money -= upgradeCost;
+            clickPower += 10;
+            upgradeCost = Math.floor(upgradeCost * 1.5);
+            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+            updateUI();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById("money").textContent = "Деньги: " + money + " ₽";
+        if (money >= upgradeCost) {
+            document.getElementById("upgradeBtn").style.display = "block";
+        } else {
+            document.getElementById("upgradeBtn").style.display = "none";
+        }
+    }
+
     function resetGame() {
-        money = 0;
-        document.getElementById("money").textContent = "Деньги: 0 ₽";
-        document.getElementById("clickText").textContent = "";
+        if(confirm("Точно сбросить весь прогресс?")) {
+            money = 0;
+            clickPower = 10;
+            upgradeCost = 100;
+            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+            updateUI();
+            document.getElementById("clickText").textContent = "";
+        }
     }
 </script>
 </body>
