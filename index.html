@@ -1,181 +1,245 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Phone Master Studio (Beta 2.1)</title>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Phone Master Studio</title>
 <style>
-    * { box-sizing: border-box; }
-    body { margin: 0; background: #f0f4f8; font-family: Arial, sans-serif; text-align: center; color: #222; overflow: hidden; }
-    h1 { margin-top: 20px; font-size: 24px; color: #1e3a8a; }
-    #money { font-size: 32px; font-weight: bold; color: #16a34a; margin: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .phone-container { position: relative; display: inline-block; }
-    .phone { width: 170px; height: 320px; background: #222; border: 8px solid #111; border-radius: 30px; margin: 20px auto; cursor: pointer; position: relative; transition: transform 0.1s; box-shadow: 0 10px 25px rgba(0,0,0,0.3); user-select: none; }
-    .phone:active { transform: scale(0.92); }
-    .screen { background: linear-gradient(145deg, #60a5fa, #2563eb); width: 100%; height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; pointer-events: none; }
-    .camera { position: absolute; width: 45px; height: 6px; background: #111; border-radius: 10px; top: 5px; left: 50%; transform: translateX(-50%); z-index: 2; pointer-events: none; }
-    .hint { color: #64748b; font-size: 16px; margin-bottom: 20px; }
-    
-    .buttons { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 20px; }
-    button { width: 100%; max-width: 300px; border: none; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    button:active { transform: scale(0.98); }
-    
-    #upgradeBtn { background: #eab308; color: #000; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.4); display: none; }
-    #upgradeBtn:active { background: #ca8a04; }
-    
-    .reset-btn { background: #ef4444; color: white; margin-top: 20px; font-size: 14px; padding: 10px; width: auto; }
-    
-    #clickText { height: 25px; color: #16a34a; font-weight: bold; font-size: 20px; margin-top: 10px; }
-
-    .tool {
-        position: absolute;
-        font-size: 40px;
-        pointer-events: none;
-        animation: flyUp 0.6s ease-out forwards;
-        z-index: 100;
-    }
-
-    @keyframes flyUp {
-        0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
-        100% { opacity: 0; transform: translateY(-80px) scale(1.5) rotate(45deg); }
-    }
-</style>
-</head>
+:root{--bg:#e9edf4;--card:#fff;--tx:#1b2330;--mu:#6b7686;--ac:#2f6bff;--ok:#1fa660;--bad:#d9433b;--bd:#d5dbe6}
+:root[data-theme="dark"]{--bg:#0b0f15;--card:#1a212c;--tx:#e8edf5;--mu:#93a0b3;--ac:#5b8cff;--ok:#3ccf85;--bad:#ff6b62;--bd:#2a3342}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);
+ font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#stage{position:absolute;left:0;top:0;width:720px;height:1280px;transform-origin:0 0;background:var(--bg);
+ display:flex;flex-direction:column;gap:12px;padding:16px 20px}
+button{font:inherit;border:0;border-radius:18px;background:var(--ac);color:#fff;cursor:pointer}
+button:disabled{opacity:.35;cursor:default}
+button.alt{background:var(--card);color:var(--tx);border:2px solid var(--bd)}
+.card{background:var(--card);border:2px solid var(--bd);border-radius:24px;padding:16px}
+header{display:flex;justify-content:space-between;align-items:center;height:84px}
+.ttl{font-size:28px;font-weight:700}.money{font-size:40px;font-weight:800;color:var(--ok);line-height:1.1}
+.icons{display:flex;gap:10px}
+.ib{position:relative;width:72px;height:72px;font-size:34px;padding:0;background:var(--card);border:2px solid var(--bd)}
+.ib.off{opacity:.55}
+.ib.off::after{content:"";position:absolute;left:12px;right:12px;top:50%;height:6px;margin-top:-3px;
+ background:var(--bad);border-radius:3px;transform:rotate(-45deg)}
+.info{display:flex;align-items:center;justify-content:space-between;gap:10px;height:64px}
+.info .mu{font-size:24px}.info button{height:60px;font-size:24px;padding:0 18px}
+.mu{color:var(--mu)}
+.queue{display:flex;gap:10px;height:150px}
+.cl{flex:1;min-width:0;border:2px solid var(--bd);border-radius:20px;padding:10px 12px;font-size:22px;background:var(--card);overflow:hidden}
+.cl.sel{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac) inset}
+.cl small{display:block;color:var(--mu);font-size:19px;line-height:1.25}
+.empty{flex:1;display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:22px}
+.work{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;min-height:0}
+#job{font-size:26px;min-height:68px}
+#phone{font-size:230px;line-height:1.05;transition:transform .06s}
+#phone.tap{transform:scale(.9)}
+.bar{width:100%;height:30px;background:var(--bd);border-radius:16px;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s}
+#msg{font-size:24px;min-height:34px}
+#dismiss{height:52px;font-size:22px;padding:0 24px}
+.bottom{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.chips{display:flex;gap:8px}
+.chip{flex:1;height:74px;font-size:34px;padding:0;background:var(--bg);border:2px solid var(--bd);color:var(--tx)}
+.chip.on{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac) inset}
+.lab{font-size:22px;color:var(--mu);display:flex;justify-content:space-between}
+.trio{display:flex;gap:10px}
+.trio button{flex:1;height:96px;font-size:25px;line-height:1.2;padding:4px}
+.q-used{color:#e0a100}.q-analog{color:var(--ac)}.q-orig{color:var(--ok)}
+.trio button:not(.alt) span{color:#fff}
+</style></head>
 <body>
-
-<h1>🔧 Phone Master Studio</h1>
-<div id="money">Деньги: 0 ₽</div>
-
-<div class="phone-container" id="phoneArea">
-    <div class="phone" onclick="clickPhone(event)">
-        <div class="camera"></div>
-        <div class="screen">📱</div>
-    </div>
-</div>
-
-<div id="clickText"></div>
-<p class="hint" id="hintText">Нажимай на телефон, чтобы чинить его!</p>
-
-<div class="buttons">
-    <button id="upgradeBtn" onclick="buyUpgrade()">Купить улучшение (100 ₽)</button>
-    <button class="reset-btn" onclick="resetGame()">Сбросить прогресс</button>
+<div id="stage">
+ <header>
+  <div><div class="ttl">🔧 Phone Master</div><div class="money" id="money">0 ₽</div></div>
+  <div class="icons">
+   <button class="ib" id="bTheme" aria-label="Тёмная тема">🌙</button>
+   <button class="ib" id="bMusic" aria-label="Музыка">🎵</button>
+   <button class="ib" id="bSfx" aria-label="Звуки">🔔</button>
+  </div>
+ </header>
+ <div class="info">
+  <span class="mu" id="rep"></span>
+  <span><button id="up">Улучшить</button> <button class="alt" id="reset">Сброс</button></span>
+ </div>
+ <div class="queue" id="queue"></div>
+ <div class="card work">
+  <div id="job" class="mu">Выбери клиента в очереди</div>
+  <div id="phone">📱</div>
+  <div class="bar"><i id="bar"></i></div>
+  <div id="msg">Тапы работают только во время ремонта.</div>
+  <button class="alt" id="dismiss">Отказать клиенту</button>
+ </div>
+ <div class="card bottom">
+  <div class="chips" id="chips"></div>
+  <div class="lab"><span>🧰 Установить со склада</span><span id="selname"></span></div>
+  <div class="trio" id="inst"></div>
+  <div class="lab"><span>🛒 Купить запчасть</span></div>
+  <div class="trio" id="buy"></div>
+ </div>
 </div>
 
 <script>
-    let money = parseInt(localStorage.getItem('phoneMoney')) || 0;
-    let clickPower = parseInt(localStorage.getItem('phoneClickPower')) || 10;
-    let upgradeCost = parseInt(localStorage.getItem('phoneUpgradeCost')) || 100;
+const PARTS={screen:{n:'Экран',e:'🖥️',c:120,taps:20},battery:{n:'Батарея',e:'🔋',c:70,taps:12},port:{n:'Разъём',e:'🔌',c:40,taps:10},camera:{n:'Камера',e:'📷',c:100,taps:16},board:{n:'Плата',e:'🧩',c:180,taps:26}};
+const Q={used:{n:'Б/у',m:.35,pay:.75,fail:.25,cls:'q-used'},analog:{n:'Аналог',m:.65,pay:1,fail:.08,cls:'q-analog'},orig:{n:'Оригинал',m:1,pay:1.5,fail:0,cls:'q-orig'}};
+const QS=['used','analog','orig'];
+const ISSUES=[['screen','Разбит экран'],['screen','Трещина на дисплее'],['battery','Быстро садится'],['battery','Не включается'],['port','Не заряжается'],['camera','Мутные фото'],['board','Упал в воду']];
+const NAMES=['Аня','Игорь','Мария','Денис','Олег','Света','Паша','Лена','Артём','Ксюша'],FACES=['🧑','👩','👨','🧓','👧','👦'];
+const $=id=>document.getElementById(id);
+let S,cfg,cur=null,queue=[],uid=0,sel='screen';
 
-    document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
-    updateUI();
+/* ---------- Сохранение ---------- */
+const fresh=()=>({money:600,lvl:1,rep:0,done:0,inv:{screen:{used:1},battery:{used:1},port:{used:1}}});
+function load(){
+ try{S=JSON.parse(localStorage.getItem('pms3'))||fresh()}catch(e){S=fresh()}
+ if(!S.inv)S.inv={};
+ try{cfg=JSON.parse(localStorage.getItem('pms3s'))}catch(e){cfg=null}
+ if(!cfg){let d=false;try{d=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}cfg={dark:d,music:false,sfx:true}}
+}
+function save(){try{localStorage.setItem('pms3',JSON.stringify(S))}catch(e){}}
+function saveCfg(){try{localStorage.setItem('pms3s',JSON.stringify(cfg))}catch(e){}}
 
-    function clickPhone(event) {
-        money += clickPower;
-        updateUI();
-        saveGame();
-        
-        let txt = document.getElementById("clickText");
-        let toolIcon = "";
+/* ---------- Масштаб 720x1280 под экран ---------- */
+function fit(){
+ const w=window.innerWidth,h=window.innerHeight,s=Math.min(w/720,h/1280);
+ $('stage').style.transform='translate('+((w-720*s)/2)+'px,'+((h-1280*s)/2)+'px) scale('+s+')';
+}
+addEventListener('resize',fit);addEventListener('orientationchange',fit);
 
-        if (clickPower === 10) {
-            txt.textContent = "+" + clickPower + " ₽ 💰";
-        } else if (clickPower === 20) {
-            txt.textContent = "Отлично починено! +" + clickPower + " ₽";
-            toolIcon = "🔧";
-        } else if (clickPower === 30) {
-            txt.textContent = "Схема перепаяна! +" + clickPower + " ₽";
-            toolIcon = "🔥";
-        } else if (clickPower === 40) {
-            txt.textContent = "Механизм настроен! +" + clickPower + " ₽";
-            toolIcon = "🔩";
-        } else if (clickPower === 50) {
-            txt.textContent = "Детали рассмотрены! +" + clickPower + " ₽";
-            toolIcon = "🔬";
-        } else if (clickPower === 60) {
-            txt.textContent = "Напряжение проверено! +" + clickPower + " ₽";
-            toolIcon = "📟";
-        } else if (clickPower === 70) {
-            txt.textContent = "Упрямый телефон сломан! +" + clickPower + " ₽";
-            toolIcon = "🔨";
-        } else {
-            txt.textContent = "Мастерский ремонт! +" + clickPower + " ₽";
-            toolIcon = "💸";
-        }
+/* ---------- Игровая логика ---------- */
+const power=()=>S.lvl,upCost=()=>Math.round(100*Math.pow(1.7,S.lvl-1));
+const have=(p,q)=>(S.inv[p]&&S.inv[p][q])||0;
+const cost=(p,q)=>Math.round(PARTS[p].c*Q[q].m);
+const pay=(p,q)=>Math.round(PARTS[p].c*1.9*Q[q].pay);
+function say(t,c){const m=$('msg');m.textContent=t;m.style.color=c||''}
 
-        setTimeout(() => { txt.textContent = ""; }, 800);
+function newClient(){
+ if(queue.length>=3)return;
+ const it=ISSUES[Math.floor(Math.random()*ISSUES.length)];
+ queue.push({id:++uid,name:NAMES[Math.random()*NAMES.length|0],face:FACES[Math.random()*FACES.length|0],part:it[0],issue:it[1]});
+ render();
+}
+function pickClient(c){
+ if(cur&&cur.started)return say('Сначала закончи текущий ремонт','var(--bad)');
+ cur={c:c,started:false,q:null,prog:0,need:0};sel=c.part;
+ const any=QS.some(q=>have(c.part,q));
+ say(any?'Выбери запчасть внизу и начинай!':'Нет нужной запчасти — купи её внизу','var(--mu)');
+ render();
+}
+function install(q){
+ if(!cur||cur.started||sel!==cur.c.part||!have(sel,q))return;
+ S.inv[sel][q]--;cur.started=true;cur.q=q;cur.prog=0;cur.need=PARTS[sel].taps;
+ say('Тапай по телефону!');save();render();
+}
+function buy(q){
+ const k=cost(sel,q);if(S.money<k)return;
+ S.money-=k;if(!S.inv[sel])S.inv[sel]={};S.inv[sel][q]=have(sel,q)+1;
+ save();beep(700,.08);render();
+}
+function tap(){
+ const ph=$('phone');ph.classList.add('tap');setTimeout(()=>ph.classList.remove('tap'),60);
+ if(!cur||!cur.started)return say('Тапать можно только при ремонте. Выбери клиента и запчасть.','var(--mu)');
+ beep(500+cur.prog*20,.04);
+ cur.prog+=power();
+ if(cur.prog>=cur.need)finish();else $('bar').style.width=(cur.prog/cur.need*100)+'%';
+}
+function finish(){
+ const c=cur.c,q=cur.q;
+ queue=queue.filter(x=>x.id!==c.id);
+ if(Math.random()<Q[q].fail){S.rep=Math.max(0,S.rep-1);say('💥 Запчасть ('+Q[q].n+') бракованная. Клиент ушёл без оплаты.','var(--bad)');beep(120,.3,'sawtooth')}
+ else{const g=pay(c.part,q);S.money+=g;S.done++;if(q!=='used')S.rep++;say('✅ Готово! +'+g+' ₽','var(--ok)');chime()}
+ cur=null;save();render();
+}
+function dismiss(){
+ if(!cur||cur.started)return;
+ queue=queue.filter(c=>c.id!==cur.c.id);cur=null;S.rep=Math.max(0,S.rep-1);
+ say('Клиент ушёл недовольным','var(--bad)');save();render();
+}
 
-        if (toolIcon !== "") {
-            spawnTool(event, toolIcon);
-        }
-    }
+/* ---------- Отрисовка ---------- */
+function render(){
+ $('money').textContent=S.money+' ₽';
+ $('rep').textContent='⭐ '+S.rep+' · Починено: '+S.done+' · Ур. '+S.lvl+' (×'+power()+')';
+ $('up').textContent='Улучшить · '+upCost()+' ₽';$('up').disabled=S.money<upCost();
 
-    function spawnTool(event, icon) {
-        const area = document.getElementById("phoneArea");
-        const rect = area.getBoundingClientRect();
-        
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+ const qb=$('queue');qb.innerHTML='';
+ if(!queue.length)qb.innerHTML='<div class="empty">Ждём клиентов…</div>';
+ queue.forEach(c=>{
+  const d=document.createElement('div');d.className='cl'+(cur&&cur.c.id===c.id?' sel':'');
+  d.innerHTML='<div>'+c.face+' <b>'+c.name+'</b></div><small>'+c.issue+'</small><small>Нужно: '+PARTS[c.part].e+' '+PARTS[c.part].n+'</small>';
+  d.onclick=()=>pickClient(c);qb.appendChild(d);
+ });
 
-        const tool = document.createElement("div");
-        tool.className = "tool";
-        tool.textContent = icon;
-        tool.style.left = x + "px";
-        tool.style.top = y + "px";
+ if(!cur){$('job').textContent='Выбери клиента в очереди'}
+ else if(!cur.started){$('job').textContent=cur.c.name+': '+cur.c.issue+' → нужна «'+PARTS[cur.c.part].n+'»'}
+ else{$('job').textContent='Чиню: '+cur.c.issue+' ('+Q[cur.q].n+')'}
+ $('bar').style.width=cur&&cur.started?(cur.prog/cur.need*100)+'%':'0%';
+ $('dismiss').style.visibility=cur&&!cur.started?'visible':'hidden';
 
-        area.appendChild(tool);
+ const ch=$('chips');ch.innerHTML='';
+ Object.keys(PARTS).forEach(p=>{
+  const b=document.createElement('button');b.className='chip'+(p===sel?' on':'');b.textContent=PARTS[p].e;
+  b.setAttribute('aria-label',PARTS[p].n);b.onclick=()=>{sel=p;render()};ch.appendChild(b);
+ });
+ $('selname').textContent=PARTS[sel].e+' '+PARTS[sel].n;
 
-        setTimeout(() => {
-            tool.remove();
-        }, 600);
-    }
+ const ib=$('inst');ib.innerHTML='';
+ const canInst=cur&&!cur.started&&cur.c.part===sel;
+ QS.forEach(q=>{
+  const b=document.createElement('button');b.className='alt';
+  b.disabled=!(canInst&&have(sel,q)>0);
+  b.innerHTML='<span class="'+Q[q].cls+'">'+Q[q].n+'</span><br>×'+have(sel,q);
+  b.onclick=()=>install(q);ib.appendChild(b);
+ });
+ const bb=$('buy');bb.innerHTML='';
+ QS.forEach(q=>{
+  const k=cost(sel,q),b=document.createElement('button');b.disabled=S.money<k;
+  b.innerHTML=Q[q].n+'<br>'+k+' ₽';b.onclick=()=>buy(q);bb.appendChild(b);
+ });
+}
 
-    function buyUpgrade() {
-        if (money >= upgradeCost) {
-            money -= upgradeCost;
-            clickPower += 10;
-            upgradeCost = Math.floor(upgradeCost * 1.5);
-            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
-            
-            if (clickPower === 20) document.getElementById("hintText").textContent = "У тебя есть отвертка! 🔧";
-            else if (clickPower === 30) document.getElementById("hintText").textContent = "Ты освоил паяльник! 🔥";
-            else if (clickPower === 40) document.getElementById("hintText").textContent = "Гаечный ключ в деле! 🔩";
-            else if (clickPower === 50) document.getElementById("hintText").textContent = "Лупа поможет найти микрополомки! 🔬";
-            else if (clickPower === 60) document.getElementById("hintText").textContent = "Мультиметр в помощь! 📟";
-            else if (clickPower === 70) document.getElementById("hintText").textContent = "Молоток для самых сложных случаев! 🔨";
-            else if (clickPower >= 80) document.getElementById("hintText").textContent = "Ты мастер-миллионер! 💸";
-            
-            updateUI();
-            saveGame();
-        }
-    }
+/* ---------- Звук и музыка (WebAudio) ---------- */
+let ac=null,timer=null,step=0;
+function ctx(){
+ if(!ac){try{ac=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}
+ if(ac&&ac.state==='suspended')ac.resume();return ac;
+}
+function note(f,t,d,type,v){
+ const a=ctx();if(!a)return;
+ const o=a.createOscillator(),g=a.createGain();o.type=type||'square';o.frequency.value=f;
+ g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
+ o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);
+}
+function beep(f,d,type){if(!cfg.sfx)return;const a=ctx();if(a)note(f,a.currentTime,d,type||'square',.15)}
+function chime(){if(!cfg.sfx)return;const a=ctx();if(!a)return;[523,659,784].forEach((f,i)=>note(f,a.currentTime+i*.09,.2,'triangle',.2))}
+const MEL=[262,0,330,0,392,330,0,294,0,349,0,440,392,0,330,0],BASS=[131,131,175,175,196,196,131,131];
+function tick(){
+ const a=ctx();if(!a)return;const t=a.currentTime+.05,m=MEL[step%16];
+ if(m)note(m,t,.22,'triangle',.15);
+ if(step%2===0)note(BASS[(step/2|0)%8],t,.3,'sine',.18);
+ step++;
+}
+function startMusic(){if(timer||!ctx())return;timer=setInterval(tick,230)}
+function stopMusic(){clearInterval(timer);timer=null}
 
-    function updateUI() {
-        document.getElementById("money").textContent = "Деньги: " + money + " ₽";
-        if (money >= upgradeCost) {
-            document.getElementById("upgradeBtn").style.display = "block";
-        } else {
-            document.getElementById("upgradeBtn").style.display = "none";
-        }
-    }
+/* ---------- Настройки (тема / музыка / звуки) ---------- */
+function applyCfg(){
+ document.documentElement.setAttribute('data-theme',cfg.dark?'dark':'light');
+ $('bTheme').textContent=cfg.dark?'☀️':'🌙';
+ $('bMusic').classList.toggle('off',!cfg.music);
+ $('bSfx').classList.toggle('off',!cfg.sfx);
+ saveCfg();
+}
+$('bTheme').onclick=()=>{cfg.dark=!cfg.dark;applyCfg()};
+$('bMusic').onclick=()=>{cfg.music=!cfg.music;cfg.music?startMusic():stopMusic();applyCfg()};
+$('bSfx').onclick=()=>{cfg.sfx=!cfg.sfx;applyCfg();if(cfg.sfx)beep(660,.08)};
+document.addEventListener('pointerdown',()=>{ctx();if(cfg.music)startMusic()},{once:true});
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMusic();else if(cfg.music)startMusic()});
 
-    function saveGame() {
-        localStorage.setItem('phoneMoney', money);
-        localStorage.setItem('phoneClickPower', clickPower);
-        localStorage.setItem('phoneUpgradeCost', upgradeCost);
-    }
-
-    function resetGame() {
-        if(confirm("Точно сбросить весь прогресс?")) {
-            money = 0;
-            clickPower = 10;
-            upgradeCost = 100;
-            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
-            document.getElementById("hintText").textContent = "Нажимай на телефон, чтобы чинить его!";
-            updateUI();
-            document.getElementById("clickText").textContent = "";
-            localStorage.clear();
-        }
-    }
-</script>
-</body>
-</html>
+/* ---------- Запуск ---------- */
+$('phone').addEventListener('pointerdown',tap);
+$('up').onclick=()=>{if(S.money>=upCost()){S.money-=upCost();S.lvl++;save();render();chime()}};
+$('dismiss').onclick=dismiss;
+$('reset').onclick=()=>{if(confirm('Сбросить весь прогресс?')){S=fresh();cur=null;queue=[];sel='screen';save();say('Прогресс сброшен');render();newClient()}};
+load();applyCfg();fit();render();newClient();
+setInterval(()=>{if(Math.random()<.7)newClient()},8000);
+</script></body></html>
