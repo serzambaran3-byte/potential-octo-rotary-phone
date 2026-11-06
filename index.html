@@ -1,52 +1,180 @@
-       <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ремонт телефонов</title>
+<title>Phone Master Studio</title>
 <style>
     * { box-sizing: border-box; }
-    body { margin: 0; background: white; font-family: Arial, sans-serif; text-align: center; color: #222; }
-    h1 { margin-top: 30px; }
-    #money { font-size: 28px; font-weight: bold; color: #16a34a; margin: 25px; }
-    .phone { width: 190px; height: 350px; background: #222; border: 8px solid #111; border-radius: 30px; margin: 40px auto; cursor: pointer; position: relative; transition: transform 0.1s; box-shadow: 0 8px 20px #0003; }
-    .phone:active { transform: scale(0.94); }
-    .screen { background: linear-gradient(145deg, #60a5fa, #2563eb); width: 100%; height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 35px; }
-    .camera { position: absolute; width: 45px; height: 6px; background: #111; border-radius: 10px; top: 5px; left: 50%; transform: translateX(-50%); z-index: 2; }
-    .hint { color: #777; font-size: 17px; }
-    button { background: #2563eb; color: white; border: none; padding: 15px 25px; border-radius: 12px; font-size: 17px; cursor: pointer; }
-    button:hover { background: #1d4ed8; }
-    #clickText { height: 25px; color: #16a34a; font-weight: bold; }
+    body { margin: 0; background: #f0f4f8; font-family: Arial, sans-serif; text-align: center; color: #222; overflow: hidden; }
+    h1 { margin-top: 20px; font-size: 24px; color: #1e3a8a; }
+    #money { font-size: 32px; font-weight: bold; color: #16a34a; margin: 15px; text-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .phone-container { position: relative; display: inline-block; }
+    .phone { width: 170px; height: 320px; background: #222; border: 8px solid #111; border-radius: 30px; margin: 20px auto; cursor: pointer; position: relative; transition: transform 0.1s; box-shadow: 0 10px 25px rgba(0,0,0,0.3); user-select: none; }
+    .phone:active { transform: scale(0.92); }
+    .screen { background: linear-gradient(145deg, #60a5fa, #2563eb); width: 100%; height: 100%; border-radius: 20px; display: flex; align-items: center; justify-content: center; color: white; font-size: 40px; pointer-events: none; }
+    .camera { position: absolute; width: 45px; height: 6px; background: #111; border-radius: 10px; top: 5px; left: 50%; transform: translateX(-50%); z-index: 2; pointer-events: none; }
+    .hint { color: #64748b; font-size: 16px; margin-bottom: 20px; }
+    
+    .buttons { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 0 20px; }
+    button { width: 100%; max-width: 300px; border: none; padding: 15px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    button:active { transform: scale(0.98); }
+    
+    #upgradeBtn { background: #eab308; color: #000; box-shadow: 0 4px 10px rgba(234, 179, 8, 0.4); display: none; }
+    #upgradeBtn:active { background: #ca8a04; }
+    
+    .reset-btn { background: #ef4444; color: white; margin-top: 20px; font-size: 14px; padding: 10px; width: auto; }
+    
+    #clickText { height: 25px; color: #16a34a; font-weight: bold; font-size: 20px; margin-top: 10px; }
+
+    .tool {
+        position: absolute;
+        font-size: 40px;
+        pointer-events: none;
+        animation: flyUp 0.6s ease-out forwards;
+        z-index: 100;
+    }
+
+    @keyframes flyUp {
+        0% { opacity: 1; transform: translateY(0) scale(1) rotate(0deg); }
+        100% { opacity: 0; transform: translateY(-80px) scale(1.5) rotate(45deg); }
+    }
 </style>
 </head>
 <body>
 
-<h1>🔧 Ремонт телефонов</h1>
+<h1>🔧 Phone Master Studio</h1>
 <div id="money">Деньги: 0 ₽</div>
 
-<div class="phone" onclick="clickPhone()">
-    <div class="camera"></div>
-    <div class="screen">📱</div>
+<div class="phone-container" id="phoneArea">
+    <div class="phone" onclick="clickPhone(event)">
+        <div class="camera"></div>
+        <div class="screen">📱</div>
+    </div>
 </div>
 
-<p class="hint">Нажимай на телефон, чтобы ремонтировать его!</p>
-<p id="clickText"></p>
+<div id="clickText"></div>
+<p class="hint" id="hintText">Нажимай на телефон, чтобы чинить его!</p>
 
-<button onclick="resetGame()">Сбросить игру</button>
+<div class="buttons">
+    <button id="upgradeBtn" onclick="buyUpgrade()">Купить улучшение (100 ₽)</button>
+    <button class="reset-btn" onclick="resetGame()">Сбросить прогресс</button>
+</div>
 
 <script>
-    let money = 0;
+    let money = parseInt(localStorage.getItem('phoneMoney')) || 0;
+    let clickPower = parseInt(localStorage.getItem('phoneClickPower')) || 10;
+    let upgradeCost = parseInt(localStorage.getItem('phoneUpgradeCost')) || 100;
 
-    function clickPhone() {
-        money += 10;
+    document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+    updateUI();
+
+    function clickPhone(event) {
+        money += clickPower;
+        updateUI();
+        saveGame();
+        
+        let txt = document.getElementById("clickText");
+        let toolIcon = "";
+
+        if (clickPower === 10) {
+            txt.textContent = "+" + clickPower + " ₽ 💰";
+        } else if (clickPower === 20) {
+            txt.textContent = "Отлично починено! +" + clickPower + " ₽";
+            toolIcon = "🔧";
+        } else if (clickPower === 30) {
+            txt.textContent = "Схема перепаяна! +" + clickPower + " ₽";
+            toolIcon = "🔥";
+        } else if (clickPower === 40) {
+            txt.textContent = "Механизм настроен! +" + clickPower + " ₽";
+            toolIcon = "🔩";
+        } else if (clickPower === 50) {
+            txt.textContent = "Детали рассмотрены! +" + clickPower + " ₽";
+            toolIcon = "🔬";
+        } else if (clickPower === 60) {
+            txt.textContent = "Напряжение проверено! +" + clickPower + " ₽";
+            toolIcon = "📟";
+        } else if (clickPower === 70) {
+            txt.textContent = "Упрямый телефон сломан! +" + clickPower + " ₽";
+            toolIcon = "🔨";
+        } else {
+            txt.textContent = "Мастерский ремонт! +" + clickPower + " ₽";
+            toolIcon = "💸";
+        }
+
+        setTimeout(() => { txt.textContent = ""; }, 800);
+
+        if (toolIcon !== "") {
+            spawnTool(event, toolIcon);
+        }
+    }
+
+    function spawnTool(event, icon) {
+        const area = document.getElementById("phoneArea");
+        const rect = area.getBoundingClientRect();
+        
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const tool = document.createElement("div");
+        tool.className = "tool";
+        tool.textContent = icon;
+        tool.style.left = x + "px";
+        tool.style.top = y + "px";
+
+        area.appendChild(tool);
+
+        setTimeout(() => {
+            tool.remove();
+        }, 600);
+    }
+
+    function buyUpgrade() {
+        if (money >= upgradeCost) {
+            money -= upgradeCost;
+            clickPower += 10;
+            upgradeCost = Math.floor(upgradeCost * 1.5);
+            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+            
+            if (clickPower === 20) document.getElementById("hintText").textContent = "У тебя есть отвертка! 🔧";
+            else if (clickPower === 30) document.getElementById("hintText").textContent = "Ты освоил паяльник! 🔥";
+            else if (clickPower === 40) document.getElementById("hintText").textContent = "Гаечный ключ в деле! 🔩";
+            else if (clickPower === 50) document.getElementById("hintText").textContent = "Лупа поможет найти микрополомки! 🔬";
+            else if (clickPower === 60) document.getElementById("hintText").textContent = "Мультиметр в помощь! 📟";
+            else if (clickPower === 70) document.getElementById("hintText").textContent = "Молоток для самых сложных случаев! 🔨";
+            else if (clickPower >= 80) document.getElementById("hintText").textContent = "Ты мастер-миллионер! 💸";
+            
+            updateUI();
+            saveGame();
+        }
+    }
+
+    function updateUI() {
         document.getElementById("money").textContent = "Деньги: " + money + " ₽";
-        document.getElementById("clickText").textContent = "+10 ₽ 💰";
+        if (money >= upgradeCost) {
+            document.getElementById("upgradeBtn").style.display = "block";
+        } else {
+            document.getElementById("upgradeBtn").style.display = "none";
+        }
+    }
+
+    function saveGame() {
+        localStorage.setItem('phoneMoney', money);
+        localStorage.setItem('phoneClickPower', clickPower);
+        localStorage.setItem('phoneUpgradeCost', upgradeCost);
     }
 
     function resetGame() {
-        money = 0;
-        document.getElementById("money").textContent = "Деньги: 0 ₽";
-        document.getElementById("clickText").textContent = "";
+        if(confirm("Точно сбросить весь прогресс?")) {
+            money = 0;
+            clickPower = 10;
+            upgradeCost = 100;
+            document.getElementById("upgradeBtn").textContent = "Купить улучшение (" + upgradeCost + " ₽)";
+            document.getElementById("hintText").textContent = "Нажимай на телефон, чтобы чинить его!";
+            updateUI();
+            document.getElementById("clickText").textContent = "";
+            localStorage.clear();
+        }
     }
 </script>
 </body>
