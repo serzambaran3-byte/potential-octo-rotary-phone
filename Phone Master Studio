@@ -209,13 +209,13 @@ function note(f,t,d,type,v){
  g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);
  o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02);
 }
-function beep(f,d,type){if(!cfg.sfx)return;const a=ctx();if(a)note(f,a.currentTime,d,type||'square',.15)} // Громкость тапа
-function chime(){if(!cfg.sfx)return;const a=ctx();if(!a)return;[523,659,784].forEach((f,i)=>note(f,a.currentTime+i*.09,.2,'triangle',.2))} // Громкость успеха
+function beep(f,d,type){if(!cfg.sfx)return;const a=ctx();if(a)note(f,a.currentTime,d,type||'square',.15)}
+function chime(){if(!cfg.sfx)return;const a=ctx();if(!a)return;[523,659,784].forEach((f,i)=>note(f,a.currentTime+i*.09,.2,'triangle',.2))}
 const MEL=[262,0,330,0,392,330,0,294,0,349,0,440,392,0,330,0],BASS=[131,131,175,175,196,196,131,131];
 function tick(){
  const a=ctx();if(!a)return;const t=a.currentTime+.05,m=MEL[step%16];
- if(m)note(m,t,.22,'triangle',.15); // Громкость мелодии
- if(step%2===0)note(BASS[(step/2|0)%8],t,.3,'sine',.18); // Громкость баса
+ if(m)note(m,t,.22,'triangle',.15);
+ if(step%2===0)note(BASS[(step/2|0)%8],t,.3,'sine',.18);
  step++;
 }
 function startMusic(){if(timer||!ctx())return;timer=setInterval(tick,230)}
@@ -232,7 +232,6 @@ function applyCfg(){
 $('bTheme').onclick=()=>{cfg.dark=!cfg.dark;applyCfg()};
 $('bMusic').onclick=()=>{cfg.music=!cfg.music;cfg.music?startMusic():stopMusic();applyCfg()};
 $('bSfx').onclick=()=>{cfg.sfx=!cfg.sfx;applyCfg();if(cfg.sfx)beep(660,.08)};
-// Браузер разрешает звук только после первого касания
 document.addEventListener('pointerdown',()=>{ctx();if(cfg.music)startMusic()},{once:true});
 document.addEventListener('visibilitychange',()=>{if(document.hidden)stopMusic();else if(cfg.music)startMusic()});
 
