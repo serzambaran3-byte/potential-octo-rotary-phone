@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Взлом</title>
+<style>
+    body {
+        margin: 0;
+        background: #000;
+        color: #0f0;
+        font-family: monospace;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        flex-direction: column;
+        text-align: center;
+    }
+    #hack-screen {
+        width: 90%;
+        max-width: 600px;
+        border: 2px solid #f00;
+        padding: 20px;
+        box-shadow: 0 0 20px #f00;
+        background: #111;
+        transition: 0.2s;
+    }
+    .shaking {
+        animation: shake 0.5s infinite;
+    }
+    @keyframes shake {
+        0% { transform: translate(1px, 1px) rotate(0deg); }
+        10% { transform: translate(-1px, -2px) rotate(-1deg); }
+        20% { transform: translate(-3
