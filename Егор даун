@@ -33,4 +33,185 @@
     @keyframes shake {
         0% { transform: translate(1px, 1px) rotate(0deg); }
         10% { transform: translate(-1px, -2px) rotate(-1deg); }
-        20% { transform: translate(-3
+        20% { transform: translate(-3px, 0px) rotate(1deg); }
+        30% { transform: translate(3px, 2px) rotate(0deg); }
+        40% { transform: translate(1px, -1px) rotate(1deg); }
+        50% { transform: translate(-1px, 2px) rotate(-1deg); }
+        60% { transform: translate(-3px, 1px) rotate(0deg); }
+        70% { transform: translate(3px, 1px) rotate(-1deg); }
+        80% { transform: translate(-1px, -1px) rotate(1deg); }
+        90% { transform: translate(1px, 2px) rotate(0deg); }
+        100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+    .glitch-text {
+        color: #f00;
+        text-shadow: 0 0 10px #f00;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    #terminal-output {
+        text-align: left;
+        height: 200px;
+        overflow-y: auto;
+        background: #000;
+        padding: 10px;
+        border: 1px solid #333;
+        margin-bottom: 20px;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+    #stopBtn {
+        display: none;
+        background: #f00;
+        color: #fff;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 0 15px #f00;
+        border-radius: 5px;
+    }
+    #stopBtn:hover {
+        background: #d00;
+    }
+</style>
+</head>
+<body>
+
+<div id="hack-screen">
+    <h1 class="glitch-text" data-text="СИСТЕМА ВЗЛОМАНА">СИСТЕМА ВЗЛОМАНА</h1>
+    <div id="terminal-output"></div>
+    <button id="stopBtn">ОСТАНОВИТЬ АТАКУ</button>
+</div>
+
+<script>
+const hackScreen = document.getElementById('hack-screen');
+const terminal = document.getElementById('terminal-output');
+const stopBtn = document.getElementById('stopBtn');
+
+// Запускаем тряску
+hackScreen.classList.add('shaking');
+
+// --- ЗВУКОВОЙ ЭФФЕКТ (СИРЕНА) ---
+let audioCtx;
+let oscillator;
+
+function startSiren() {
+    try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        
+        oscillator.type = 'sawtooth'; // Злой, скрежещущий звук
+        oscillator.frequency.setValueAtTime(400, audioCtx.currentTime); // Частота
+        
+        // Модуляция частоты (эффект сирены)
+        oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.5);
+        oscillator.frequency.linearRampToValueAtTime(400, audioCtx.currentTime + 1.0);
+        
+        gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Громкость (не орет на весь дом)
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        
+        oscillator.start();
+        
+        // Повторяем сирену
+        setInterval(() => {
+            if (oscillator && audioCtx.state === 'running') {
+                oscillator.frequency.linearRampToValueAtTime(800, audioCtx.currentTime + 0.5);
+                oscillator.frequency.linearRampToValueAtTime(400, audioCtx.currentTime + 1.0);
+            }
+        }, 1000);
+    } catch (e) {
+        console.log("Браузер заблокировал звук");
+    }
+}
+
+// Массив страшных сообщений
+const messages = [
+    ">>> Инициализация протокола T.I.S.P...",
+    ">>> ВЗЛОМ ЯДРА СИСТЕМЫ...",
+    ">>> ОБХОД МЕЖСЕТЕВОГО ЭКРАНА... УСПЕШНО.",
+    ">>> ДОСТУП К ЛИЧНЫМ ДАННЫМ: 10%...",
+    ">>> ДОСТУП К ЛИЧНЫМ ДАННЫМ: 50%...",
+    ">>> ДОСТУП К ЛИЧНЫМ ДАННЫМ: 99%...",
+    ">>> ПЕРЕХВАТ КАМЕРЫ... ВКЛЮЧЕНО.",
+    ">>> ПЕРЕХВАТ МИКРОФОНА... ЗАПИСЬ.",
+    ">>> СБОР КОНТАКТОВ И ГЕОЛОКАЦИИ...",
+    ">>> ВНИМАНИЕ! УСТРОЙСТВО КОМПРОМЕТИРОВАНО!",
+    ">>> I.S.-1 НА СВЯЗИ...",
+    ">>> Я ВИЖУ ТЕБЯ👁️",
+    ">>> ХА-ХА-ХА.",
+    ">>> ЧТОБЫ ОСТАНОВИТЬ АТАКУ, НАЖМИТЕ КНОПКУ."
+];
+
+let messageIndex = 0;
+
+// Вибрация (агрессивная)
+function vibrateDevice() {
+    if (navigator.vibrate) {
+        navigator.vibrate([100, 50, 100, 50, 200]); 
+    }
+}
+
+function typeMessage() {
+    if (messageIndex < messages.length) {
+        // Добавляем текст с эффектом "печатной машинки"
+        terminal.innerHTML += messages[messageIndex] + "<br>";
+        messageIndex++;
+        
+        vibrateDevice();
+        
+        // Автоскролл вниз
+        terminal.scrollTop = terminal.scrollHeight;
+
+        // Случайная задержка, чтобы было непредсказуемо
+        setTimeout(typeMessage, 300 + Math.random() * 800);
+    } else {
+        stopBtn.style.display = 'inline-block';
+        if (navigator.vibrate) navigator.vibrate([500, 200, 500]); // Долгая вибрация
+    }
+}
+
+// Запуск
+setTimeout(() => {
+    startSiren(); // Пытаемся включить звук
+    typeMessage();
+}, 500);
+
+// Остановка
+stopBtn.addEventListener('click', () => {
+    // Выключаем звук
+    if (oscillator) {
+        oscillator.stop();
+        oscillator.disconnect();
+    }
+
+    if (navigator.vibrate) navigator.vibrate([50, 50, 50, 50, 200]);
+
+    hackScreen.classList.remove('shaking');
+    
+    // Убираем красный фон
+    document.body.style.backgroundImage = "none";
+    document.body.style.backgroundColor = "#111";
+    document.body.style.animation = "none";
+
+    terminal.innerHTML = ">>> АТАКА УСПЕШНО ОТРАЖЕНА.\n>>> СИСТЕМА В БЕЗОПАСНОСТИ.\n>>> I.S.-1 ОТСТУПАЕТ...";
+    terminal.style.color = "#00ffcc";
+    terminal.style.textShadow = "0 0 5px #00ffcc";
+    terminal.style.borderColor = "#00ffcc";
+    terminal.style.boxShadow = "inset 0 0 20px #00ffcc, 0 0 20px rgba(0,255,204,0.5)";
+    
+    const h1 = document.querySelector('h1');
+    h1.innerText = "ДОСТУП ВОССТАНОВЛЕН";
+    h1.style.color = "#00ffcc";
+    h1.style.textShadow = "0 0 10px #00ffcc, 0 0 30px #00ffcc";
+    h1.style.animation = "none";
+    
+    stopBtn.style.display = 'none';
+});
+</script>
+</body>
+</html>
