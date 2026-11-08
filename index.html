@@ -10,7 +10,7 @@ html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--
  font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;user-select:none;-webkit-user-select:none;touch-action:manipulation}
 #stage{position:absolute;left:0;top:0;width:720px;height:1280px;transform-origin:0 0;background:var(--bg);
  display:flex;flex-direction:column;gap:12px;padding:16px 20px}
-button{font:inherit;border:0;border-radius:18px;background:var(--ac);color:#fff;cursor:pointer}
+button{font:inherit;border:0;border-radius:18px;background:var(--ac);color:#fff;cursor:pointer;transition:0.2s;}
 button:disabled{opacity:.35;cursor:default}
 button.alt{background:var(--card);color:var(--tx);border:2px solid var(--bd)}
 .card{background:var(--card);border:2px solid var(--bd);border-radius:24px;padding:16px}
@@ -24,7 +24,7 @@ header{display:flex;justify-content:space-between;align-items:center;height:84px
 .info{display:flex;align-items:center;justify-content:space-between;gap:10px;height:64px}
 .info .mu{font-size:24px}.info button{height:60px;font-size:24px;padding:0 18px}
 .mu{color:var(--mu)}
-.queue{display:flex;gap:10px;height:150px}
+.queue{display:flex;gap:10px;height:150px;flex-wrap:wrap;}
 .cl{flex:1;min-width:0;border:2px solid var(--bd);border-radius:20px;padding:10px 12px;font-size:22px;background:var(--card);overflow:hidden}
 .cl.sel{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac) inset}
 .cl small{display:block;color:var(--mu);font-size:19px;line-height:1.25}
@@ -38,14 +38,15 @@ header{display:flex;justify-content:space-between;align-items:center;height:84px
 #msg{font-size:24px;min-height:34px}
 #dismiss{height:52px;font-size:22px;padding:0 24px}
 .bottom{padding:14px 16px;display:flex;flex-direction:column;gap:8px}
-.chips{display:flex;gap:8px}
-.chip{flex:1;height:74px;font-size:34px;padding:0;background:var(--bg);border:2px solid var(--bd);color:var(--tx)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{flex:1;min-width:60px;height:74px;font-size:34px;padding:0;background:var(--bg);border:2px solid var(--bd);color:var(--tx)}
 .chip.on{border-color:var(--ac);box-shadow:0 0 0 3px var(--ac) inset}
 .lab{font-size:22px;color:var(--mu);display:flex;justify-content:space-between}
-.trio{display:flex;gap:10px}
-.trio button{flex:1;height:96px;font-size:25px;line-height:1.2;padding:4px}
+.trio{display:flex;gap:10px;flex-wrap:wrap;}
+.trio button{flex:1;min-width:100px;height:96px;font-size:22px;line-height:1.2;padding:4px}
 .q-used{color:#e0a100}.q-analog{color:var(--ac)}.q-orig{color:var(--ok)}
 .trio button:not(.alt) span{color:#fff}
+.btn-buy-success{background:var(--ok) !important; transform:scale(0.95);}
 </style></head>
 <body>
 <div id="stage">
@@ -130,10 +131,22 @@ function install(q){
  S.inv[sel][q]--;cur.started=true;cur.q=q;cur.prog=0;cur.need=PARTS[sel].taps;
  say('Тапай по телефону!');save();render();
 }
-function buy(q){
+function buy(q, btn){
  const k=cost(sel,q);if(S.money<k)return;
  S.money-=k;if(!S.inv[sel])S.inv[sel]={};S.inv[sel][q]=have(sel,q)+1;
  save();beep(700,.08);render();
+ 
+ // Анимация успешной покупки
+ if(btn){
+     btn.classList.add('btn-buy-success');
+     const originalText = btn.innerHTML;
+     btn.innerHTML = '✅ Куплено!';
+     setTimeout(()=>{
+         btn.classList.remove('btn-buy-success');
+         // После анимации текст обновится через render(), но на всякий случай вернем
+         btn.innerHTML = originalText;
+     }, 500);
+ }
 }
 function tap(){
  const ph=$('phone');ph.classList.add('tap');setTimeout(()=>ph.classList.remove('tap'),60);
@@ -193,7 +206,10 @@ function render(){
  const bb=$('buy');bb.innerHTML='';
  QS.forEach(q=>{
   const k=cost(sel,q),b=document.createElement('button');b.disabled=S.money<k;
-  b.innerHTML=Q[q].n+'<br>'+k+' ₽';b.onclick=()=>buy(q);bb.appendChild(b);
+  b.innerHTML=Q[q].n+'<br>'+k+' ₽';
+  // Передаем саму кнопку в функцию buy для анимации
+  b.onclick=function() { buy(q, this); };
+  bb.appendChild(b);
  });
 }
 
