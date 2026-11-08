@@ -42,13 +42,52 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
 #job{font-size:22px;min-height:50px}
 #phone-area{position:relative;width:200px;height:320px;margin:0 auto;}
 #phone-bg{width:100%;height:100%;background:#222;border:6px solid #111;border-radius:24px;position:relative;overflow:hidden;box-shadow:0 8px 20px rgba(0,0,0,0.5);}
-.phone-part{position:absolute;border-radius:4px;transition:0.2s;}
+.phone-part{position:absolute;border-radius:4px;transition:all 0.4s ease;}
 #battery{width:80px;height:140px;background:#fff;bottom:40px;left:50%;transform:translateX(-50%);border:2px solid #ccc;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:bold;color:#333;}
-#screen-part{width:100%;height:60%;background:linear-gradient(135deg,#4b6cb7,#182848);top:0;left:0;border-bottom-left-radius:16px;border-bottom-right-radius:16px;}
+#screen-part{width:100%;height:60%;background:linear-gradient(135deg,#4b6cb7,#182848);top:0;left:0;border-bottom-left-radius:16px;border-bottom-right-radius:16px;transition:all 0.4s ease;}
 #board{width:100%;height:40%;background:#2d5a27;bottom:0;left:0;border:2px dashed #1a3317;}
-.screw{position:absolute;width:24px;height:24px;background:#999;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;color:#333;cursor:pointer;z-index:10;box-shadow:0 2px 4px rgba(0,0,0,0.4);}
-.screw:active{transform:scale(0.8);}
-.screw.removed{display:none;}
+
+/* Задняя крышка */
+#back-cover {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #333, #111);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #555;
+    font-size: 60px;
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease;
+    z-index: 5;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+    border: 1px solid #444;
+}
+#back-cover.slide-down {
+    transform: translateY(100%);
+    opacity: 0;
+}
+
+/* Винтики */
+.screw {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #888;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    transition: transform 0.3s, opacity 0.3s;
+}
+.screw:active { transform: scale(0.8); }
+.screw.removed { transform: scale(0) rotate(180deg); opacity: 0; pointer-events: none; }
+
 .bar{width:100%;height:20px;background:var(--bd);border-radius:10px;overflow:hidden;margin-top:10px;}
 .bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .08s}
 #msg{font-size:18px;min-height:30px}
@@ -66,13 +105,95 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
 .trio button:not(.alt) span{color:#fff}
 .btn-buy-success{background:var(--ok) !important; transform:scale(0.95);}
 
-/* Сайт прошивок */
-.web-list{display:flex;flex-direction:column;gap:8px;overflow-y:auto;flex:1;padding-right:5px;}
-.web-item{border:2px solid var(--bd);border-radius:12px;padding:10px;background:var(--card);cursor:pointer;transition:0.2s;}
-.web-item:active{background:var(--bg);}
-.web-item .url{font-size:16px;font-weight:bold;color:var(--ac);}
-.web-item .risk{font-size:14px;color:var(--mu);margin-top:4px;}
-.web-item.danger .risk{color:var(--bad);font-weight:bold;}
+/* НОУТБУК (Прошивки) */
+.laptop-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding-top: 10px;
+}
+.laptop-screen {
+    width: 100%;
+    background: #000;
+    border: 10px solid #333;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    position: relative;
+    aspect-ratio: 16/10;
+    overflow: hidden;
+    box-shadow: inset 0 0 10px #000;
+}
+.laptop-base {
+    width: 110%;
+    height: 25px;
+    background: linear-gradient(to bottom, #444, #222);
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    position: relative;
+}
+.laptop-base::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%; transform: translateX(-50%);
+    width: 60px; height: 5px;
+    background: #111;
+    border-radius: 0 0 5px 5px;
+}
+
+/* Браузер внутри ноутбука */
+.browser-header {
+    background: #333;
+    padding: 5px;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    border-bottom: 1px solid #111;
+}
+.browser-tab {
+    background: #555;
+    color: #fff;
+    padding: 4px 10px;
+    border-radius: 4px 4px 0 0;
+    font-size: 10px;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.browser-url {
+    flex: 1;
+    background: #222;
+    color: #aaa;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+}
+.web-content {
+    padding: 10px;
+    overflow-y: auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.web-item {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.web-item:active { background: rgba(255,255,255,0.2); }
+.web-item .url { color: #4af626; font-size: 12px; font-weight: bold; }
+.web-item .risk { color: #aaa; font-size: 10px; margin-top: 4px; }
+.web-item.danger .risk { color: #ff4a4a; }
+
 </style></head>
 <body>
 <div id="stage">
@@ -88,7 +209,7 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
  <div class="tabs">
    <button class="tab-btn active" id="tab-repair" onclick="switchTab('repair')">🔧 Ремонт</button>
    <button class="tab-btn" id="tab-cases" onclick="switchTab('cases')">🎁 Коробки</button>
-   <button class="tab-btn" id="tab-web" onclick="switchTab('web')">🌐 Прошивки</button>
+   <button class="tab-btn" id="tab-web" onclick="switchTab('web')">💻 Прошивки</button>
  </div>
 
  <div class="info">
@@ -103,20 +224,16 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
      <div class="card work">
       <div id="job" class="mu">Выбери клиента в очереди</div>
       
-      <!-- 3D Заглушка (пока 2D, но интерактивная) -->
       <div id="phone-area">
           <div id="phone-bg">
-              <!-- Винтики -->
               <div class="screw" id="screw1" style="top:10px; left:10px;" onclick="unscrew(1)">+</div>
               <div class="screw" id="screw2" style="top:10px; right:10px;" onclick="unscrew(2)">+</div>
               <div class="screw" id="screw3" style="bottom:10px; left:10px;" onclick="unscrew(3)">+</div>
               <div class="screw" id="screw4" style="bottom:10px; right:10px;" onclick="unscrew(4)">+</div>
               
-              <!-- Задняя крышка (исчезает при откручивании) -->
-              <div id="back-cover" style="position:absolute;inset:0;background:#333;border-radius:18px;display:flex;align-items:center;justify-content:center;color:#777;font-size:40px;transition:0.3s;">📱</div>
+              <div id="back-cover">📱</div>
 
-              <!-- Внутренности (появляются) -->
-              <div id="internals" style="position:absolute;inset:0;display:none;opacity:0;transition:0.3s;">
+              <div id="internals" style="position:absolute;inset:0;display:none;opacity:0;transition:0.4s;">
                   <div id="screen-part" class="phone-part"></div>
                   <div id="board" class="phone-part">
                       <div style="position:absolute;top:10px;left:10px;color:#4af626;font-size:10px;font-family:monospace;">REV 4.0</div>
@@ -163,28 +280,35 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
      </div>
  </div>
 
- <!-- ЭКРАН ПРОШИВОК -->
- <div id="screen-web" class="screen" style="display:none;flex-direction:column;flex:1;gap:10px;">
-     <div class="card" style="flex:1;display:flex;flex-direction:column;">
-         <h3 style="margin-top:0;">Выбери прошивку:</h3>
-         <div class="web-list">
-             <div class="web-item" onclick="flashOS('official')">
-                 <div class="url">https://miui.com/download</div>
-                 <div class="risk">Официальная прошивка. Риск вируса: 0%.</div>
+ <!-- ЭКРАН ПРОШИВОК (НОУТБУК) -->
+ <div id="screen-web" class="screen" style="display:none;flex-direction:column;flex:1;gap:10px; align-items:center; justify-content:center;">
+     <div class="laptop-container">
+         <div class="laptop-screen">
+             <!-- Браузер -->
+             <div class="browser-header">
+                 <div class="browser-tab">Прошивки</div>
+                 <div class="browser-url">https://google.com/search?q=прошивки</div>
              </div>
-             <div class="web-item" onclick="flashOS('custom')">
-                 <div class="url">https://lineageos.org</div>
-                 <div class="risk">Кастомная прошивка. Риск вируса: 10%.</div>
-             </div>
-             <div class="web-item danger" onclick="flashOS('virus')">
-                 <div class="url">https://sborka.vasi.com</div>
-                 <div class="risk">Сборка от Васи. Риск вируса: 90%!</div>
-             </div>
-             <div class="web-item danger" onclick="flashOS('virus')">
-                 <div class="url">https://besplatnye-proshivki.net</div>
-                 <div class="risk">Бесплатные прошивки. Риск вируса: 99%!</div>
+             <div class="web-content">
+                 <div class="web-item" onclick="flashOS('official')">
+                     <div class="url">miui.com/download</div>
+                     <div class="risk">Официальная прошивка. Риск вируса: 0%.</div>
+                 </div>
+                 <div class="web-item" onclick="flashOS('custom')">
+                     <div class="url">lineageos.org</div>
+                     <div class="risk">Кастомная прошивка. Риск вируса: 10%.</div>
+                 </div>
+                 <div class="web-item danger" onclick="flashOS('virus')">
+                     <div class="url">sborka.vasi.com</div>
+                     <div class="risk">Сборка от Васи. Риск вируса: 90%!</div>
+                 </div>
+                 <div class="web-item danger" onclick="flashOS('virus')">
+                     <div class="url">besplatnye-proshivki.net</div>
+                     <div class="risk">Бесплатные прошивки. Риск вируса: 99%!</div>
+                 </div>
              </div>
          </div>
+         <div class="laptop-base"></div>
      </div>
  </div>
 
@@ -237,7 +361,7 @@ function switchTab(tab){
 function resetScrews(){
     screwsRemoved = 0;
     for(let i=1; i<=4; i++) $('screw'+i).classList.remove('removed');
-    $('back-cover').style.display='flex';
+    $('back-cover').classList.remove('slide-down');
     $('internals').style.display='none';
     $('internals').style.opacity='0';
 }
@@ -252,9 +376,11 @@ function unscrew(num){
     
     if(screwsRemoved === 4){
         say('Крышка снята! Теперь чини.','var(--ok)');
-        $('back-cover').style.display='none';
-        $('internals').style.display='block';
-        setTimeout(()=>{$('internals').style.opacity='1'}, 50);
+        $('back-cover').classList.add('slide-down');
+        setTimeout(()=>{
+            $('internals').style.display='block';
+            setTimeout(()=>{$('internals').style.opacity='1'}, 50);
+        }, 400);
     }
 }
 
@@ -314,7 +440,6 @@ function openCase(type, price){
     if(S.money < price) return showCaseResult('Не хватает денег!', 'var(--bad)');
     S.money -= price;
     
-    // Шансы
     let dropQ = 'used';
     let r = Math.random() * 100;
     if(type === 'common') {
@@ -327,7 +452,6 @@ function openCase(type, price){
         else dropQ = 'analog';
     }
     
-    // Случайная деталь
     const partsKeys = Object.keys(PARTS);
     const randPart = partsKeys[Math.floor(Math.random()*partsKeys.length)];
     
@@ -356,7 +480,7 @@ function flashOS(type){
     if(type === 'official') {
         beep(800, 0.2);
         say('Официальная прошивка установлена. Всё ок!', 'var(--ok)');
-        S.money += 500; // Бонус за установку
+        S.money += 500;
     } else if(type === 'custom') {
         beep(600, 0.2);
         if(Math.random() < 0.1) {
@@ -381,7 +505,7 @@ function flashOS(type){
 function triggerVirus(){
     alert('СИСТЕМА ВЗЛОМАНА! (Шутка, вирус фейковый)');
     beep(100, 1, 'sawtooth');
-    S.money = Math.max(0, S.money - 300); // Штраф
+    S.money = Math.max(0, S.money - 300);
     S.rep = Math.max(0, S.rep - 1);
     say('💥 ВИРУС! Телефон сломан. Ты потерял деньги.', 'var(--bad)');
 }
