@@ -56,12 +56,15 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #555;
-    font-size: 60px;
+    color: #fff;
+    font-size: 24px; /* Крупный текст для названия модели */
+    font-weight: bold;
+    text-align: center;
     transition: transform 0.5s ease-in-out, opacity 0.5s ease;
     z-index: 5;
     box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
     border: 1px solid #444;
+    text-shadow: 0 2px 4px #000;
 }
 #back-cover.slide-down {
     transform: translateY(100%);
@@ -231,7 +234,7 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
               <div class="screw" id="screw3" style="bottom:10px; left:10px;" onclick="unscrew(3)">+</div>
               <div class="screw" id="screw4" style="bottom:10px; right:10px;" onclick="unscrew(4)">+</div>
               
-              <div id="back-cover">📱</div>
+              <div id="back-cover">Samsung S20</div>
 
               <div id="internals" style="position:absolute;inset:0;display:none;opacity:0;transition:0.4s;">
                   <div id="screen-part" class="phone-part"></div>
@@ -318,7 +321,25 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
 const PARTS={screen:{n:'Экран',e:'🖥️',c:120,taps:20},battery:{n:'Батарея',e:'🔋',c:70,taps:12},port:{n:'Разъём',e:'🔌',c:40,taps:10},camera:{n:'Камера',e:'📷',c:100,taps:16},board:{n:'Плата',e:'🧩',c:180,taps:26}};
 const Q={used:{n:'Б/у',m:.35,pay:.75,fail:.25,cls:'q-used'},analog:{n:'Аналог',m:.65,pay:1,fail:.08,cls:'q-analog'},orig:{n:'Оригинал',m:1,pay:1.5,fail:0,cls:'q-orig'}};
 const QS=['used','analog','orig'];
-const ISSUES=[['screen','Разбит экран'],['screen','Трещина на дисплее'],['battery','Быстро садится'],['battery','Не включается'],['port','Не заряжается'],['camera','Мутные фото'],['board','Упал в воду']];
+
+// СПИСОК МОДЕЛЕЙ ТЕЛЕФОНОВ
+const PHONE_MODELS = [
+    'Samsung S20', 'Samsung S21', 'Samsung S22', 'Samsung S23', 'Samsung S24', 'Samsung S25', 'Samsung S26',
+    'Xiaomi 10 Ultra', 'Xiaomi 11 Ultra', 'Xiaomi 12 Ultra', 'Xiaomi 13 Ultra', 'Xiaomi 14 Ultra'
+];
+
+// Добавили тип "Прошивка"
+const ISSUES=[
+    ['screen','Разбит экран'],
+    ['screen','Трещина на дисплее'],
+    ['battery','Быстро садится'],
+    ['battery','Не включается'],
+    ['port','Не заряжается'],
+    ['camera','Мутные фото'],
+    ['board','Упал в воду'],
+    ['flash','Нужна перепрошивка'] // Новый тип
+];
+
 const NAMES=['Аня','Игорь','Мария','Денис','Олег','Света','Паша','Лена','Артём','Ксюша'],FACES=['🧑','👩','👨','🧓','👧','👦'];
 const $=id=>document.getElementById(id);
 let S,cfg,cur=null,queue=[],uid=0,sel='screen';
@@ -387,17 +408,36 @@ function unscrew(num){
 function newClient(){
  if(queue.length>=3)return;
  const it=ISSUES[Math.floor(Math.random()*ISSUES.length)];
- queue.push({id:++uid,name:NAMES[Math.random()*NAMES.length|0],face:FACES[Math.random()*FACES.length|0],part:it[0],issue:it[1]});
+ const model = PHONE_MODELS[Math.floor(Math.random()*PHONE_MODELS.length)];
+ queue.push({
+     id:++uid,
+     name:NAMES[Math.random()*NAMES.length|0],
+     face:FACES[Math.random()*FACES.length|0],
+     part:it[0],
+     issue:it[1],
+     model: model // Сохраняем модель
+ });
  render();
 }
+
 function pickClient(c){
  if(cur&&cur.started)return say('Сначала закончи текущий ремонт','var(--bad)');
  cur={c:c,started:false,q:null,prog:0,need:0};sel=c.part;
+ 
+ // Меняем надпись на крышке
+ $('back-cover').textContent = c.model;
+ 
  resetScrews();
  const any=QS.some(q=>have(c.part,q));
- say(any?'Выбери запчасть внизу и начинай!':'Нет нужной запчасти — купи её внизу','var(--mu)');
+ 
+ if(c.part === 'flash') {
+     say('Клиент просит перепрошить телефон. Открой вкладку Прошивки!', 'var(--ac)');
+ } else {
+     say(any?'Выбери запчасть внизу и начинай!':'Нет нужной запчасти — купи её внизу','var(--mu)');
+ }
  render();
 }
+
 function install(q){
  if(!cur||cur.started||sel!==cur.c.part||!have(sel,q))return;
  S.inv[sel][q]--;cur.started=true;cur.q=q;cur.prog=0;cur.need=PARTS[sel].taps;
@@ -477,6 +517,8 @@ function showCaseResult(text, color) {
 }
 
 function flashOS(type){
+    if(!cur || cur.c.part !== 'flash') return say('Сейчас этому клиенту не нужна прошивка!', 'var(--bad)');
+    
     if(type === 'official') {
         beep(800, 0.2);
         say('Официальная прошивка установлена. Всё ок!', 'var(--ok)');
@@ -497,9 +539,15 @@ function flashOS(type){
             S.money += 100;
         }
     }
+    // Завершаем заказ
+    if(cur) {
+        queue=queue.filter(x=>x.id!==cur.c.id);
+        cur=null;
+    }
     save();
     render();
     switchTab('repair');
+    resetScrews();
 }
 
 function triggerVirus(){
@@ -520,15 +568,32 @@ function render(){
  if(!queue.length)qb.innerHTML='<div class="empty">Ждём клиентов…</div>';
  queue.forEach(c=>{
   const d=document.createElement('div');d.className='cl'+(cur&&cur.c.id===c.id?' sel':'');
-  d.innerHTML='<div>'+c.face+' <b>'+c.name+'</b></div><small>'+c.issue+'</small><small>Нужно: '+PARTS[c.part].e+' '+PARTS[c.part].n+'</small>';
+  
+  let needText = c.part === 'flash' ? 'Нужна прошивка' : `Нужно: ${PARTS[c.part].e} ${PARTS[c.part].n}`;
+  
+  d.innerHTML=`<div>${c.face} <b>${c.name}</b></div><small>${c.model}</small><small>${c.issue}</small><small>${needText}</small>`;
   d.onclick=()=>pickClient(c);qb.appendChild(d);
  });
 
  if(!cur){$('job').textContent='Выбери клиента в очереди'}
- else if(!cur.started){$('job').textContent=cur.c.name+': '+cur.c.issue+' → нужна «'+PARTS[cur.c.part].n+'»'}
+ else if(!cur.started){$('job').textContent=`${cur.c.name} (${cur.c.model}): ${cur.c.issue}`}
  else{$('job').textContent='Чиню: '+cur.c.issue+' ('+Q[cur.q].n+')'}
  $('bar').style.width=cur&&cur.started?(cur.prog/cur.need*100)+'%':'0%';
  $('dismiss').style.display=cur&&!cur.started?'block':'none';
+
+ // Скрываем кнопки запчастей, если нужна прошивка
+ if(cur && cur.c.part === 'flash') {
+     $('chips').style.display = 'none';
+     $('inst').style.display = 'none';
+     $('buy').style.display = 'none';
+     document.querySelector('.lab').style.display = 'none'; // Скрываем заголовок
+     return;
+ } else {
+     $('chips').style.display = 'flex';
+     $('inst').style.display = 'flex';
+     $('buy').style.display = 'flex';
+     document.querySelector('.lab').style.display = 'flex';
+ }
 
  const ch=$('chips');ch.innerHTML='';
  Object.keys(PARTS).forEach(p=>{
