@@ -3,652 +3,112 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Phone Master Studio 4.2</title>
+<title>Mobile Repair Studio</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#101522;color:#f3f6ff;font-family:Arial,sans-serif}
-header{background:#1b2537;padding:14px;text-align:center;border-bottom:2px solid #34445d}
-header h1{font-size:21px;margin:0 0 9px}
-.stats{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;font-size:14px}
-nav{display:flex;overflow-x:auto;gap:6px;padding:9px;background:#141c2b}
-button{border:0;border-radius:9px;padding:11px;background:#35445f;color:white;font-weight:bold;cursor:pointer}
-button:active{transform:scale(.97)}
-button:disabled{opacity:.4}
-nav button.active{background:#54d5ff;color:#102033}
-main{padding:10px;max-width:950px;margin:auto}
-.page{display:none}
-.page.active{display:block}
-.panel{background:#1d293c;border:1px solid #35465e;border-radius:14px;padding:13px;margin-bottom:12px}
-h2{font-size:18px;margin:0 0 12px}
-h3{font-size:15px}
-.muted{color:#a9b8cc;font-size:13px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.between{justify-content:space-between}
-.primary{background:#147fa8}
-.good{background:#16825d}
-.danger{background:#a63448}
-.gold{background:#99701d}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.workgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.phonearea{min-height:380px;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
-.phone{width:175px;height:335px;border:7px solid #596477;border-radius:27px;position:relative;background:#202d40;box-shadow:0 12px 30px #0009;transition:transform .5s}
-.cover{position:absolute;inset:0;background:linear-gradient(140deg,#536783,#202c40);border-radius:19px;display:flex;align-items:center;justify-content:center;font-weight:bold;z-index:3;transition:transform .7s,opacity .7s}
-.cover.open{transform:translateX(200px) rotate(15deg);opacity:0;pointer-events:none}
-.camera{position:absolute;top:14px;left:14px;background:#121a29;border-radius:10px;padding:8px;display:grid;grid-template-columns:repeat(2,12px);gap:5px}
-.lens{width:12px;height:12px;background:#05090e;border:2px solid #8290a4;border-radius:50%}
-.brand{position:absolute;top:120px;width:100%;text-align:center;font-size:12px;font-weight:bold}
-.screw{position:absolute;z-index:5;width:22px;height:22px;padding:0;border-radius:50%;background:#b8c4d3;color:#18202c;border:2px solid white;font-size:14px}
-.s1{top:10px;left:10px}.s2{top:10px;right:10px}.s3{bottom:10px;left:10px}.s4{bottom:10px;right:10px}
-.screw.removed{display:none}
-.board{position:absolute;inset:12px;border-radius:13px;background:#14583f;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:14px;color:white;font-size:12px}
-.chip,.battery{background:#283342;border:2px solid #b3a06c;padding:17px;border-radius:7px}
-.laptop{background:#56657a;padding:8px;border-radius:12px;border:3px solid #8190a4}
-.screen{background:#e6edf5;color:#172033;min-height:205px;padding:9px;border-radius:5px;font-size:12px}
-.browserbar{background:#cbd5e3;padding:7px;border-radius:5px;margin-bottom:8px}
-.site{display:block;width:100%;text-align:left;margin:5px 0;font-size:12px}
-.wire{text-align:center;color:#ffd166;font-size:13px;padding:12px 0}
-.inventoryitem,.quest,.case{background:#2a3950;padding:12px;border-radius:10px;margin:7px 0}
-.progress{height:9px;background:#101522;border-radius:8px;overflow:hidden;margin:8px 0}
-.progress span{display:block;height:100%;background:#52e0a0}
-#message{display:none;position:fixed;bottom:15px;left:5%;width:90%;background:#304766;border:1px solid #6c91bb;border-radius:10px;padding:12px;text-align:center;z-index:20}
-#alarm,#bsod{display:none;position:fixed;inset:0;z-index:40;text-align:center;padding:25vh 15px 0;color:white}
-#alarm{background:#a40016;animation:blink .4s infinite alternate}
-#bsod{background:#0754a0;font-family:monospace;z-index:41;padding-top:15vh}
-@keyframes blink{to{background:#310008}}
-.color{width:35px;height:35px;border:2px solid white;border-radius:50%;padding:0}
-@media(max-width:620px){.grid,.workgrid{grid-template-columns:1fr}.phonearea{min-height:360px}header h1{font-size:18px}}
+:root{--bg:#090e17;--panel:#151e2a;--panel2:#1c2938;--line:#293849;--red:#d92735;--yellow:#ffc83d;--muted:#91a0b2;--green:#53d69a}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 30%,#17283b 0,#0a111c 55%,#070b12 100%);color:#f4f7fb;font:15px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+button{font:inherit;color:inherit;border:0;cursor:pointer}button:disabled{opacity:.35;cursor:not-allowed}
+.app{width:min(100%,520px);margin:auto;min-height:100vh;padding:12px 13px 22px;display:flex;flex-direction:column;gap:10px}
+.top{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:1000;letter-spacing:2px;font-size:17px}.brand b{background:var(--red);padding:4px 7px;border-radius:4px;margin-right:4px}.money{color:var(--yellow);font-weight:900;font-size:20px}
+.card{background:linear-gradient(145deg,#1a2634,#111a25);border:1px solid var(--line);border-radius:13px;padding:11px;box-shadow:0 8px 22px #0005}
+.order{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.eyebrow{color:var(--yellow);font-size:12px;font-weight:800}.order h2{font-size:16px;margin:3px 0}.muted{color:var(--muted);font-size:12px}.price{font-size:23px;color:var(--yellow);font-weight:900;text-align:right}.btn{background:var(--red);padding:10px 14px;border-radius:9px;font-weight:850;box-shadow:inset 0 -3px #8d1420}.btn.secondary{background:#273649;box-shadow:none;border:1px solid #3b4b5f}.btn.gold{background:var(--yellow);color:#211b0b;box-shadow:inset 0 -3px #c28b12}.btn.small{padding:7px 10px;font-size:12px}
+.progress{height:6px;background:#293747;border-radius:8px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),#ff8d38);transition:width .25s}
+.workbench{position:relative;min-height:370px;border-radius:15px;border:1px solid #3b526b;background:radial-gradient(ellipse at center,#315477 0,#1d354d 55%,#142638 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px 58px 14px 12px}
+.workbench:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
+.phone-wrap{position:relative;width:min(64%,235px);height:320px;perspective:800px;z-index:2}
+.phone{position:absolute;inset:0;border-radius:28px;background:linear-gradient(110deg,#111923,#384553 13%,#0b1018 20%,#1d2936 80%,#080c12);border:5px solid #070b10;box-shadow:0 20px 35px #0009;overflow:hidden;transition:transform .3s}
+.phone.back{background:linear-gradient(120deg,#9b1e2a,#e13d4b 45%,#9c1e2a)}
+.phone.front{background:#080c12}
+.screen{position:absolute;inset:7px;border-radius:21px;background:linear-gradient(145deg,#101a2c,#182f4a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px}
+.screen:before{content:"";position:absolute;top:5px;width:62px;height:12px;background:#05080d;border-radius:0 0 10px 10px}
+.screen .time{font-size:30px;font-weight:300}.screen .wall{font-size:12px;color:#a9c5dc;margin-top:10px}
+.camera{position:absolute;top:16px;left:20px;width:58px;height:58px;background:#202b37;border-radius:15px;border:2px solid #7b8791;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px}
+.lens{border-radius:50%;background:radial-gradient(circle at 35% 35%,#8ba9c5 0 10%,#17283d 25%,#03070c 70%);border:2px solid #677889}
+.logo{position:absolute;top:48%;width:100%;text-align:center;font-weight:900;letter-spacing:3px;color:#ffffff55}
+.screw{position:absolute;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle,#b9c4ce,#4b5864 60%,#141a21);border:1px solid #c1cbd2;z-index:8;display:grid;place-items:center;font-size:10px;color:#18202a;cursor:pointer}
+.s1{top:8px;left:8px}.s2{top:8px;right:8px}.s3{bottom:8px;left:8px}.s4{bottom:8px;right:8px}
+.board{position:absolute;inset:16px 13px 16px;background:linear-gradient(135deg,#14513f,#23765a 45%,#103b32);border:2px solid #9bba9d;border-radius:13px;display:none;overflow:hidden}
+.board:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 17px,#a6d3a122 18px 19px),repeating-linear-gradient(90deg,transparent 0 21px,#a6d3a122 22px 23px)}
+.chip{position:absolute;background:#171d26;border:2px solid #8d9a9e;border-radius:4px;box-shadow:0 2px 4px #0008}.c1{width:60px;height:54px;left:25px;top:40px}.c2{width:45px;height:38px;right:22px;top:100px}.c3{width:75px;height:48px;left:60px;bottom:35px}
+.battery{position:absolute;left:20%;top:34%;width:60%;height:32%;background:linear-gradient(120deg,#202a36,#536170);border:3px solid #b5c2ca;border-radius:9px;display:none;color:#e6edf4;text-align:center;padding-top:25px;font-size:13px;font-weight:800}
+.cover{position:absolute;inset:0;border-radius:23px;background:linear-gradient(120deg,#18212b,#56616a 45%,#202b36);z-index:5;transition:transform .45s,opacity .35s;display:none}
+.cover.open{transform:translateX(110%) rotate(8deg);opacity:0;pointer-events:none}
+.tool-rail{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:4}
+.tool-rail button{width:40px;height:40px;border-radius:50%;background:#101a27dd;border:1px solid #60768b;font-size:18px}
+.tip{position:absolute;z-index:10;top:10px;left:10px;right:58px;background:#111b28eF;border:1px solid #52677c;border-left:3px solid var(--yellow);border-radius:9px;padding:9px;font-size:12px;box-shadow:0 5px 14px #0006}
+.bottom{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.tool{background:#141f2c;border:1px solid #2c3b4c;border-radius:10px;padding:9px 3px;text-align:center;color:#cbd5df;font-size:11px;min-height:61px}
+.tool span{display:block;font-size:20px;margin-bottom:3px}.tool.active{border-color:var(--yellow);background:#40351b;color:#ffe18a}
+.actions{display:flex;gap:7px;flex-wrap:wrap}.actions .btn{flex:1;min-width:105px}
+.status{font-size:12px;color:#c4d0dc;min-height:34px}.parts{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.part{min-width:105px;background:#111c29;border:1px solid #34485b;border-radius:9px;padding:8px;font-size:11px}.part b{display:block;color:#fff;font-size:12px;margin-bottom:4px}
+.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.dialog{width:min(100%,390px);background:#172331;border:1px solid #4b6074;border-radius:15px;padding:17px}.dialog h3{margin:0 0 8px}.dialog p{color:#b5c2d0;font-size:13px}
+@media(min-width:520px){.app{padding-top:20px}.workbench{min-height:430px}.phone-wrap{height:350px}}
 </style>
 </head>
 <body>
-
-<header>
-<h1>🔧 Phone Master Studio 4.2</h1>
-<div class="stats">
-<span>💰 <b id="money">3000</b> ₽</span>
-<span>⭐ Уровень <b id="level">1</b></span>
-<span>🔧 Ремонтов <b id="repairs">0</b></span>
+<div class="app">
+ <header class="top"><div class="brand"><b>MOBILE</b> REPAIR STUDIO</div><div class="money" id="money">₽ 1 500</div></header>
+ <section class="card order">
+  <div><div class="eyebrow">ЗАКАЗ КЛИЕНТА · №001</div><h2 id="customer">Артём · Samsung S24 · Чёрный</h2><div class="muted" id="problem">Не включается после падения. Нужно заменить дисплей.</div><div class="progress"><i id="progress"></i></div></div>
+  <div><div class="price" id="reward">₽ 2 400</div><button class="btn small" id="checkBtn">Проверить</button></div>
+ </section>
+ <div class="workbench" id="bench">
+  <div class="tip" id="tip">Начни с проверки телефона. Нажми «Проверить», затем выбери инструмент.</div>
+  <div class="phone-wrap"><div class="phone back" id="phone">
+   <div class="screen" id="screen"><div class="time">08:24</div><div class="wall">SAMSUNG · GALAXY</div></div>
+   <div class="camera"><i class="lens"></i><i class="lens"></i><i class="lens"></i><i class="lens"></i></div><div class="logo" id="logo">SAMSUNG</div>
+   <div class="board" id="board"><div class="chip c1"></div><div class="chip c2"></div><div class="chip c3"></div></div>
+   <div class="battery" id="battery">BATTERY<br>5000 mAh</div>
+   <div class="cover" id="cover"></div>
+   <button class="screw s1" data-screw="0">＋</button><button class="screw s2" data-screw="1">＋</button><button class="screw s3" data-screw="2">＋</button><button class="screw s4" data-screw="3">＋</button>
+  </div></div>
+  <div class="tool-rail"><button id="rotate">⟳</button><button id="zoomIn">＋</button><button id="zoomOut">－</button></div>
+ </div>
+ <div class="card"><div class="eyebrow">ИНСТРУМЕНТЫ</div><div class="bottom" id="tools">
+  <button class="tool active" data-tool="hand"><span>✋</span>Рука</button><button class="tool" data-tool="driver"><span>🪛</span>Отвёртка</button><button class="tool" data-tool="heat"><span>♨️</span>Фен</button><button class="tool" data-tool="pick"><span>🔧</span>Медиатор</button><button class="tool" data-tool="tweezers"><span>✂️</span>Пинцет</button>
+ </div></div>
+ <section class="card"><div class="eyebrow">РАБОЧАЯ ПАНЕЛЬ</div><p class="status" id="status">Телефон ещё не проверен. Нажми «Проверить», чтобы начать диагностику.</p><div class="actions"><button class="btn secondary" id="backBtn">Собрать телефон</button><button class="btn gold" id="deliverBtn">Сдать заказ</button></div></section>
+ <section class="card"><div class="eyebrow">ЗАПЧАСТИ И СКЛАД</div><div class="parts">
+  <button class="part" id="displayPart"><b>📱 Дисплей</b>Оригинал · ₽ 900</button>
+  <button class="part" id="batteryPart"><b>🔋 Аккумулятор</b>Оригинал · ₽ 650</button>
+  <button class="part" id="boardPart"><b>🟩 Плата</b>Совместимая · ₽ 1 200</button>
+ </div></section>
+ <div class="muted" style="text-align:center">Уровень 1 · Начинающий мастер · Ремонтировано: <b id="repairs">0</b></div>
 </div>
-</header>
-
-<nav>
-<button class="active" data-page="workshop">🔧 Мастерская</button>
-<button data-page="cases">📦 Кейсы</button>
-<button data-page="firmware">💻 Прошивки</button>
-<button data-page="quests">📋 Задания</button>
-<button data-page="custom">🎨 Дизайн</button>
-</nav>
-
-<main>
-<section class="page active" id="workshop">
-<div class="panel">
-<div class="row between">
-<h2>Заказ клиента</h2>
-<button class="primary" onclick="newCustomer()">Новый клиент</button>
-</div>
-<div id="customerInfo">Загрузка...</div>
-</div>
-
-<div class="workgrid">
-<div class="panel phonearea">
-<h2>📱 Телефон</h2>
-<div class="phone" id="phone">
-<div class="camera"><div class="lens"></div><div class="lens"></div><div class="lens"></div><div class="lens"></div></div>
-<div class="brand" id="brand">SAMSUNG</div>
-<button class="screw s1" onclick="removeScrew(0)">+</button>
-<button class="screw s2" onclick="removeScrew(1)">+</button>
-<button class="screw s3" onclick="removeScrew(2)">+</button>
-<button class="screw s4" onclick="removeScrew(3)">+</button>
-<div class="board">
-<div class="chip">МАТЕРИНСКАЯ ПЛАТА</div>
-<div class="battery">🔋 БАТАРЕЯ</div>
-</div>
-<div class="cover" id="cover">ЗАДНЯЯ КРЫШКА</div>
-</div>
-<p id="screwInfo" class="muted">Открути 4 винтика.</p>
-<div class="row">
-<button class="primary" onclick="flipPhone()">Перевернуть</button>
-<button onclick="resetDisassembly()">Сбросить</button>
-</div>
-</div>
-
-<div class="panel">
-<h2>💻 Ноутбук мастера</h2>
-<div class="laptop">
-<div class="screen">
-<div class="browserbar">🌐 Phone Master Browser</div>
-<b id="browserTitle">Выбери сайт</b>
-<p id="browserResult">Открой крышку телефона и подключи USB.</p>
-<div id="browserSites"></div>
-</div>
-</div>
-<div class="wire" id="wire">🔌 USB не подключён</div>
-<div class="row">
-<button class="good" onclick="connectUSB()">Подключить USB</button>
-<button class="danger" onclick="disconnectUSB()">Отключить</button>
-</div>
-</div>
-</div>
-
-<div class="panel">
-<h2>🧰 Ремонт</h2>
-<div id="repairControls"></div>
-</div>
-
-<div class="panel">
-<h2>🎒 Инвентарь</h2>
-<div id="inventory"></div>
-</div>
-</section>
-
-<section class="page" id="cases">
-<div class="panel">
-<h2>📦 Магазин кейсов</h2>
-<div class="grid">
-<div class="case"><h3>Обычный кейс</h3><p>Случайная деталь</p><b>500 ₽</b><br><br><button class="primary" onclick="buyCase('normal')">Купить</button></div>
-<div class="case"><h3>Редкий кейс</h3><p>Больше шансов на оригинал</p><b>2000 ₽</b><br><br><button class="primary" onclick="buyCase('rare')">Купить</button></div>
-<div class="case"><h3>Золотой кейс</h3><p>Две хорошие детали</p><b>5000 ₽</b><br><br><button class="gold" onclick="buyCase('gold')">Купить</button></div>
-</div>
-</div>
-</section>
-
-<section class="page" id="firmware">
-<div class="panel">
-<h2>💻 Центр прошивок</h2>
-<p class="muted">Выбери сайт, подключи USB и запусти игровую прошивку.</p>
-<div id="firmwareSites"></div>
-<p id="selectedSite">Сайт не выбран.</p>
-<div class="row">
-<button class="good" onclick="connectUSB()">Подключить USB</button>
-<button class="danger" onclick="disconnectUSB()">Отключить USB</button>
-<button class="primary" onclick="flashFirmware()">Запустить прошивку</button>
-</div>
-</div>
-</section>
-
-<section class="page" id="quests">
-<div class="panel">
-<h2>📋 Ежедневные задания</h2>
-<div id="questList"></div>
-</div>
-</section>
-
-<section class="page" id="custom">
-<div class="panel">
-<h2>🎨 Цвет телефона</h2>
-<div class="row">
-<button class="color" style="background:#20242e" onclick="setColor('#20242e')"></button>
-<button class="color" style="background:#1c477c" onclick="setColor('#1c477c')"></button>
-<button class="color" style="background:#7d294b" onclick="setColor('#7d294b')"></button>
-<button class="color" style="background:#28704f" onclick="setColor('#28704f')"></button>
-<button class="color" style="background:#a47a31" onclick="setColor('#a47a31')"></button>
-<button class="color" style="background:#aaaeb8" onclick="setColor('#aaaeb8')"></button>
-<button class="color" style="background:#6b3b91" onclick="setColor('#6b3b91')"></button>
-</div>
-</div>
-<div class="panel">
-<h2>🔊 Звуки</h2>
-<div class="row">
-<button onclick="toggleSound()" id="soundButton">Звуки: ВКЛ</button>
-<button onclick="toggleMusic()" id="musicButton">Музыка: ВЫКЛ</button>
-</div>
-</div>
-<div class="panel">
-<h2>💾 Сохранение</h2>
-<button class="danger" onclick="resetSave()">Сбросить прогресс</button>
-</div>
-</section>
-</main>
-
-<footer style="text-align:center;color:#9ca9c0;padding:20px;font-size:12px">Phone Master Studio 4.2</footer>
-<div id="message"></div>
-
-<div id="alarm">
-<h1>🚨 ВИРУС ОБНАРУЖЕН!</h1>
-<h2>НОУТБУК ЗАБЛОКИРОВАН</h2>
-<p>Игровая симуляция вирусной ошибки.</p>
-<button onclick="closeAlarm()">Перезагрузить ноутбук</button>
-</div>
-<div id="bsod">
-<h1>:(</h1>
-<h2>Возникла системная ошибка</h2>
-<p>FIRMWARE_FAILURE</p>
-<button onclick="closeAlarm()">Перезагрузить</button>
-</div>
-
+<div class="modal" id="modal"><div class="dialog"><h3 id="modalTitle">Заказ выполнен!</h3><p id="modalText"></p><button class="btn" id="nextBtn">Следующий заказ</button></div></div>
 <script>
-"use strict";
-
-const MODELS=[
-"Samsung S20","Samsung S21","Samsung S22","Samsung S23",
-"Samsung S24","Samsung S25","Samsung S26",
-"Xiaomi 10 Ultra","Xiaomi 11 Ultra","Xiaomi 12 Ultra",
-"Xiaomi 13 Ultra","Xiaomi 14 Ultra"
-];
-
-const PARTS=["Экран","Батарея","Материнская плата"];
-const SITES=[
-{name:"miui.com",risk:0},
-{name:"lineageos.org",risk:10},
-{name:"sborka.vasi.com",risk:90},
-{name:"besplatnye-proshivki.net",risk:99}
-];
-
-const DEFAULT_STATE={
-money:3000,xp:0,repairs:0,color:"#20242e",
-inventory:[],customer:null,screws:[false,false,false,false],
-opened:false,flipped:false,usb:false,selectedSite:null,
-sound:true,music:false,quests:[],questDate:""
-};
-
-let state={...DEFAULT_STATE};
-let messageTimer=null;
-let musicTimer=null;
-let audioContext=null;
-
-function save(){
-try{
-localStorage.setItem("pms42-save",JSON.stringify(state));
-}catch(e){}
+(()=>{
+const $=id=>document.getElementById(id);
+let money=1500,repairs=0,checked=false,opened=false,heated=false,usb=false,installed=false,assembled=false,tool='hand',removed=[false,false,false,false],zoom=1,rotation=0,part='display';
+const jobs=[
+{name:'Артём',model:'Samsung S24',color:'Чёрный',problem:'Не включается после падения. Нужно заменить дисплей.',reward:2400,need:'display'},
+{name:'Мария',model:'Xiaomi 13 Ultra',color:'Белый',problem:'Телефон быстро разряжается. Нужен новый аккумулятор.',reward:1800,need:'battery'},
+{name:'Илья',model:'Samsung S22',color:'Зелёный',problem:'Повреждена плата после попадания влаги.',reward:3200,need:'board'},
+{name:'София',model:'Xiaomi 14 Ultra',color:'Чёрный',problem:'Разбит экран. Требуется замена дисплейного модуля.',reward:2600,need:'display'}
+];let job=0;
+function say(t){$('status').textContent=t;$('tip').textContent=t}
+function update(){ $('money').textContent='₽ '+money.toLocaleString('ru-RU');$('repairs').textContent=repairs;
+let n=(checked?1:0)+(removed.filter(Boolean).length/4)*2+(heated?1:0)+(opened?2:0)+(installed?3:0)+(assembled?1:0);$('progress').style.width=Math.min(100,n/10*100)+'%';
+$('customer').textContent=`${jobs[job].name} · ${jobs[job].model} · ${jobs[job].color}`;$('problem').textContent=jobs[job].problem;$('reward').textContent='₽ '+jobs[job].reward.toLocaleString('ru-RU');
 }
-
-function load(){
-try{
-const raw=localStorage.getItem("pms42-save");
-if(raw){
-const data=JSON.parse(raw);
-state={...DEFAULT_STATE,...data};
-}
-}catch(e){
-state={...DEFAULT_STATE};
-}
-if(!Array.isArray(state.inventory))state.inventory=[];
-if(!Array.isArray(state.screws)||state.screws.length!==4)state.screws=[false,false,false,false];
-dailyReset();
-}
-
-function dailyReset(){
-const date=new Date().toLocaleDateString("ru-RU");
-if(state.questDate!==date){
-state.questDate=date;
-state.quests=[
-{name:"Починить 5 телефонов",target:5,progress:0,reward:1500,done:false,type:"repair"},
-{name:"Заработать 5000 ₽",target:5000,progress:0,reward:2000,done:false,type:"earn"},
-{name:"Получить 3 детали из кейсов",target:3,progress:0,reward:1000,done:false,type:"buy"}
-];
-}
-}
-
-function notify(text){
-const el=document.getElementById("message");
-el.textContent=text;
-el.style.display="block";
-clearTimeout(messageTimer);
-messageTimer=setTimeout(()=>el.style.display="none",2500);
-}
-
-function tone(freq=500,duration=.1){
-if(!state.sound)return;
-try{
-audioContext=audioContext||new(window.AudioContext||window.webkitAudioContext)();
-const osc=audioContext.createOscillator();
-const gain=audioContext.createGain();
-osc.frequency.value=freq;
-gain.gain.value=.06;
-osc.connect(gain);
-gain.connect(audioContext.destination);
-osc.start();
-gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
-osc.stop(audioContext.currentTime+duration);
-}catch(e){}
-}
-
-function toggleSound(){
-state.sound=!state.sound;
-document.getElementById("soundButton").textContent="Звуки: "+(state.sound?"ВКЛ":"ВЫКЛ");
-save();
-tone();
-}
-
-function toggleMusic(){
-state.music=!state.music;
-document.getElementById("musicButton").textContent="Музыка: "+(state.music?"ВКЛ":"ВЫКЛ");
-if(state.music){
-stopMusic();
-musicTimer=setInterval(()=>tone(220+Math.random()*180,.15),1000);
-}else stopMusic();
-save();
-}
-
-function stopMusic(){
-if(musicTimer)clearInterval(musicTimer);
-musicTimer=null;
-}
-
-function showPage(id){
-document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-document.getElementById(id).classList.add("active");
-document.querySelector('[data-page="'+id+'"]').classList.add("active");
-renderAll();
-}
-
-document.querySelectorAll("nav button").forEach(b=>{
-b.addEventListener("click",()=>showPage(b.dataset.page));
+function screws(){document.querySelectorAll('.screw').forEach((b,i)=>{b.style.display=opened?'none':'grid';b.textContent=removed[i]?'':'＋';b.style.opacity=removed[i]?'.15':'1'})}
+function render(){ $('board').style.display=opened?'block':'none';$('battery').style.display=opened?'block':'none';$('cover').style.display=checked?'block':'none';$('cover').classList.toggle('open',opened);$('logo').style.display=opened?'none':'block';$('screen').style.display=opened?'none':'flex';screws();update()}
+$('checkBtn').onclick=()=>{checked=true;say('Диагностика завершена: обнаружена неисправность. Выбери отвёртку и выкрути четыре винта на задней крышке.');render()};
+document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===b));say(({hand:'Рука: можно вращать телефон и выполнять ручные действия.',driver:'Отвёртка выбрана. Нажми на каждый винт, чтобы выкрутить его.',heat:'Фен выбран. Прогрей края крышки, нажав на телефон.',pick:'Медиатор выбран. После прогрева нажми на крышку, чтобы открыть её.',tweezers:'Пинцет выбран. Используй его для отключения аккумулятора и установки деталей.'})[tool])});
+document.querySelectorAll('.screw').forEach(b=>b.onclick=()=>{if(!checked){say('Сначала проверь телефон.');return}if(tool!=='driver'){say('Для винтов нужна отвёртка. Выбери её в панели инструментов.');return}let i=+b.dataset.screw;removed[i]=true;b.textContent='';b.style.opacity='.15';say(`Винт ${removed.filter(Boolean).length}/4 выкручен.`);if(removed.every(Boolean))say('Все винты сняты. Выбери фен и прогрей края задней крышки.')});
+$('bench').addEventListener('click',e=>{if(e.target.closest('button')||e.target.closest('.screw'))return;if(!checked)return;
+if(tool==='hand'){rotation+=12;$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`;return}
+if(tool==='heat'){if(!removed.every(Boolean)){say('Сначала выкрути все четыре винта.');return}heated=true;say('Клей прогрет. Теперь выбери медиатор и открой заднюю крышку.');return}
+if(tool==='pick'){if(!heated){say('Сначала прогрей края феном.');return}opened=true;say('Крышка снята! Видна плата и аккумулятор. Выбери пинцет, чтобы отключить аккумулятор.');render();return}
+if(tool==='tweezers'){if(!opened){say('Сначала открой заднюю крышку.');return}if(!usb){usb=true;say('Аккумулятор отключён. Теперь выбери нужную запчасть на складе ниже.');return}say('Аккумулятор уже отключён. Выбери нужную запчасть на складе.')}
 });
-
-function newCustomer(){
-const model=MODELS[Math.floor(Math.random()*MODELS.length)];
-const issue=["Экран","Батарея","Материнская плата","Прошивка"][Math.floor(Math.random()*4)];
-state.customer={
-model:model,
-issue:issue,
-reward:500+Math.floor(Math.random()*1000),
-done:false
-};
-state.screws=[false,false,false,false];
-state.opened=false;
-state.flipped=false;
-state.usb=false;
-state.selectedSite=null;
-document.getElementById("phone").style.transform="";
-document.getElementById("cover").classList.remove("open");
-document.getElementById("browserResult").textContent="Открой крышку и подключи USB.";
-document.getElementById("brand").textContent=model.toUpperCase();
-notify("Новый заказ: "+model);
-tone(650);
-save();
-renderAll();
-}
-
-function removeScrew(i){
-if(!state.customer||state.customer.done){
-notify("Сначала получи заказ.");
-return;
-}
-if(state.opened||state.screws[i])return;
-state.screws[i]=true;
-document.querySelectorAll(".screw")[i].classList.add("removed");
-tone(420);
-const count=state.screws.filter(Boolean).length;
-document.getElementById("screwInfo").textContent="Винтики: "+count+"/4";
-if(count===4){
-state.opened=true;
-document.getElementById("cover").classList.add("open");
-notify("Крышка снята! Телефон открыт.");
-tone(750);
-}
-save();
-renderAll();
-}
-
-function resetDisassembly(){
-state.screws=[false,false,false,false];
-state.opened=false;
-state.usb=false;
-state.flipped=false;
-document.getElementById("phone").style.transform="";
-document.getElementById("cover").classList.remove("open");
-save();
-renderAll();
-}
-
-function flipPhone(){
-state.flipped=!state.flipped;
-document.getElementById("phone").style.transform=state.flipped?"rotateY(180deg)":"rotateY(0deg)";
-tone(350);
-save();
-}
-
-function connectUSB(){
-if(!state.opened){
-notify("Сначала открой заднюю крышку.");
-return;
-}
-state.usb=true;
-document.getElementById("wire").textContent="🔌 USB подключён: телефон ↔ ноутбук";
-document.getElementById("browserResult").textContent="Устройство обнаружено. Выбери прошивку.";
-notify("USB подключён!");
-tone(600);
-save();
-}
-
-function disconnectUSB(){
-state.usb=false;
-document.getElementById("wire").textContent="🔌 USB не подключён";
-document.getElementById("browserResult").textContent="Ожидание подключения устройства.";
-save();
-renderAll();
-}
-
-function selectSite(i){
-state.selectedSite=SITES[i];
-document.getElementById("browserTitle").textContent=SITES[i].name;
-document.getElementById("browserResult").textContent="Риск заражения: "+SITES[i].risk+"%.";
-document.getElementById("selectedSite").textContent=
-SITES[i].name+" · риск вируса "+SITES[i].risk+"%";
-save();
-renderAll();
-}
-
-function renderSites(){
-const a=document.getElementById("browserSites");
-const b=document.getElementById("firmwareSites");
-a.innerHTML="";
-b.innerHTML="";
-SITES.forEach((site,i)=>{
-[a,b].forEach(box=>{
-const button=document.createElement("button");
-button.className="site";
-button.textContent=site.name+" · "+site.risk+"% риск";
-button.onclick=()=>selectSite(i);
-box.appendChild(button);
-});
-});
-document.getElementById("selectedSite").textContent=state.selectedSite?
-state.selectedSite.name+" · риск вируса "+state.selectedSite.risk+"%":"Сайт не выбран.";
-}
-
-function flashFirmware(){
-const c=state.customer;
-if(!c||c.done){notify("Нет активного заказа.");return;}
-if(c.issue!=="Прошивка"){notify("Клиенту нужна другая деталь.");return;}
-if(!state.opened){notify("Сначала открой крышку.");return;}
-if(!state.usb){notify("Подключи USB.");return;}
-if(!state.selectedSite){notify("Выбери сайт.");return;}
-
-document.getElementById("browserResult").textContent="Идёт установка прошивки...";
-const risk=state.selectedSite.risk;
-if(Math.random()*100<risk){
-state.money=Math.max(0,state.money-700);
-document.getElementById("alarm").style.display="block";
-document.getElementById("bsod").style.display="block";
-document.getElementById("browserResult").textContent="Ошибка установки!";
-tone(100,.5);
-save();
-renderAll();
-return;
-}
-document.getElementById("browserResult").textContent="Прошивка успешно установлена!";
-notify("Прошивка завершена!");
-completeJob();
-}
-
-function closeAlarm(){
-document.getElementById("alarm").style.display="none";
-document.getElementById("bsod").style.display="none";
-disconnectUSB();
-notify("Ноутбук перезагружен. Можно попробовать снова.");
-}
-
-function installPart(i){
-const c=state.customer;
-if(!c||c.done){notify("Нет активного заказа.");return;}
-if(c.issue==="Прошивка"){notify("Нужна прошивка, а не запчасть.");return;}
-if(!state.opened){notify("Сначала открой телефон.");return;}
-const item=state.inventory[i];
-if(!item)return;
-if(item.part!==c.issue){notify("Эта деталь не подходит.");return;}
-state.inventory.splice(i,1);
-notify("Установлена деталь: "+item.part);
-tone(700);
-completeJob();
-}
-
-function completeJob(){
-const c=state.customer;
-if(!c||c.done)return;
-c.done=true;
-state.money+=c.reward;
-state.xp+=100;
-state.repairs++;
-state.quests.forEach(q=>{
-if(q.type==="repair"&&!q.done)q.progress=Math.min(q.target,q.progress+1);
-if(q.type==="earn"&&!q.done)q.progress=Math.min(q.target,q.progress+c.reward);
-});
-notify("Ремонт завершён! +"+c.reward+" ₽");
-save();
-renderAll();
-}
-
-function buyCase(type){
-const config={
-normal:{price:500,count:1},
-rare:{price:2000,count:1},
-gold:{price:5000,count:2}
-};
-const item=config[type];
-if(state.money<item.price){notify("Недостаточно денег!");return;}
-state.money-=item.price;
-for(let n=0;n<item.count;n++){
-const part=PARTS[Math.floor(Math.random()*PARTS.length)];
-const roll=Math.random();
-let quality;
-if(type==="gold")quality=roll<.65?"Оригинал":roll<.9?"Аналог":"Б/У";
-else if(type==="rare")quality=roll<.4?"Оригинал":roll<.8?"Аналог":"Б/У";
-else quality=roll<.12?"Оригинал":roll<.48?"Аналог":"Б/У";
-state.inventory.push({part,quality});
-}
-state.quests.forEach(q=>{
-if(q.type==="buy"&&!q.done)q.progress=Math.min(q.target,q.progress+item.count);
-});
-notify("Кейс открыт! Получено деталей: "+item.count);
-tone(700);
-save();
-renderAll();
-}
-
-function claimQuest(i){
-const q=state.quests[i];
-if(!q||q.done||q.progress<q.target)return;
-q.done=true;
-state.money+=q.reward;
-notify("Награда: "+q.reward+" ₽");
-save();
-renderAll();
-}
-
-function renderQuests(){
-const box=document.getElementById("questList");
-box.innerHTML="";
-state.quests.forEach((q,i)=>{
-const card=document.createElement("div");
-card.className="quest";
-const percent=Math.min(100,q.progress/q.target*100);
-card.innerHTML="<b>"+q.name+"</b><p>"+q.progress+" / "+q.target+"</p><div class='progress'><span style='width:"+percent+"%'></span></div><p>Награда: "+q.reward+" ₽</p>";
-const button=document.createElement("button");
-button.className="good";
-button.textContent=q.done?"Получено":"Забрать награду";
-button.disabled=q.done||q.progress<q.target;
-button.onclick=()=>claimQuest(i);
-card.appendChild(button);
-box.appendChild(card);
-});
-}
-
-function renderInventory(){
-const box=document.getElementById("inventory");
-box.innerHTML="";
-if(!state.inventory.length){
-box.textContent="Инвентарь пуст. Купи кейс.";
-return;
-}
-state.inventory.forEach((item,i)=>{
-const row=document.createElement("div");
-row.className="inventoryitem";
-const label=document.createElement("span");
-label.textContent=item.part+" · "+item.quality+" ";
-const button=document.createElement("button");
-button.className="primary";
-button.textContent="Установить";
-button.onclick=()=>installPart(i);
-row.append(label,button);
-box.appendChild(row);
-});
-}
-
-function renderRepair(){
-const box=document.getElementById("repairControls");
-const c=state.customer;
-if(!c){
-box.textContent="Нажми «Новый клиент».";
-return;
-}
-if(c.done){
-box.innerHTML="<p style='color:#52e0a0'>Заказ выполнен!</p><button class='primary' onclick='newCustomer()'>Следующий клиент</button>";
-return;
-}
-if(c.issue==="Прошивка"){
-box.innerHTML="<p>Клиент просит перепрошить устройство.</p><button class='primary' onclick='showPage(\"firmware\")'>Перейти к прошивкам</button>";
-}else{
-box.innerHTML="<p>Неисправность: <b>"+c.issue+"</b>.</p><p>Открой крышку и установи подходящую деталь из инвентаря.</p>";
-}
-}
-
-function renderAll(){
-document.getElementById("money").textContent=state.money;
-document.getElementById("level").textContent=1+Math.floor(state.xp/500);
-document.getElementById("repairs").textContent=state.repairs;
-const c=state.customer;
-document.getElementById("customerInfo").innerHTML=c?
-"<b>"+c.model+"</b><p>Неисправность: "+c.issue+"</p><p>Оплата: "+c.reward+" ₽</p><b>"+(c.done?"Заказ выполнен":"Заказ активен")+"</b>":
-"Нет клиента.";
-document.getElementById("brand").textContent=c?c.model.toUpperCase():"PHONE MASTER";
-document.getElementById("cover").classList.toggle("open",state.opened);
-document.getElementById("screwInfo").textContent=state.opened?
-"Крышка открыта.":"Винтики: "+state.screws.filter(Boolean).length+"/4";
-document.querySelectorAll(".screw").forEach((b,i)=>b.classList.toggle("removed",state.screws[i]));
-document.getElementById("phone").style.background=state.color;
-document.getElementById("wire").textContent=state.usb?"🔌 USB подключён: телефон ↔ ноутбук":"🔌 USB не подключён";
-renderInventory();
-renderRepair();
-renderQuests();
-renderSites();
-save();
-}
-
-function setColor(color){
-state.color=color;
-document.getElementById("phone").style.background=color;
-save();
-notify("Цвет изменён!");
-}
-
-function resetSave(){
-if(!confirm("Удалить весь прогресс?"))return;
-localStorage.removeItem("pms42-save");
-location.reload();
-}
-
-function init(){
-load();
-renderAll();
-if(!state.customer)newCustomer();
-document.getElementById("soundButton").textContent="Звуки: "+(state.sound?"ВКЛ":"ВЫКЛ");
-document.getElementById("musicButton").textContent="Музыка: "+(state.music?"ВКЛ":"ВЫКЛ");
-if(state.music)toggleMusic();
-}
-
-init();
+function choosePart(p,cost){if(!opened){say('Сначала разбери телефон и сними заднюю крышку.');return}if(!usb){say('Сначала выбери пинцет и отключи аккумулятор.');return}if(money<cost){say('Недостаточно денег для покупки этой детали.');return}if(installed){say('Запчасть уже установлена. Можно собирать телефон.');return}money-=cost;part=p;installed=true;say(({display:'Новый дисплей установлен. Проверь соединение и собери телефон.',battery:'Новый аккумулятор установлен. Проверь соединение и собери телефон.',board:'Новая плата установлена. Проверь соединение и собери телефон.'})[p]);update()}
+$('displayPart').onclick=()=>choosePart('display',900);$('batteryPart').onclick=()=>choosePart('battery',650);$('boardPart').onclick=()=>choosePart('board',1200);
+$('backBtn').onclick=()=>{if(!installed){say('Сначала установи необходимую запчасть.');return}assembled=true;opened=false;$('phone').style.transform=`rotateY(0deg) scale(${zoom})`;say('Телефон собран. Нажми «Сдать заказ», чтобы проверить результат.');render()};
+$('deliverBtn').onclick=()=>{if(!assembled){say('Сначала закончи ремонт и собери телефон.');return}if(part!==jobs[job].need){say('Проверка не пройдена: установлена неподходящая запчасть.');return}money+=jobs[job].reward;repairs++;$('modalTitle').textContent='Заказ успешно выполнен!';$('modalText').textContent=`Клиент доволен. Ты получил ₽ ${jobs[job].reward}. Ремонтировано телефонов: ${repairs}.`; $('modal').classList.add('show')};
+$('nextBtn').onclick=()=>{job=(job+1)%jobs.length;checked=false;opened=false;heated=false;usb=false;installed=false;assembled=false;removed=[false,false,false,false];part='display';rotation=0;zoom=1;$('phone').style.transform='';$('modal').classList.remove('show');say('Новый заказ получен. Нажми «Проверить», чтобы начать диагностику.');render()};
+$('rotate').onclick=()=>{rotation+=90;$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};$('zoomIn').onclick=()=>{zoom=Math.min(1.18,zoom+.06);$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};$('zoomOut').onclick=()=>{zoom=Math.max(.78,zoom-.06);$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};
+render();
+})();
 </script>
-</body>
-    </html>
+</body></html>
