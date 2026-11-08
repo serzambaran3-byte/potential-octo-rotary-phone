@@ -26,8 +26,8 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
 .mu{color:var(--mu)}
 
 /* Вкладки */
-.tabs{display:flex;gap:8px;margin-bottom:5px;}
-.tab-btn{flex:1;padding:10px;font-size:18px;background:var(--card);color:var(--mu);border:2px solid var(--bd);}
+.tabs{display:flex;gap:8px;margin-bottom:5px; overflow-x:auto; white-space:nowrap;}
+.tab-btn{flex:1;padding:10px;font-size:16px;background:var(--card);color:var(--mu);border:2px solid var(--bd);}
 .tab-btn.active{background:var(--ac);color:#fff;border-color:var(--ac);}
 
 /* Очередь клиентов */
@@ -57,7 +57,7 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
     align-items: center;
     justify-content: center;
     color: #fff;
-    font-size: 24px; /* Крупный текст для названия модели */
+    font-size: 20px;
     font-weight: bold;
     text-align: center;
     transition: transform 0.5s ease-in-out, opacity 0.5s ease;
@@ -197,6 +197,97 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
 .web-item .risk { color: #aaa; font-size: 10px; margin-top: 4px; }
 .web-item.danger .risk { color: #ff4a4a; }
 
+/* Ежедневные задания */
+.task-item {
+    background: var(--bg);
+    padding: 10px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--bd);
+    font-size: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.task-reward { color: var(--ok); font-weight: bold; }
+
+/* Экран блокировки (Оверлей) */
+#lock-screen-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #182848, #4b6cb7);
+    z-index: 1000;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-family: sans-serif;
+    animation: fadeIn 0.5s ease;
+}
+#lock-screen-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lock-time { font-size: 80px; font-weight: 200; margin: 0; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+.lock-date { font-size: 24px; opacity: 0.8; margin-bottom: 50px; }
+.lock-notification {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    padding: 15px 20px;
+    border-radius: 20px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideUp 0.5s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+/* 3D Кастомизация */
+#custom-phone {
+    width: 160px;
+    height: 300px;
+    background: #222;
+    border: 6px solid #111;
+    border-radius: 24px;
+    margin: 20px auto;
+    position: relative;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+#custom-phone.rotate {
+    animation: spinPhone 4s infinite linear;
+}
+@keyframes spinPhone {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+.custom-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 18px;
+    background: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+}
+.color-picker {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+}
+.color-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+}
 </style></head>
 <body>
 <div id="stage">
@@ -209,10 +300,12 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
   </div>
  </header>
  
- <div class="tabs">
+ <div class="tabs" style="overflow-x:auto; white-space:nowrap;">
    <button class="tab-btn active" id="tab-repair" onclick="switchTab('repair')">🔧 Ремонт</button>
    <button class="tab-btn" id="tab-cases" onclick="switchTab('cases')">🎁 Коробки</button>
    <button class="tab-btn" id="tab-web" onclick="switchTab('web')">💻 Прошивки</button>
+   <button class="tab-btn" id="tab-tasks" onclick="switchTab('tasks')">📋 Задания</button>
+   <button class="tab-btn" id="tab-custom" onclick="switchTab('custom')">🎨 Кастом</button>
  </div>
 
  <div class="info">
@@ -251,12 +344,17 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
       <button class="alt" id="dismiss">Отказать клиенту</button>
      </div>
 
-     <div class="card bottom">
+     <div class="card bottom" id="repair-tools">
       <div class="chips" id="chips"></div>
       <div class="lab"><span>🧰 Установить со склада</span><span id="selname"></span></div>
       <div class="trio" id="inst"></div>
       <div class="lab"><span>🛒 Купить запчасть</span></div>
       <div class="trio" id="buy"></div>
+     </div>
+     
+     <div class="card bottom" id="flash-tools" style="display:none; text-align:center;">
+         <h3 style="margin:0; color:var(--ac);">Клиент просит перепрошить телефон!</h3>
+         <p>Открой вкладку <b>Прошивки</b> и установи подходящую ОС.</p>
      </div>
  </div>
 
@@ -287,7 +385,6 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
  <div id="screen-web" class="screen" style="display:none;flex-direction:column;flex:1;gap:10px; align-items:center; justify-content:center;">
      <div class="laptop-container">
          <div class="laptop-screen">
-             <!-- Браузер -->
              <div class="browser-header">
                  <div class="browser-tab">Прошивки</div>
                  <div class="browser-url">https://google.com/search?q=прошивки</div>
@@ -315,6 +412,42 @@ header{display:flex;justify-content:space-between;align-items:center;height:70px
      </div>
  </div>
 
+ <!-- ЭКРАН ЗАДАНИЙ -->
+ <div id="screen-tasks" class="screen" style="display:none;flex-direction:column;flex:1;gap:10px;">
+     <div class="card" style="flex:1;display:flex;flex-direction:column;">
+         <h3 style="margin-top:0;">Ежедневные задания:</h3>
+         <div id="tasks-list" style="flex:1; overflow-y:auto;">
+         </div>
+         <button onclick="resetTasks()" class="alt" style="margin-top:10px;">Сбросить задания (тест)</button>
+     </div>
+ </div>
+
+ <!-- ЭКРАН КАСТОМИЗАЦИИ -->
+ <div id="screen-custom" class="screen" style="display:none;flex-direction:column;flex:1;gap:10px;">
+     <div class="card" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+         <h2 style="margin-top:0;">3D Кастомизация</h2>
+         <p class="mu" style="text-align:center;">Нажми на телефон, чтобы он крутился. Выбери цвет корпуса!</p>
+         
+         <div id="custom-phone" onclick="this.classList.toggle('rotate')">
+             <div class="custom-back" id="custom-back-color">📱</div>
+         </div>
+         
+         <div class="color-picker" id="color-picker">
+             <!-- Цвета добавятся через JS -->
+         </div>
+     </div>
+ </div>
+
+ <!-- ОВЕРЛЕЙ ЭКРАНА БЛОКИРОВКИ -->
+ <div id="lock-screen-overlay">
+     <h1 class="lock-time" id="lock-time">12:00</h1>
+     <div class="lock-date" id="lock-date">Понедельник, 1 Января</div>
+     <div class="lock-notification">
+         <span>💬</span>
+         <span>Спасибо за ремонт!</span>
+     </div>
+ </div>
+
 </div>
 
 <script>
@@ -322,13 +455,11 @@ const PARTS={screen:{n:'Экран',e:'🖥️',c:120,taps:20},battery:{n:'Ба�
 const Q={used:{n:'Б/у',m:.35,pay:.75,fail:.25,cls:'q-used'},analog:{n:'Аналог',m:.65,pay:1,fail:.08,cls:'q-analog'},orig:{n:'Оригинал',m:1,pay:1.5,fail:0,cls:'q-orig'}};
 const QS=['used','analog','orig'];
 
-// СПИСОК МОДЕЛЕЙ ТЕЛЕФОНОВ
 const PHONE_MODELS = [
     'Samsung S20', 'Samsung S21', 'Samsung S22', 'Samsung S23', 'Samsung S24', 'Samsung S25', 'Samsung S26',
     'Xiaomi 10 Ultra', 'Xiaomi 11 Ultra', 'Xiaomi 12 Ultra', 'Xiaomi 13 Ultra', 'Xiaomi 14 Ultra'
 ];
 
-// Добавили тип "Прошивка"
 const ISSUES=[
     ['screen','Разбит экран'],
     ['screen','Трещина на дисплее'],
@@ -337,19 +468,21 @@ const ISSUES=[
     ['port','Не заряжается'],
     ['camera','Мутные фото'],
     ['board','Упал в воду'],
-    ['flash','Нужна перепрошивка'] // Новый тип
+    ['flash','Нужна перепрошивка']
 ];
 
 const NAMES=['Аня','Игорь','Мария','Денис','Олег','Света','Паша','Лена','Артём','Ксюша'],FACES=['🧑','👩','👨','🧓','👧','👦'];
 const $=id=>document.getElementById(id);
 let S,cfg,cur=null,queue=[],uid=0,sel='screen';
 let screwsRemoved = 0;
+let customColor = '#333333';
 
 /* ---------- Сохранение ---------- */
-const fresh=()=>({money:600,lvl:1,rep:0,done:0,inv:{screen:{used:1},battery:{used:1},port:{used:1}}});
+const fresh=()=>({money:600,lvl:1,rep:0,done:0,inv:{screen:{used:1},battery:{used:1},port:{used:1}},tasks:{repair:0,earn:0,buy:0}});
 function load(){
  try{S=JSON.parse(localStorage.getItem('pms4'))||fresh()}catch(e){S=fresh()}
  if(!S.inv)S.inv={};
+ if(!S.tasks)S.tasks={repair:0,earn:0,buy:0};
  try{cfg=JSON.parse(localStorage.getItem('pms4s'))}catch(e){cfg=null}
  if(!cfg){let d=false;try{d=matchMedia('(prefers-color-scheme: dark)').matches}catch(e){}cfg={dark:d,music:false,sfx:true}}
 }
@@ -376,7 +509,11 @@ function switchTab(tab){
     document.getElementById('screen-repair').style.display = tab==='repair'?'flex':'none';
     document.getElementById('screen-cases').style.display = tab==='cases'?'flex':'none';
     document.getElementById('screen-web').style.display = tab==='web'?'flex':'none';
+    document.getElementById('screen-tasks').style.display = tab==='tasks'?'flex':'none';
+    document.getElementById('screen-custom').style.display = tab==='custom'?'flex':'none';
     if(tab!=='repair') $('dismiss').style.display='none';
+    if(tab==='tasks') renderTasks();
+    if(tab==='custom') initCustom();
 }
 
 function resetScrews(){
@@ -391,7 +528,7 @@ function unscrew(num){
     if(!cur || !cur.started) return say('Сначала выбери клиента и запчасть','var(--bad)');
     if(screwsRemoved >= 4) return;
     
-    $('screw'+num).classList.add('removed');
+    $('screw'+num).classList.remove('removed');
     screwsRemoved++;
     beep(300,0.05);
     
@@ -415,7 +552,7 @@ function newClient(){
      face:FACES[Math.random()*FACES.length|0],
      part:it[0],
      issue:it[1],
-     model: model // Сохраняем модель
+     model: model
  });
  render();
 }
@@ -424,7 +561,6 @@ function pickClient(c){
  if(cur&&cur.started)return say('Сначала закончи текущий ремонт','var(--bad)');
  cur={c:c,started:false,q:null,prog:0,need:0};sel=c.part;
  
- // Меняем надпись на крышке
  $('back-cover').textContent = c.model;
  
  resetScrews();
@@ -432,7 +568,11 @@ function pickClient(c){
  
  if(c.part === 'flash') {
      say('Клиент просит перепрошить телефон. Открой вкладку Прошивки!', 'var(--ac)');
+     document.getElementById('repair-tools').style.display = 'none';
+     document.getElementById('flash-tools').style.display = 'flex';
  } else {
+     document.getElementById('repair-tools').style.display = 'flex';
+     document.getElementById('flash-tools').style.display = 'none';
      say(any?'Выбери запчасть внизу и начинай!':'Нет нужной запчасти — купи её внизу','var(--mu)');
  }
  render();
@@ -446,6 +586,10 @@ function install(q){
 function buy(q, btn){
  const k=cost(sel,q);if(S.money<k)return;
  S.money-=k;if(!S.inv[sel])S.inv[sel]={};S.inv[sel][q]=have(sel,q)+1;
+ 
+ S.tasks.buy++;
+ checkTasks();
+
  save();beep(700,.08);render();
  
  if(btn){
@@ -470,10 +614,46 @@ function tap(){
 function finish(){
  const c=cur.c,q=cur.q;
  queue=queue.filter(x=>x.id!==c.id);
- if(Math.random()<Q[q].fail){S.rep=Math.max(0,S.rep-1);say('💥 Запчасть ('+Q[q].n+') бракованная. Клиент ушёл без оплаты.','var(--bad)');beep(120,.3,'sawtooth')}
- else{const g=pay(c.part,q);S.money+=g;S.done++;if(q!=='used')S.rep++;say('✅ Готово! +'+g+' ₽','var(--ok)');chime()}
+ if(Math.random()<Q[q].fail){
+     S.rep=Math.max(0,S.rep-1);
+     say('💥 Запчасть ('+Q[q].n+') бракованная. Клиент ушёл без оплаты.','var(--bad)');
+     beep(120,.3,'sawtooth');
+ } else {
+     const g=pay(c.part,q);
+     S.money+=g;S.done++;if(q!=='used')S.rep++;
+     say('✅ Готово! +'+g+' ₽','var(--ok)');chime();
+     
+     S.tasks.repair++;
+     S.tasks.earn += g;
+     checkTasks();
+     
+     // Показываем экран блокировки
+     showLockScreen();
+ }
  cur=null;save();render();
  resetScrews();
+ document.getElementById('repair-tools').style.display = 'flex';
+ document.getElementById('flash-tools').style.display = 'none';
+}
+
+function showLockScreen() {
+    const overlay = $('lock-screen-overlay');
+    const now = new Date();
+    
+    // Устанавливаем время
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    $('lock-time').textContent = `${hours}:${minutes}`;
+    
+    // Устанавливаем дату
+    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+    $('lock-date').textContent = now.toLocaleDateString('ru-RU', options);
+    
+    overlay.classList.add('show');
+    
+    setTimeout(() => {
+        overlay.classList.remove('show');
+    }, 3000); // Показываем 3 секунды
 }
 
 function openCase(type, price){
@@ -519,35 +699,53 @@ function showCaseResult(text, color) {
 function flashOS(type){
     if(!cur || cur.c.part !== 'flash') return say('Сейчас этому клиенту не нужна прошивка!', 'var(--bad)');
     
+    let success = false;
+    let reward = 0;
+
     if(type === 'official') {
         beep(800, 0.2);
         say('Официальная прошивка установлена. Всё ок!', 'var(--ok)');
-        S.money += 500;
+        reward = 500;
+        success = true;
     } else if(type === 'custom') {
         beep(600, 0.2);
         if(Math.random() < 0.1) {
             triggerVirus();
         } else {
             say('Кастомная прошивка установлена. Всё ок!', 'var(--ok)');
-            S.money += 300;
+            reward = 300;
+            success = true;
         }
     } else {
         if(Math.random() < 0.9) {
             triggerVirus();
         } else {
             say('Тебе повезло! Вируса не было.', 'var(--ok)');
-            S.money += 100;
+            reward = 100;
+            success = true;
         }
     }
-    // Завершаем заказ
-    if(cur) {
-        queue=queue.filter(x=>x.id!==cur.c.id);
-        cur=null;
+    
+    if(success) {
+        S.money += reward;
+        S.done++;
+        S.tasks.repair++;
+        S.tasks.earn += reward;
+        checkTasks();
+        
+        if(cur) {
+            queue=queue.filter(x=>x.id!==cur.c.id);
+            cur=null;
+        }
+        showLockScreen(); // И тут показываем экран
     }
+    
     save();
     render();
     switchTab('repair');
     resetScrews();
+    document.getElementById('repair-tools').style.display = 'flex';
+    document.getElementById('flash-tools').style.display = 'none';
 }
 
 function triggerVirus(){
@@ -556,6 +754,92 @@ function triggerVirus(){
     S.money = Math.max(0, S.money - 300);
     S.rep = Math.max(0, S.rep - 1);
     say('💥 ВИРУС! Телефон сломан. Ты потерял деньги.', 'var(--bad)');
+    
+    if(cur) {
+        queue=queue.filter(x=>x.id!==cur.c.id);
+        cur=null;
+    }
+    save();
+    render();
+    switchTab('repair');
+    resetScrews();
+    document.getElementById('repair-tools').style.display = 'flex';
+    document.getElementById('flash-tools').style.display = 'none';
+}
+
+/* ---------- Задания ---------- */
+const TASKS = [
+    {id:'repair', text:'Починить 5 телефонов', target:5, reward:1000},
+    {id:'earn', text:'Заработать 5000 ₽', target:5000, reward:2000},
+    {id:'buy', text:'Купить 3 запчасти', target:3, reward:500}
+];
+
+function checkTasks() {
+    TASKS.forEach(t => {
+        if(S.tasks[t.id] >= t.target) {
+            if(!S.tasks['done_'+t.id]) {
+                S.money += t.reward;
+                S.tasks['done_'+t.id] = true;
+                setTimeout(()=>alert(`Задание выполнено: ${t.text}! Награда: ${t.reward} ₽`), 500);
+            }
+        }
+    });
+    save();
+    render();
+}
+
+function renderTasks() {
+    const el = $('tasks-list');
+    el.innerHTML = '';
+    TASKS.forEach(t => {
+        const progress = Math.min(S.tasks[t.id] || 0, t.target);
+        const isDone = S.tasks['done_'+t.id];
+        
+        const div = document.createElement('div');
+        div.className = 'task-item';
+        div.innerHTML = `
+            <div>
+                <div>${t.text}</div>
+                <div style="font-size:12px;color:var(--mu);">Прогресс: ${progress} / ${t.target}</div>
+            </div>
+            <div class="task-reward">${isDone ? '✅' : '+'+t.reward+' ₽'}</div>
+        `;
+        el.appendChild(div);
+    });
+}
+
+function resetTasks() {
+    S.tasks = {repair:0, earn:0, buy:0};
+    delete S.tasks['done_repair'];
+    delete S.tasks['done_earn'];
+    delete S.tasks['done_buy'];
+    save();
+    renderTasks();
+    render();
+}
+
+/* ---------- 3D Кастомизация ---------- */
+const COLORS = ['#333333', '#ffffff', '#2f6bff', '#d9433b', '#1fa660', '#ffaa00', '#9c27b0'];
+
+function initCustom() {
+    const picker = $('color-picker');
+    picker.innerHTML = '';
+    COLORS.forEach(c => {
+        const b = document.createElement('div');
+        b.className = 'color-btn';
+        b.style.backgroundColor = c;
+        b.onclick = () => {
+            customColor = c;
+            $('custom-back-color').style.backgroundColor = c;
+            // Меняем цвет и в основной игре (для следующего ремонта)
+            $('back-cover').style.backgroundColor = c;
+            beep(600, 0.1);
+        };
+        picker.appendChild(b);
+    });
+    // Устанавливаем текущий цвет
+    $('custom-back-color').style.backgroundColor = customColor;
+    $('back-cover').style.backgroundColor = customColor;
 }
 
 /* ---------- Отрисовка ---------- */
@@ -581,18 +865,12 @@ function render(){
  $('bar').style.width=cur&&cur.started?(cur.prog/cur.need*100)+'%':'0%';
  $('dismiss').style.display=cur&&!cur.started?'block':'none';
 
- // Скрываем кнопки запчастей, если нужна прошивка
  if(cur && cur.c.part === 'flash') {
-     $('chips').style.display = 'none';
-     $('inst').style.display = 'none';
-     $('buy').style.display = 'none';
-     document.querySelector('.lab').style.display = 'none'; // Скрываем заголовок
-     return;
+     document.getElementById('repair-tools').style.display = 'none';
+     document.getElementById('flash-tools').style.display = 'flex';
  } else {
-     $('chips').style.display = 'flex';
-     $('inst').style.display = 'flex';
-     $('buy').style.display = 'flex';
-     document.querySelector('.lab').style.display = 'flex';
+     document.getElementById('repair-tools').style.display = 'flex';
+     document.getElementById('flash-tools').style.display = 'none';
  }
 
  const ch=$('chips');ch.innerHTML='';
@@ -664,6 +942,8 @@ $('dismiss').onclick=()=>{
  queue=queue.filter(c=>c.id!==cur.c.id);cur=null;S.rep=Math.max(0,S.rep-1);
  say('Клиент ушёл недовольным','var(--bad)');save();render();
  resetScrews();
+ document.getElementById('repair-tools').style.display = 'flex';
+ document.getElementById('flash-tools').style.display = 'none';
 };
 $('reset').onclick=()=>{if(confirm('Сбросить весь прогресс?')){S=fresh();cur=null;queue=[];sel='screen';save();say('Прогресс сброшен');render();newClient();resetScrews();}};
 
