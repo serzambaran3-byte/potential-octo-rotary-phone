@@ -181,12 +181,19 @@ const Q=['Б/У','Аналог','Оригинал'],MULT=[.6,.85,1.3],KINDS=['Э
 const SITES=[{u:'miui.com',v:0},{u:'lineageos.org',v:.1},{u:'sborka.vasi.com',v:.9},{u:'besplatnye-proshivki.net',v:.99}];
 const COLORS=['#2a6df4','#e53935','#43a047','#fbc02d','#8e24aa','#111','#eee','#ff7043'];
 
-// БАРАХОЛКА
+// БАРАХОЛКА (НОВЫЕ ТЕЛЕФОНЫ)
 const MODELS_SHOP = [
     {m:'Samsung S20', p:15000}, {m:'Samsung S21', p:18000}, {m:'Samsung S22', p:22000},
     {m:'Samsung S23', p:28000}, {m:'Samsung S24', p:35000}, {m:'Samsung S25', p:45000},
     {m:'Samsung S26', p:55000}, {m:'Xiaomi 10 Ultra', p:14000}, {m:'Xiaomi 11 Ultra', p:17000},
     {m:'Xiaomi 12S Ultra', p:21000}, {m:'Xiaomi 13 Ultra', p:26000}, {m:'Xiaomi 14 Ultra', p:32000}
+];
+// СЛОМАННЫЕ ТЕЛЕФОНЫ
+const BROKEN_PHONES = [
+    {m:'iPhone 13 (Разбит экран)', p:8000, fix:'Экран'},
+    {m:'Samsung S22 (Не включается)', p:7000, fix:'Плата'},
+    {m:'Xiaomi 12 (Быстро садится)', p:5000, fix:'Батарея'},
+    {m:'Pixel 6 (Не заряжается)', p:6000, fix:'Шлейф'}
 ];
 // КЕЙСЫ С ТЕЛЕФОНАМИ
 const PHONE_CASES = [
@@ -439,15 +446,25 @@ function rMarket(){
     });
     h += '</div></div>';
 
+    h += '<div class="card"><b>Сломанные телефоны (Купи и почини!):</b>';
+    BROKEN_PHONES.forEach((p) => {
+        h += `<div class="q" style="padding:8px 0;"><span>${p.m}</span><button class="btn" onclick="buyBroken('${p.m}', ${p.p}, '${p.fix}')">${p.p} ₽</button></div>`;
+    });
+    h += '</div>';
+
     const invPhones = S.inv.filter(item => item.isPhone);
     if(invPhones.length > 0) {
-        h += '<div class="card"><b>Продать телефон:</b>';
+        h += '<div class="card"><b>Твои телефоны:</b>';
         invPhones.forEach((p, i) => {
-            h += `<div class="q" style="padding:8px 0;"><span>${p.k} (Цена: ${p.sellPrice} ₽)</span><button class="btn g" onclick="sellPhone(${i})">Продать</button></div>`;
+            if(p.broken) {
+                h += `<div class="q" style="padding:8px 0;"><span>${p.k} (Сломан)</span><button class="btn" onclick="fixBroken(${i})">Починить</button></div>`;
+            } else {
+                h += `<div class="q" style="padding:8px 0;"><span>${p.k} (Цена: ${p.sellPrice} ₽)</span><button class="btn g" onclick="sellPhone(${i})">Продать</button></div>`;
+            }
         });
         h += '</div>';
     } else {
-        h += '<p style="text-align:center;color:#89a">У вас нет телефонов для продажи. Купите и продайте дороже!</p>';
+        h += '<p style="text-align:center;color:#89a">У вас нет телефонов для продажи.</p>';
     }
     $('bh').innerHTML = h;
     ui();
@@ -457,8 +474,28 @@ function buyPhone(name, price) {
     if(S.money < price) { sfx.bad(); toast('Не хватает денег'); return; }
     S.money -= price;
     S.inv.push({ k: name, q: 2, isPhone: true, buyPrice: price, sellPrice: Math.round(price * (1.1 + Math.random() * 0.2)) });
-    save(); sfx.buy(); toast('Куплено: ' + name);
-    rMarket();
+    save(); sfx.buy(); toast('Куплено: ' + name); rMarket();
+}
+
+function buyBroken(name, price, fixPart) {
+    if(S.money < price) { sfx.bad(); toast('Не хватает денег'); return; }
+    S.money -= price;
+    S.inv.push({ k: name, q: 0, isPhone: true, buyPrice: price, sellPrice: Math.round(price * 2.5), broken: true, fix: fixPart });
+    save(); sfx.buy(); toast('Куплен сломанный: ' + name); rMarket();
+}
+
+function fixBroken(index) {
+    const invPhones = S.inv.filter(item => item.isPhone);
+    const phone = invPhones[index];
+    if(phone && phone.broken) {
+        const realIndex = S.inv.findIndex(item => item.k === phone.k && item.isPhone);
+        if(realIndex !== -1) {
+            S.inv[realIndex].broken = false;
+            sfx.ok();
+            toast('✅ Телефон починен! Теперь его можно продать за ' + phone.sellPrice + ' ₽');
+            rMarket();
+        }
+    }
 }
 
 function sellPhone(index) {
