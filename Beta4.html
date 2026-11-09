@@ -1,114 +1,574 @@
 <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>Mobile Repair Studio</title>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Phone Master Studio 4.0</title>
 <style>
-:root{--bg:#090e17;--panel:#151e2a;--panel2:#1c2938;--line:#293849;--red:#d92735;--yellow:#ffc83d;--muted:#91a0b2;--green:#53d69a}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% 30%,#17283b 0,#0a111c 55%,#070b12 100%);color:#f4f7fb;font:15px/1.35 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
-button{font:inherit;color:inherit;border:0;cursor:pointer}button:disabled{opacity:.35;cursor:not-allowed}
-.app{width:min(100%,520px);margin:auto;min-height:100vh;padding:12px 13px 22px;display:flex;flex-direction:column;gap:10px}
-.top{display:flex;align-items:center;justify-content:space-between}.brand{font-weight:1000;letter-spacing:2px;font-size:17px}.brand b{background:var(--red);padding:4px 7px;border-radius:4px;margin-right:4px}.money{color:var(--yellow);font-weight:900;font-size:20px}
-.card{background:linear-gradient(145deg,#1a2634,#111a25);border:1px solid var(--line);border-radius:13px;padding:11px;box-shadow:0 8px 22px #0005}
-.order{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center}.eyebrow{color:var(--yellow);font-size:12px;font-weight:800}.order h2{font-size:16px;margin:3px 0}.muted{color:var(--muted);font-size:12px}.price{font-size:23px;color:var(--yellow);font-weight:900;text-align:right}.btn{background:var(--red);padding:10px 14px;border-radius:9px;font-weight:850;box-shadow:inset 0 -3px #8d1420}.btn.secondary{background:#273649;box-shadow:none;border:1px solid #3b4b5f}.btn.gold{background:var(--yellow);color:#211b0b;box-shadow:inset 0 -3px #c28b12}.btn.small{padding:7px 10px;font-size:12px}
-.progress{height:6px;background:#293747;border-radius:8px;overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--yellow),#ff8d38);transition:width .25s}
-.workbench{position:relative;min-height:370px;border-radius:15px;border:1px solid #3b526b;background:radial-gradient(ellipse at center,#315477 0,#1d354d 55%,#142638 100%);overflow:hidden;display:flex;align-items:center;justify-content:center;padding:14px 58px 14px 12px}
-.workbench:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff09 1px,transparent 1px),linear-gradient(90deg,#ffffff09 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
-.phone-wrap{position:relative;width:min(64%,235px);height:320px;perspective:800px;z-index:2}
-.phone{position:absolute;inset:0;border-radius:28px;background:linear-gradient(110deg,#111923,#384553 13%,#0b1018 20%,#1d2936 80%,#080c12);border:5px solid #070b10;box-shadow:0 20px 35px #0009;overflow:hidden;transition:transform .3s}
-.phone.back{background:linear-gradient(120deg,#9b1e2a,#e13d4b 45%,#9c1e2a)}
-.phone.front{background:#080c12}
-.screen{position:absolute;inset:7px;border-radius:21px;background:linear-gradient(145deg,#101a2c,#182f4a);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:12px}
-.screen:before{content:"";position:absolute;top:5px;width:62px;height:12px;background:#05080d;border-radius:0 0 10px 10px}
-.screen .time{font-size:30px;font-weight:300}.screen .wall{font-size:12px;color:#a9c5dc;margin-top:10px}
-.camera{position:absolute;top:16px;left:20px;width:58px;height:58px;background:#202b37;border-radius:15px;border:2px solid #7b8791;display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:7px}
-.lens{border-radius:50%;background:radial-gradient(circle at 35% 35%,#8ba9c5 0 10%,#17283d 25%,#03070c 70%);border:2px solid #677889}
-.logo{position:absolute;top:48%;width:100%;text-align:center;font-weight:900;letter-spacing:3px;color:#ffffff55}
-.screw{position:absolute;width:13px;height:13px;border-radius:50%;background:radial-gradient(circle,#b9c4ce,#4b5864 60%,#141a21);border:1px solid #c1cbd2;z-index:8;display:grid;place-items:center;font-size:10px;color:#18202a;cursor:pointer}
-.s1{top:8px;left:8px}.s2{top:8px;right:8px}.s3{bottom:8px;left:8px}.s4{bottom:8px;right:8px}
-.board{position:absolute;inset:16px 13px 16px;background:linear-gradient(135deg,#14513f,#23765a 45%,#103b32);border:2px solid #9bba9d;border-radius:13px;display:none;overflow:hidden}
-.board:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 17px,#a6d3a122 18px 19px),repeating-linear-gradient(90deg,transparent 0 21px,#a6d3a122 22px 23px)}
-.chip{position:absolute;background:#171d26;border:2px solid #8d9a9e;border-radius:4px;box-shadow:0 2px 4px #0008}.c1{width:60px;height:54px;left:25px;top:40px}.c2{width:45px;height:38px;right:22px;top:100px}.c3{width:75px;height:48px;left:60px;bottom:35px}
-.battery{position:absolute;left:20%;top:34%;width:60%;height:32%;background:linear-gradient(120deg,#202a36,#536170);border:3px solid #b5c2ca;border-radius:9px;display:none;color:#e6edf4;text-align:center;padding-top:25px;font-size:13px;font-weight:800}
-.cover{position:absolute;inset:0;border-radius:23px;background:linear-gradient(120deg,#18212b,#56616a 45%,#202b36);z-index:5;transition:transform .45s,opacity .35s;display:none}
-.cover.open{transform:translateX(110%) rotate(8deg);opacity:0;pointer-events:none}
-.tool-rail{position:absolute;right:8px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:8px;z-index:4}
-.tool-rail button{width:40px;height:40px;border-radius:50%;background:#101a27dd;border:1px solid #60768b;font-size:18px}
-.tip{position:absolute;z-index:10;top:10px;left:10px;right:58px;background:#111b28eF;border:1px solid #52677c;border-left:3px solid var(--yellow);border-radius:9px;padding:9px;font-size:12px;box-shadow:0 5px 14px #0006}
-.bottom{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
-.tool{background:#141f2c;border:1px solid #2c3b4c;border-radius:10px;padding:9px 3px;text-align:center;color:#cbd5df;font-size:11px;min-height:61px}
-.tool span{display:block;font-size:20px;margin-bottom:3px}.tool.active{border-color:var(--yellow);background:#40351b;color:#ffe18a}
-.actions{display:flex;gap:7px;flex-wrap:wrap}.actions .btn{flex:1;min-width:105px}
-.status{font-size:12px;color:#c4d0dc;min-height:34px}.parts{display:flex;gap:7px;overflow:auto;padding-bottom:3px}.part{min-width:105px;background:#111c29;border:1px solid #34485b;border-radius:9px;padding:8px;font-size:11px}.part b{display:block;color:#fff;font-size:12px;margin-bottom:4px}
-.modal{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;padding:18px;z-index:30}.modal.show{display:flex}.dialog{width:min(100%,390px);background:#172331;border:1px solid #4b6074;border-radius:15px;padding:17px}.dialog h3{margin:0 0 8px}.dialog p{color:#b5c2d0;font-size:13px}
-@media(min-width:520px){.app{padding-top:20px}.workbench{min-height:430px}.phone-wrap{height:350px}}
-</style>
-</head>
-<body>
-<div class="app">
- <header class="top"><div class="brand"><b>MOBILE</b> REPAIR STUDIO</div><div class="money" id="money">₽ 1 500</div></header>
- <section class="card order">
-  <div><div class="eyebrow">ЗАКАЗ КЛИЕНТА · №001</div><h2 id="customer">Артём · Samsung S24 · Чёрный</h2><div class="muted" id="problem">Не включается после падения. Нужно заменить дисплей.</div><div class="progress"><i id="progress"></i></div></div>
-  <div><div class="price" id="reward">₽ 2 400</div><button class="btn small" id="checkBtn">Проверить</button></div>
- </section>
- <div class="workbench" id="bench">
-  <div class="tip" id="tip">Начни с проверки телефона. Нажми «Проверить», затем выбери инструмент.</div>
-  <div class="phone-wrap"><div class="phone back" id="phone">
-   <div class="screen" id="screen"><div class="time">08:24</div><div class="wall">SAMSUNG · GALAXY</div></div>
-   <div class="camera"><i class="lens"></i><i class="lens"></i><i class="lens"></i><i class="lens"></i></div><div class="logo" id="logo">SAMSUNG</div>
-   <div class="board" id="board"><div class="chip c1"></div><div class="chip c2"></div><div class="chip c3"></div></div>
-   <div class="battery" id="battery">BATTERY<br>5000 mAh</div>
-   <div class="cover" id="cover"></div>
-   <button class="screw s1" data-screw="0">＋</button><button class="screw s2" data-screw="1">＋</button><button class="screw s3" data-screw="2">＋</button><button class="screw s4" data-screw="3">＋</button>
-  </div></div>
-  <div class="tool-rail"><button id="rotate">⟳</button><button id="zoomIn">＋</button><button id="zoomOut">－</button></div>
- </div>
- <div class="card"><div class="eyebrow">ИНСТРУМЕНТЫ</div><div class="bottom" id="tools">
-  <button class="tool active" data-tool="hand"><span>✋</span>Рука</button><button class="tool" data-tool="driver"><span>🪛</span>Отвёртка</button><button class="tool" data-tool="heat"><span>♨️</span>Фен</button><button class="tool" data-tool="pick"><span>🔧</span>Медиатор</button><button class="tool" data-tool="tweezers"><span>✂️</span>Пинцет</button>
- </div></div>
- <section class="card"><div class="eyebrow">РАБОЧАЯ ПАНЕЛЬ</div><p class="status" id="status">Телефон ещё не проверен. Нажми «Проверить», чтобы начать диагностику.</p><div class="actions"><button class="btn secondary" id="backBtn">Собрать телефон</button><button class="btn gold" id="deliverBtn">Сдать заказ</button></div></section>
- <section class="card"><div class="eyebrow">ЗАПЧАСТИ И СКЛАД</div><div class="parts">
-  <button class="part" id="displayPart"><b>📱 Дисплей</b>Оригинал · ₽ 900</button>
-  <button class="part" id="batteryPart"><b>🔋 Аккумулятор</b>Оригинал · ₽ 650</button>
-  <button class="part" id="boardPart"><b>🟩 Плата</b>Совместимая · ₽ 1 200</button>
- </div></section>
- <div class="muted" style="text-align:center">Уровень 1 · Начинающий мастер · Ремонтировано: <b id="repairs">0</b></div>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{--c:#2a6df4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;background:#0b0f1a;color-scheme:dark}
+body{height:100%;background:#0b0f1a;color:#eef;font-family:system-ui,sans-serif;overflow:hidden}
+#app{max-width:720px;height:100%;margin:auto;display:flex;flex-direction:column;background:linear-gradient(#121a30,#0b0f1a)}
+header{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#0006;font-weight:700;font-size:16px}
+header .xp{flex:1;height:8px;background:#234;border-radius:4px;overflow:hidden}
+header .xp i{display:block;height:100%;background:#4f8;width:0}
+.ib{background:#234;border:0;color:#fff;border-radius:10px;padding:6px 9px;font-size:16px}
+.ib.off{opacity:.35}
+main{flex:1;overflow-y:auto;padding:10px 12px}
+.tab{display:none}.tab.on{display:block}
+nav{display:flex;background:#0008}
+nav button{flex:1;padding:12px 0;background:none;border:0;color:#9ab;font-size:22px}
+nav button.on{color:#fff;background:#2a6df433}
+nav small{display:block;font-size:10px}
+.card{background:#1a2440;border-radius:14px;padding:12px;margin:8px 0}
+.btn{background:#2a6df4;color:#fff;border:0;border-radius:12px;padding:11px 14px;font-size:15px;font-weight:700;margin:3px}
+.btn:disabled{opacity:.4}
+.btn.g{background:#2ea44f}
+.ph{position:relative;width:min(62vw,290px);aspect-ratio:9/17;margin:8px auto;border-radius:28px;background:#111;border:4px solid #444;overflow:hidden}
+.in{position:absolute;inset:0;padding:14px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.slot{border-radius:8px;padding:12px;text-align:center;font-size:13px;font-weight:700;border:2px solid transparent}
+.s0{background:#222;color:#8af;height:30%}.s1{background:#1b5e35;height:25%}.s2{background:#555;height:30%}
+.need{border-color:#fc3;box-shadow:0 0 14px #fc3}
+.bk{position:absolute;inset:0;background:var(--c);transition:transform 1.2s cubic-bezier(.6,0,.4,1);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;text-align:center;padding:10px;color:#fffd;text-shadow:0 2px 6px #0008}
+.bk.open{transform:translateY(105%)}
+.sc{position:absolute;width:26px;height:26px;border-radius:50%;background:radial-gradient(#eee,#777);border:2px solid #333;transition:.45s;color:#333;font-weight:900;text-align:center;line-height:22px}
+.sc::after{content:'+'}
+.sc.gone{transform:scale(2.2) rotate(360deg);opacity:0;pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.case{text-align:center;padding:14px 4px;border-radius:14px;border:2px solid;font-weight:700;background:#1a2440;color:#fff}
+.case b{font-size:38px;display:block}
+.part{display:inline-block;padding:6px 10px;margin:3px;border-radius:10px;background:#234;font-size:13px}
+.q0{color:#aaa}.q1{color:#6cf}.q2{color:#fc3}
+.cam{position:absolute;pointer-events:none;z-index:1}
+.cam.h{background:#15161c;border:2px solid #3a3c46;border-radius:16px;box-shadow:0 2px 6px #0006}
+.cam.c{border-radius:50%}
+.cam.s{background:linear-gradient(#0004,#0004),var(--c);border-radius:14px;box-shadow:0 1px 4px #0005}
+.ln{position:absolute;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#6a7fb0 0,#1a2238 22%,#000 60%);border:2px solid #9aa;box-shadow:inset 0 0 0 3px #000,0 1px 3px #0008}
+.rs{position:absolute;background:linear-gradient(135deg,#2a2d38,#000);border:1.5px solid #555;border-radius:6px}
+.fl{position:absolute;aspect-ratio:1;border-radius:50%;background:#ffe9a8;width:7%}
+.lap{background:#cfd4dc;border-radius:14px 14px 4px 4px;padding:10px;color:#000}
+.lap .scr{background:#fff;border-radius:6px;min-height:250px;padding:8px;font-size:13px}
+.lap .base{height:12px;background:#9aa2b0;margin:0 -16px;border-radius:0 0 14px 14px}
+.bar{background:#eef;border-radius:6px;padding:5px 8px;margin-bottom:8px;font-size:12px;color:#235;word-break:break-all}
+.site{display:block;width:100%;text-align:left;background:#eef;border:1px solid #bcd;border-radius:6px;padding:8px;margin:5px 0;font-size:13px;color:#036}
+.pr{height:12px;background:#ddd;border-radius:6px;overflow:hidden;margin:8px 0}.pr i{display:block;height:100%;width:0;background:#2a6df4}
+.scr.bsodw{background:#0078d7;color:#fff;animation:fl .4s infinite;text-align:left;padding:16px}
+.bsodw h1{font-size:64px;font-weight:200}
+.bsodw p{font-size:14px!important;line-height:1.4}
+#wb{background-color:#17335c;background-image:repeating-linear-gradient(0deg,#ffffff0a 0 1px,transparent 1px 20px),repeating-linear-gradient(90deg,#ffffff0a 0 1px,transparent 1px 20px);border-radius:16px;padding:10px;margin:8px 0}
+#wb .ph{margin:0 auto;box-shadow:0 8px 20px #0008}
+.s1{background-image:radial-gradient(#9c6 1px,transparent 2px);background-size:12px 12px}
+.slot.out{background:transparent!important;border:2px dashed #fc3!important;color:transparent!important}
+.slot.tbad{border-color:#f44;box-shadow:0 0 14px #f44}
+.slot.tok{border-color:#4f8}
+.tbar{display:flex;gap:6px;margin-top:10px}
+.tl{flex:1;background:#234;color:#cde;border:2px solid transparent;border-radius:10px;padding:8px 2px;font-size:20px}
+.tl small{display:block;font-size:10px}
+.tl.on{border-color:#fc3;background:#345}
+.tp{touch-action:none;border:1px solid #fc3}
+.stm{background:#000b}.stm .box{background:#1a2440;border-radius:16px;padding:18px;width:min(86%,360px);text-align:left}
+.stm p{margin:6px 0}
+#wb{position:relative}
+#pu{position:absolute;right:8px;top:8px;z-index:6;background:#1a2440;border:2px solid #fc3;color:#fff;border-radius:12px;padding:6px 8px;font-size:22px}
+#pu small{display:block;font-size:9px}
+#pm{position:fixed;inset:0;z-index:8;display:none;background:#000c;align-items:center;justify-content:center}
+#pm.on{display:flex}
+.pz{display:flex;flex-direction:column;align-items:center;gap:10px;transform:scale(.25) translateY(25%);opacity:0;transition:transform .7s cubic-bezier(.2,.9,.2,1),opacity .5s}
+.pz.big{transform:none;opacity:1}
+.pf{position:relative;width:min(78vw,330px);aspect-ratio:9/18;border-radius:34px;border:6px solid #444;background:#000;overflow:hidden;box-shadow:0 10px 40px #000}
+.pw{position:absolute;inset:0;display:flex;flex-direction:column}
+.pn{position:absolute;top:10px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#000;border:2px solid #556;z-index:3}
+.pcap{max-width:min(78vw,330px);text-align:center;font-size:13px;color:#cde;min-height:34px}
+.px{background:#e53935;border:0;color:#fff;border-radius:12px;padding:10px 18px;font-weight:700}
+.sb{display:flex;justify-content:space-between;padding:8px 18px 0;font-size:12px}
+.hs{flex:1;display:flex;flex-direction:column;background:linear-gradient(160deg,#2a4a7a,#1a1040 60%,#3a1050);position:relative;overflow:hidden}
+.hs.fk{animation:fk .18s infinite}
+@keyframes fk{50%{opacity:.3}}
+.tm{font-size:54px;font-weight:200;text-align:center;margin-top:26px}
+.dt{text-align:center;font-size:12px;opacity:.8}
+.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 14px;margin-top:auto}
+.ag button{background:#fff2;border:0;color:#fff;border-radius:16px;padding:10px 0;font-size:26px}
+.ag small{display:block;font-size:9px}
+.hb{position:absolute;bottom:6px;left:50%;width:90px;height:5px;margin-left:-45px;border-radius:3px;background:#fffa}
+.pc{margin:auto;text-align:center;font-size:22px;padding:20px;color:#cde}
+.pc.boot{font-size:20px;font-weight:700;letter-spacing:1px}
+.blk{flex:1;background:#000}
+.blk svg{width:100%;height:100%}
+.ck2{margin:auto;font-size:40px;font-weight:200}
+.cd{margin:34px 14px 8px;font-size:34px;text-align:right;min-height:46px;overflow:hidden}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 8px 20px}
+.kp button{background:#fff2;border:0;color:#fff;border-radius:10px;padding:12px 0;font-size:18px}
+.vf{flex:1;margin:34px 10px 10px;border-radius:14px;background:linear-gradient(#6bb7ff,#d8f0ff 60%,#7ab55c);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative}
+.vf.er{background:#000;font-size:14px;color:#f66;text-align:center;padding:10px}
+.shut{position:absolute;bottom:10px;left:50%;width:44px;height:44px;margin-left:-22px;border-radius:50%;border:4px solid #fff;background:#fff4}
+.li{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #fff2;font-size:13px}
+.in{display:block;padding:0;z-index:1}
+#cab{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
+.trayb{background:#10182e;border:2px dashed #4a5b86;border-radius:12px;padding:8px;margin-top:8px}
+.tw .part{display:inline-flex;align-items:center;gap:6px}
+.ti{display:inline-block}
+.part.bad{opacity:.6}
+.pt.out.glued{border-color:#ffd54f!important;box-shadow:inset 0 0 14px #ffd54f}
+#wb .ph.gc{box-shadow:0 0 0 3px #ffd54f,0 8px 20px #0008}
+.crk{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.fs.cr{overflow:hidden}.fs.cr .ck{opacity:.6}
+.fs.fk{animation:fk .18s infinite}
+.flipmsg{background:#5a3b00;border:2px solid #fc3;border-radius:12px;padding:10px;margin-bottom:8px;text-align:center;font-weight:700}
+.pt svg{width:100%;height:100%;display:block;border-radius:inherit}
+.bk{z-index:2}
+.pt{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;font-weight:700;border-radius:8px;border:2px solid transparent;transition:all .3s;color:#cde}
+.p0{inset:5px;background:linear-gradient(160deg,#16203a,#06090f);color:#8af;border-radius:20px;z-index:0}
+.p1{left:12%;top:24%;width:76%;height:34%;background:radial-gradient(#9c6 1px,transparent 2px) 0 0/12px 12px,#1b5e35;z-index:1}
+.p2{left:12%;top:68%;width:76%;height:26%;background:#555;z-index:2}
+.p3{left:10%;top:7%;width:30%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#456,#000 70%);border-color:#889;z-index:2;font-size:16px}
+.p4{left:58%;top:9%;width:20%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#456,#000 70%);border-color:#889;z-index:2;font-size:12px}
+.p5{left:38%;top:59%;width:24%;height:7%;background:#e08a2a;z-index:3;font-size:10px;border-radius:4px}
+.pt.out{background:#0004!important;border:2px dashed #fff5!important;color:#fff6!important}
+.pt.need{border-color:#fc3!important;box-shadow:0 0 14px #fc3}
+.pt.tbad{border-color:#f44;box-shadow:0 0 14px #f44}
+.pt.tok{border-color:#4f8}
+#fv{position:absolute;inset:0;z-index:4;display:none;background:#05070c}
+#fv.on{display:block}
+.fs{position:absolute;inset:6px;border-radius:22px;background:linear-gradient(160deg,#2a4a7a,#0a1020);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cde;transition:box-shadow .4s}
+.fs.hot{box-shadow:inset 0 0 40px #f80,0 0 20px #f80}
+.fs.off{background:#10131c;border:2px dashed #fff4;font-size:13px}
+.ck{font-size:40px;font-weight:200}
+.nt{position:absolute;top:12px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#000;border:2px solid #556}
+.nt.no{border-style:dashed;border-color:#fc3}
+.st{perspective:900px;height:360px;display:grid;place-items:center}
+.cb{width:170px;height:330px;position:relative;transform-style:preserve-3d;transition:transform 1.4s;transform:rotateY(-20deg)}
+.fc,.bc{position:absolute;inset:0;border-radius:24px;backface-visibility:hidden;border:5px solid #222}
+.fc{background:linear-gradient(160deg,#16304f,#050a14);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:200}
+.bc{transform:rotateY(180deg);background:var(--c);display:flex;align-items:center;justify-content:center;font-weight:800;text-align:center;color:#fffc}
+.sw{display:inline-block;width:44px;height:44px;border-radius:50%;margin:5px;border:3px solid #fff4}
+.q{display:flex;justify-content:space-between;align-items:center}
+.pb{height:8px;background:#234;border-radius:4px;overflow:hidden;margin-top:6px}.pb i{display:block;height:100%;background:#4f8}
+#ov{position:fixed;inset:0;display:none;z-index:9;align-items:center;justify-content:center;text-align:center}
+#ov.on{display:flex}
+.lock{background:linear-gradient(#1b2a5a,#2a0d3a);flex-direction:column;gap:20px;color:#fff}
+.lock .t{font-size:84px;font-weight:200}
+.lock .n{background:#fff2;border-radius:16px;padding:14px 22px;max-width:80%;backdrop-filter:blur(8px)}
+.bsod{background:#0078d7;color:#fff;flex-direction:column;padding:30px;align-items:flex-start;text-align:left;animation:fl .4s infinite}
+.bsod h1{font-size:90px;font-weight:200}
+@keyframes fl{50%{background:#0a5fb0}}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000c;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;z-index:10;pointer-events:none;max-width:90%;text-align:center}
+#toast.on{opacity:1}
+</style></head><body>
+<div id="app">
+<header><span id="mn">💰0</span><span id="lv">Ур.1</span><div class="xp"><i id="xb"></i></div>
+<button class="ib" id="bs">🔊</button><button class="ib" id="bm">🎵</button></header>
+<main>
+<section class="tab on" id="t0">
+ <div class="card" id="cl"></div>
+ <div id="wb"><button id="pu" onclick="usePhone()">📱<small>Включить</small></button><div class="ph"><div class="in"><div class="slot s0" id="k0">📱 Экран</div><div class="slot s1" id="k1">Плата</div><div class="slot s2" id="k2">🔋 Батарея</div></div>
+  <div class="bk" id="bk"></div></div></div>
+ <div class="card" id="act"></div>
+</section>
+<section class="tab" id="t1"><div class="card">Открой коробку — выпадет случайная запчасть.</div><div class="grid" id="cs"></div>
+ <div class="card"><b>Инвентарь</b><div id="inv"></div></div></section>
+<section class="tab" id="t2"><div class="lap"><div class="scr" id="br"></div><div class="base"></div></div></section>
+<section class="tab" id="t3"><div id="qs"></div></section>
+<section class="tab" id="t4"><div class="st"><div class="cb" id="cb"><div class="fc" id="fc">12:00</div><div class="bc" id="bc"><span id="bt"></span><div id="bcam"></div></div></div></div>
+ <div class="card" style="text-align:center">Нажми на телефон — он повернётся<div id="sw"></div></div></section>
+<section class="tab" id="t5"><div class="card">Выбери деталь и качество — она попадёт в инвентарь.</div><div id="sh"></div></section>
+<section class="tab" id="t6"><div class="card">Здесь ты можешь купить телефон подешевле или продать свой.</div><div id="bh"></div></section>
+</main>
+<nav id="nv"></nav>
 </div>
-<div class="modal" id="modal"><div class="dialog"><h3 id="modalTitle">Заказ выполнен!</h3><p id="modalText"></p><button class="btn" id="nextBtn">Следующий заказ</button></div></div>
-<script>
-(()=>{
-const $=id=>document.getElementById(id);
-let money=1500,repairs=0,checked=false,opened=false,heated=false,usb=false,installed=false,assembled=false,tool='hand',removed=[false,false,false,false],zoom=1,rotation=0,part='display';
-const jobs=[
-{name:'Артём',model:'Samsung S24',color:'Чёрный',problem:'Не включается после падения. Нужно заменить дисплей.',reward:2400,need:'display'},
-{name:'Мария',model:'Xiaomi 13 Ultra',color:'Белый',problem:'Телефон быстро разряжается. Нужен новый аккумулятор.',reward:1800,need:'battery'},
-{name:'Илья',model:'Samsung S22',color:'Зелёный',problem:'Повреждена плата после попадания влаги.',reward:3200,need:'board'},
-{name:'София',model:'Xiaomi 14 Ultra',color:'Чёрный',problem:'Разбит экран. Требуется замена дисплейного модуля.',reward:2600,need:'display'}
-];let job=0;
-function say(t){$('status').textContent=t;$('tip').textContent=t}
-function update(){ $('money').textContent='₽ '+money.toLocaleString('ru-RU');$('repairs').textContent=repairs;
-let n=(checked?1:0)+(removed.filter(Boolean).length/4)*2+(heated?1:0)+(opened?2:0)+(installed?3:0)+(assembled?1:0);$('progress').style.width=Math.min(100,n/10*100)+'%';
-$('customer').textContent=`${jobs[job].name} · ${jobs[job].model} · ${jobs[job].color}`;$('problem').textContent=jobs[job].problem;$('reward').textContent='₽ '+jobs[job].reward.toLocaleString('ru-RU');
+<div id="pm"></div><div id="ov"></div><div id="toast"></div><script>
+const $=i=>document.getElementById(i),R=n=>Math.floor(Math.random()*n);
+const MODELS=['Samsung S20','Samsung S21','Samsung S22','Samsung S23','Samsung S24','Samsung S25','Samsung S26','Xiaomi 10 Ultra','Xiaomi 11 Ultra','Xiaomi 12S Ultra','Xiaomi 13 Ultra','Xiaomi 14 Ultra'];
+const Q=['Б/У','Аналог','Оригинал'],MULT=[.6,.85,1.3],KINDS=['Экран','Плата','Батарея','Камера','Фронталка','Шлейф'],BASE=900;
+const SITES=[{u:'miui.com',v:0},{u:'lineageos.org',v:.1},{u:'sborka.vasi.com',v:.9},{u:'besplatnye-proshivki.net',v:.99}];
+const COLORS=['#2a6df4','#e53935','#43a047','#fbc02d','#8e24aa','#111','#eee','#ff7043'];
+
+// БАРАХОЛКА
+const MODELS_SHOP = [
+    {m:'Samsung S20', p:15000}, {m:'Samsung S21', p:18000}, {m:'Samsung S22', p:22000},
+    {m:'Samsung S23', p:28000}, {m:'Samsung S24', p:35000}, {m:'Samsung S25', p:45000},
+    {m:'Samsung S26', p:55000}, {m:'Xiaomi 10 Ultra', p:14000}, {m:'Xiaomi 11 Ultra', p:17000},
+    {m:'Xiaomi 12S Ultra', p:21000}, {m:'Xiaomi 13 Ultra', p:26000}, {m:'Xiaomi 14 Ultra', p:32000}
+];
+// КЕЙСЫ С ТЕЛЕФОНАМИ
+const PHONE_CASES = [
+    { n: 'Обычная', p: 1000, w: [80, 19, 1], c: '#9aa' },
+    { n: 'Редкая', p: 5000, w: [20, 60, 20], c: '#4af' },
+    { n: 'Золотая', p: 15000, w: [0, 30, 70], c: '#fc3' },
+    { n: 'Мега-кейс', p: 50000, w: [0, 10, 90], c: '#f0f' }
+];
+
+const def=()=>({money:1000,xp:0,inv:[],color:COLORS[0],cl:null,day:'',q:{rep:0,earn:0,buy:0,done:[]},sfx:1,music:1});
+let saved={};try{saved=JSON.parse(localStorage.getItem('pms4')||'{}')||{}}catch(e){}
+let S=Object.assign(def(),saved);
+if(!S.v2){S.v2=1;S.money=Math.max(S.money,1000)}
+const save=()=>{try{localStorage.setItem('pms4',JSON.stringify(S))}catch(e){}};
+const lvl=()=>Math.floor(S.xp/100)+1;
+function daily(){const d=new Date().toDateString();if(S.day!==d){S.day=d;S.q={rep:0,earn:0,buy:0,done:[]};save()}}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._);t._=setTimeout(()=>t.classList.remove('on'),2200)}
+
+/* ===== AUDIO ===== */
+let ac;const A=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();return ac};
+function beep(f,d=.12,t='square',v=.06,w=0){if(!S.sfx)return;try{const a=A(),o=a.createOscillator(),g=a.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime+w);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+w+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+w);o.stop(a.currentTime+w+d+.02)}catch(e){}}
+const sfx={screw:()=>beep(700,.08,'square'),open:()=>{beep(200,.3,'sawtooth');beep(400,.2,'sawtooth',.05,.15)},ok:()=>[523,659,784,1047].forEach((f,i)=>beep(f,.15,'triangle',.08,i*.1)),buy:()=>beep(880,.1,'triangle'),bad:()=>beep(150,.4,'sawtooth',.1),click:()=>beep(500,.05)};
+function siren(){if(!S.sfx)return;try{const a=A(),o=a.createOscillator(),g=a.createGain();o.type='sawtooth';g.gain.value=.08;o.connect(g);g.connect(a.destination);for(let i=0;i<8;i++)o.frequency.setValueAtTime(i%2?600:950,a.currentTime+i*.4);o.start();o.stop(a.currentTime+3.2)}catch(e){}}
+const NOTES=[262,330,392,330,294,349,440,349,262,330,392,523,494,392,330,262];let ni=0;
+setInterval(()=>{if(!S.music||!ac)return;const f=NOTES[ni++%16];try{const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f/2;g.gain.setValueAtTime(.04,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.4);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.42)}catch(e){}},400);
+$('bs').onclick=()=>{S.sfx=S.sfx?0:1;save();ui()};$('bm').onclick=()=>{try{A()}catch(e){}S.music=S.music?0:1;save();ui()};
+document.addEventListener('touchstart',()=>{try{A()}catch(e){}},{once:true});document.addEventListener('click',()=>{try{A()}catch(e){}},{once:true});
+
+/* ===== UI ===== */
+function ui(){
+ document.documentElement.style.setProperty('--c',S.color);
+ $('mn').textContent='💰'+S.money;$('lv').textContent='Ур.'+lvl();$('xb').style.width=(S.xp%100)+'%';
+ $('bs').classList.toggle('off',!S.sfx);$('bm').classList.toggle('off',!S.music);
+ $('bt').textContent=($('cl').dataset.m||'');
 }
-function screws(){document.querySelectorAll('.screw').forEach((b,i)=>{b.style.display=opened?'none':'grid';b.textContent=removed[i]?'':'＋';b.style.opacity=removed[i]?'.15':'1'})}
-function render(){ $('board').style.display=opened?'block':'none';$('battery').style.display=opened?'block':'none';$('cover').style.display=checked?'block':'none';$('cover').classList.toggle('open',opened);$('logo').style.display=opened?'none':'block';$('screen').style.display=opened?'none':'flex';screws();update()}
-$('checkBtn').onclick=()=>{checked=true;say('Диагностика завершена: обнаружена неисправность. Выбери отвёртку и выкрути четыре винта на задней крышке.');render()};
-document.querySelectorAll('.tool').forEach(b=>b.onclick=()=>{tool=b.dataset.tool;document.querySelectorAll('.tool').forEach(x=>x.classList.toggle('active',x===b));say(({hand:'Рука: можно вращать телефон и выполнять ручные действия.',driver:'Отвёртка выбрана. Нажми на каждый винт, чтобы выкрутить его.',heat:'Фен выбран. Прогрей края крышки, нажав на телефон.',pick:'Медиатор выбран. После прогрева нажми на крышку, чтобы открыть её.',tweezers:'Пинцет выбран. Используй его для отключения аккумулятора и установки деталей.'})[tool])});
-document.querySelectorAll('.screw').forEach(b=>b.onclick=()=>{if(!checked){say('Сначала проверь телефон.');return}if(tool!=='driver'){say('Для винтов нужна отвёртка. Выбери её в панели инструментов.');return}let i=+b.dataset.screw;removed[i]=true;b.textContent='';b.style.opacity='.15';say(`Винт ${removed.filter(Boolean).length}/4 выкручен.`);if(removed.every(Boolean))say('Все винты сняты. Выбери фен и прогрей края задней крышки.')});
-$('bench').addEventListener('click',e=>{if(e.target.closest('button')||e.target.closest('.screw'))return;if(!checked)return;
-if(tool==='hand'){rotation+=12;$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`;return}
-if(tool==='heat'){if(!removed.every(Boolean)){say('Сначала выкрути все четыре винта.');return}heated=true;say('Клей прогрет. Теперь выбери медиатор и открой заднюю крышку.');return}
-if(tool==='pick'){if(!heated){say('Сначала прогрей края феном.');return}opened=true;say('Крышка снята! Видна плата и аккумулятор. Выбери пинцет, чтобы отключить аккумулятор.');render();return}
-if(tool==='tweezers'){if(!opened){say('Сначала открой заднюю крышку.');return}if(!usb){usb=true;say('Аккумулятор отключён. Теперь выбери нужную запчасть на складе ниже.');return}say('Аккумулятор уже отключён. Выбери нужную запчасть на складе.')}
-});
-function choosePart(p,cost){if(!opened){say('Сначала разбери телефон и сними заднюю крышку.');return}if(!usb){say('Сначала выбери пинцет и отключи аккумулятор.');return}if(money<cost){say('Недостаточно денег для покупки этой детали.');return}if(installed){say('Запчасть уже установлена. Можно собирать телефон.');return}money-=cost;part=p;installed=true;say(({display:'Новый дисплей установлен. Проверь соединение и собери телефон.',battery:'Новый аккумулятор установлен. Проверь соединение и собери телефон.',board:'Новая плата установлена. Проверь соединение и собери телефон.'})[p]);update()}
-$('displayPart').onclick=()=>choosePart('display',900);$('batteryPart').onclick=()=>choosePart('battery',650);$('boardPart').onclick=()=>choosePart('board',1200);
-$('backBtn').onclick=()=>{if(!installed){say('Сначала установи необходимую запчасть.');return}assembled=true;opened=false;$('phone').style.transform=`rotateY(0deg) scale(${zoom})`;say('Телефон собран. Нажми «Сдать заказ», чтобы проверить результат.');render()};
-$('deliverBtn').onclick=()=>{if(!assembled){say('Сначала закончи ремонт и собери телефон.');return}if(part!==jobs[job].need){say('Проверка не пройдена: установлена неподходящая запчасть.');return}money+=jobs[job].reward;repairs++;$('modalTitle').textContent='Заказ успешно выполнен!';$('modalText').textContent=`Клиент доволен. Ты получил ₽ ${jobs[job].reward}. Ремонтировано телефонов: ${repairs}.`; $('modal').classList.add('show')};
-$('nextBtn').onclick=()=>{job=(job+1)%jobs.length;checked=false;opened=false;heated=false;usb=false;installed=false;assembled=false;removed=[false,false,false,false];part='display';rotation=0;zoom=1;$('phone').style.transform='';$('modal').classList.remove('show');say('Новый заказ получен. Нажми «Проверить», чтобы начать диагностику.');render()};
-$('rotate').onclick=()=>{rotation+=90;$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};$('zoomIn').onclick=()=>{zoom=Math.min(1.18,zoom+.06);$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};$('zoomOut').onclick=()=>{zoom=Math.max(.78,zoom-.06);$('phone').style.transform=`rotateY(${rotation}deg) scale(${zoom})`};
-render();
-})();
-</script>
-</body></html>
+const TABS=[['🔧','Ремонт'],['📦','Кейсы'],['💻','Прошивки'],['📋','Задания'],['🎨','3D'],['🛒','Запчасти'],['🏪','Барахолка']];
+TABS.forEach((t,i)=>{const b=document.createElement('button');b.innerHTML=t[0]+'<small>'+t[1]+'</small>';b.onclick=()=>go(i);$('nv').appendChild(b)});
+function go(i){sfx.click();document.querySelectorAll('.tab').forEach((e,j)=>e.classList.toggle('on',i==j));[...$('nv').children].forEach((b,j)=>b.classList.toggle('on',i==j));
+ if(i==1)rCases();if(i==2)rBrowser();if(i==3)rQuests();if(i==4)rCustom();if(i==5)rShop();if(i==6)rMarket();if(i==0)rRepair()}
+
+/* ===== REPAIR ===== */
+let screws=4,stg=0,tool='hand',instQ=0,fixed=false,found=false,front=false,heat=0,scrFront=false,bsc=4,testing=false,okd=new Set(),st=[];
+const LBL=['📱 Экран','Плата','🔋 Батарея','📷','🤳','🔗'];
+const REQ=[[1],[5,2,3,4],[5],[5],[5],[]],KF=[1,1.2,.8,1,.7,.6];
+const CMP={'Экран':'разбит экран, нет картинки','Плата':'телефон не включается','Батарея':'быстро садится аккумулятор','Камера':'не работает основная камера','Фронталка':'не работает селфи-камера','Шлейф':'мерцает экран, нет связи между платами'};
+let gl={};
+const TOOLS=[['hand','✋','Рука'],['driver','🪛','Отвёртка'],['suction','🪄','Присоска'],['tester','🔍','Тестер'],['fen','🔥','Фен'],['glue','🧴','Клей']];
+const isRe=()=>S.cl.k=='reflash',fIdx=()=>KINDS.indexOf(S.cl.k),blk=i=>REQ[i].filter(j=>st[j]),nm=a=>a.map(j=>KINDS[j]).join(', ');
+const GL=(id,a,b)=>'<defs><radialGradient id="'+id+'" cx=".4" cy=".35"><stop offset="0" stop-color="'+a+'"/><stop offset=".55" stop-color="'+b+'"/><stop offset="1" stop-color="#05060d"/></radialGradient></defs>';
+const lens=(id,a,b)=>'<svg viewBox="0 0 100 100">'+GL(id,a,b)+'<circle cx="50" cy="50" r="48" fill="#2a2d34" stroke="#9aa1ab" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="#0a0c12" stroke="#555" stroke-width="2"/><circle cx="50" cy="50" r="25" fill="url(#'+id+')"/><circle cx="50" cy="50" r="11" fill="#06070b"/><circle cx="40" cy="39" r="6" fill="#fff" opacity=".4"/><circle cx="61" cy="61" r="3" fill="#8af" opacity=".6"/></svg>';
+const pcb=n=>{let s='<svg viewBox="0 0 118 100" preserveAspectRatio="none"><defs><linearGradient id="gp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f8f4e"/><stop offset="1" stop-color="#14502b"/></linearGradient></defs><rect width="118" height="100" rx="8" fill="url(#gp)"/><path d="M10 48H56V70H104M20 90H60M70 44V60H108M8 30H12" stroke="#d9b24a" stroke-width="1.2" fill="none" opacity=".75"/><rect x="14" y="12" width="44" height="32" rx="2" fill="#b9c0c9" stroke="#737a84"/><text x="36" y="32" font-size="9" font-weight="700" text-anchor="middle" fill="#444">SoC</text><rect x="64" y="14" width="22" height="22" fill="#15161a"/><text x="75" y="28" font-size="6" text-anchor="middle" fill="#9ab">RAM</text><rect x="90" y="14" width="20" height="14" fill="#15161a"/><rect x="90" y="32" width="20" height="10" fill="#b9c0c9" stroke="#737a84"/><rect x="14" y="52" width="26" height="20" fill="#15161a"/><rect x="46" y="54" width="16" height="12" fill="#2a2a2f"/><rect x="66" y="66" width="38" height="12" fill="#d9b24a"/><rect x="14" y="78" width="12" height="8" fill="#15161a"/><rect x="44" y="78" width="3" height="5" fill="#d8c08a"/><rect x="50" y="78" width="3" height="5" fill="#d8c08a"/>';
+ [[9,9],[109,9],[9,91],[109,91]].forEach((p,i)=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="'+(i<n?'#cfd3d8':'#0b2a16')+'" stroke="#222"/>'+(i<n?'<path d="M'+(p[0]-3)+' '+p[1]+'H'+(p[0]+3)+'M'+p[0]+' '+(p[1]-3)+'V'+(p[1]+3)+'" stroke="#555" stroke-width="1.5"/>':'')});
+ return s+'</svg>'};
+const BAT='<svg viewBox="0 0 155 100" preserveAspectRatio="none"><defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d3d9e0"/><stop offset="1" stop-color="#868d97"/></linearGradient></defs><rect width="155" height="100" rx="7" fill="url(#gb)" stroke="#5b616a" stroke-width="2"/><rect x="10" y="22" width="135" height="58" rx="4" fill="#f2f4f6" opacity=".92"/><text x="77" y="46" font-size="12" font-weight="800" text-anchor="middle" fill="#222">Li-Po 4500 mAh</text><text x="77" y="61" font-size="9" text-anchor="middle" fill="#444">3.87 V · 17.4 Wh</text><text x="77" y="73" font-size="7" text-anchor="middle" fill="#a22">⚠ не вскрывать</text><rect x="62" y="0" width="31" height="9" fill="#d4a62a"/></svg>';
+const FLEX='<svg viewBox="0 0 100 30" preserveAspectRatio="none"><rect y="4" width="100" height="22" rx="3" fill="#d98a2b"/><rect x="0" y="1" width="14" height="28" rx="2" fill="#2b2b2b"/><rect x="86" y="1" width="14" height="28" rx="2" fill="#2b2b2b"/><path d="M3 5V25M6 5V25M9 5V25M91 5V25M94 5V25M97 5V25" stroke="#e8c15a" stroke-width="1"/><path d="M16 10H84M16 15H84M16 20H84" stroke="#f3c26b" stroke-width="1.2"/></svg>';
+const SCR='<svg viewBox="0 0 100 190" preserveAspectRatio="none"><defs><linearGradient id="gs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#232733"/><stop offset="1" stop-color="#090a0f"/></linearGradient></defs><rect width="100" height="190" rx="14" fill="url(#gs)"/><rect x="14" y="10" width="72" height="36" fill="#b8793a" opacity=".3"/><rect x="25" y="172" width="50" height="12" fill="#d98a2b" opacity=".85"/><text x="50" y="108" font-size="7" text-anchor="middle" fill="#456">AMOLED · 120 Hz</text></svg>';
+const ART=[()=>SCR,pcb,()=>BAT,()=>lens('g3','#6a5cff','#1b2a6a'),()=>lens('g4','#3fb0ff','#103a66'),()=>FLEX];
+const CRK='<svg class="crk" viewBox="0 0 100 190" preserveAspectRatio="none"><path d="M55 55L35 85L44 135L70 120L92 98Z" fill="#000" opacity=".45"/><path d="M72 0L55 55L35 85L44 135L24 190M55 55L92 98L100 128M35 85L0 78M44 135L84 168M55 55L40 30" stroke="#dfe8f5" stroke-width=".9" fill="none"/></svg>';
+function setTool(i){tool=TOOLS[i][0];sfx.click();rRepair()}
+function flip(){front=!front;sfx.click();rRepair()}
+function newClient(){S.cl={m:MODELS[R(12)],k:Math.random()<.25?'reflash':KINDS[R(KINDS.length)]};save();buildPhone();rRepair()}
+function buildPhone(){
+ const bk=$('bk'),ph=bk.parentNode,inn=ph.querySelector('.in');
+ bk.classList.remove('open');bk.innerHTML='';screws=3;stg=0;fixed=false;found=false;front=false;heat=0;scrFront=false;bsc=4;testing=false;okd=new Set();gl={};st=KINDS.map(()=>1);
+ inn.innerHTML=KINDS.map((k,i)=>'<div class="pt p'+i+'" id="k'+i+'"></div>').join('')+'<svg id="cab" viewBox="0 0 100 190" preserveAspectRatio="none"></svg>';
+ let fv=$('fv');if(!fv){fv=document.createElement('div');fv.id='fv';ph.appendChild(fv)}
+ fv.onclick=fvTap;
+ ph.onclick=()=>{if(isRe()||stg!=2||!fixed||!st.every(x=>x)||bsc!=4||front||tool!='glue')return;gl.c=1;sfx.screw();toast('Клей нанесён на рамку 🧴');rRepair()};
+ bk.appendChild(document.createTextNode(S.cl.m));bk.insertAdjacentHTML('beforeend',cam(S.cl.m));
+ bk.onclick=()=>{if(isRe())return toast('Клиент просит перепрошивку 💻');
+  if(stg==0){if(tool!='fen')return toast('Выберите Фен 🔥');screws--;sfx.screw();if(screws==0)stg=1;return rRepair()}
+  if(stg==1){if(tool!='suction')return toast('Выберите Присоску 🪄');bk.classList.add('open');sfx.open();stg=2;gl.c=0;rRepair()}}
+}
+function probe(i){
+ if(i==fIdx()){found=true;sfx.bad();toast(KINDS[i]+': 0 Ом, замыкание ❌'+(i==0?'. Поверните телефон, чтобы поменять экран 🔄':''))}else{okd.add(i);sfx.click();toast(KINDS[i]+': 12 Ом, норма ✅')}rRepair()
+}
+function partTap(i){
+ if(isRe()||stg<2||front)return;const fi=fIdx();
+ if(tool=='tester'){if(st[i])probe(i);return}
+ if(tool=='driver'){
+  if(i!=1||!st[1])return toast('Винты есть только у платы 🟩');
+  if(blk(1).length)return toast('Сначала снимите: '+nm(blk(1)));
+  bsc=Math.max(0,Math.min(4,bsc+(fixed?1:-1)));sfx.screw();return rRepair()}
+ if(tool=='glue'){if(!st[i]&&(i==0||i==2)){gl[i]=1;sfx.screw();toast('Клей нанесён 🧴');return rRepair()}if(fixed&&st.every(x=>x)&&bsc==4)return;return toast('Клей нужен только для АКБ, экрана и крышки')}
+ if(tool=='suction'&&fixed&&st.every(x=>x)&&bsc==4)return;
+ if(tool!='hand')return toast('Здесь нужна Рука ✋');
+ if(st[i]){
+  if(fixed)return;
+  if(i==1&&bsc>0)return toast('Выкрутите винты платы 🪛 ('+bsc+')');
+  if(blk(i).length)return toast('Сначала снимите: '+nm(blk(i))+(i==0?' или снимите экран спереди 🔄':''));
+  st[i]=0;gl[i]=0;sfx.open();return rRepair()}
+ return toast('Перетащите деталь из лотка 🧰 на телефон')
+}
+function fvTap(){
+ if(isRe())return;const fi=fIdx();
+ if(tool=='tester'){if(st[0])probe(0);return}
+ if(tool=='fen'){if(!st[0]||fixed)return;heat=Math.min(3,heat+1);sfx.screw();toast(heat<3?'Греем… '+heat+'/3 🔥':'Клей размягчён 🔥');return rRepair()}
+ if(tool=='suction'){if(!st[0]||fixed)return;if(heat<3)return toast('Экран приклеен — прогрейте Феном 🔥');st[0]=0;gl[0]=0;scrFront=true;sfx.open();return rRepair()}
+ if(tool=='glue'&&!st[0]){gl[0]=1;sfx.screw();toast('Клей нанесён 🧴');return rRepair()}
+ if(tool=='hand'&&!st[0])return toast('Перетащите экран из лотка 🧰 на телефон')
+}
+const TS=[[22,44],[44,38],[50,32],[38,38],[30,30],[56,18]];
+function put(j){
+ if(j==fIdx()&&!fixed)return toast('Эта деталь неисправна — нужна новая');
+ if((j==0||j==2)&&!gl[j])return toast('Сначала нанесите клей 🧴 на место детали');
+ if(blk(j).length&&!(j==0&&scrFront))return toast('Сначала снимите: '+nm(blk(j)));
+ st[j]=1;gl[j]=0;if(j==1)bsc=0;if(j==0){heat=0;scrFront=false}sfx.ok();rRepair()
+}
+function dragP(e,j){
+ e.preventDefault();const g=document.createElement('div');g.className='part';
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent=KINDS[j];document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph')&&(!front||j==0))put(j);else toast(front&&j!=0?'Переверните телефон 🔄':'Перетащите деталь на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function trayHTML(c,fi){
+ if(stg<2&&st[0])return '';
+ const gone=[0,1,2,3,4,5].filter(j=>!st[j]),th=(j,n)=>'<i class="ti" style="width:'+TS[j][0]+'px;height:'+TS[j][1]+'px">'+ART[j](n)+'</i>';
+ let h='<div class="trayb"><b>🧰 Лоток</b><div class="tw">';
+ gone.forEach(j=>{h+=(j==fi&&!fixed)?'<span class="part bad">'+th(j,0)+'❌ '+KINDS[j]+' (сломана)</span>':'<span class="part tp" onpointerdown="dragP(event,'+j+')">'+th(j,0)+KINDS[j]+'</span>'});
+ if(stg==2)h+='<span class="part tp" onpointerdown="dragC(event)"><i class="ti" style="width:26px;height:46px;background:var(--c);border-radius:6px;border:1px solid #888"></i>Крышка</span>';
+ if(!st[fi]&&!fixed){const L=S.inv.map((p,i)=>[p,i]).filter(x=>x[0].k==c.k);
+  h+=L.map(x=>'<span class="part q'+x[0].q+' tp" onpointerdown="drag(event,'+x[1]+')">'+th(fi,4)+'новая · '+Q[x[0].q]+'</span>').join('');
+  if(!L.length)h+='<div>❌ Нет новой детали «'+c.k+'». Купите её во вкладке «Запчасти» 🛒 или откройте кейс 📦.<br><button class="btn" onclick="go(5)">🛒 В магазин запчастей</button></div>'}
+ if(!gone.length&&stg!=2)h+='<span style="color:#89a">Снятые детали появятся здесь</span>';
+ return h+'</div></div>'
+}
+function putCover(){
+ if(front)return toast('Переверните телефон 🔄');
+ if(!(fixed&&st.every(x=>x)&&bsc==4))return toast('Сначала соберите телефон полностью');
+ if(!gl.c)return toast('Нанесите клей на рамку 🧴');
+ $('bk').classList.remove('open');gl.c=0;stg=3;sfx.ok();rRepair()
+}
+function dragC(e){
+ e.preventDefault();const g=document.createElement('div');g.className='part';
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent='Крышка';document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph'))putCover();else toast('Перетащите крышку на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function place(i){
+ const fi=fIdx();
+ if(st[fi])return toast('Сначала достаньте неисправную деталь');
+ if((fi==0||fi==2)&&!gl[fi])return toast('Сначала нанесите клей 🧴 на место детали');
+ if(blk(fi).length&&!(fi==0&&scrFront))return toast('Сначала снимите: '+nm(blk(fi)));
+ const q=S.inv.splice(i,1)[0];instQ=q.q;st[fi]=1;gl[fi]=0;fixed=true;heat=0;if(fi==1)bsc=0;sfx.ok();rRepair()
+}
+function drag(e,i){
+ e.preventDefault();const p=S.inv[i],g=document.createElement('div');g.className='part q'+p.q;
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent=p.k+' · '+Q[p.q];document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const fi=fIdx(),t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph')&&(!front||fi==0))place(i);else toast(front&&fi!=0?'Переверните телефон 🔄':'Перетащите деталь на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function rRepair(){
+ const c=S.cl,re=isRe(),fi=fIdx();
+ $('cl').dataset.m=c.m;$('bk').style.boxShadow=stg<2?'inset 0 0 '+(3-screws)*16+'px #f80':'';
+ $('cl').innerHTML='👤 Клиент: <b>'+c.m+'</b><br>'+(re?'Просит <b>перепрошивку</b> 💻':'Жалоба: <b>'+CMP[c.k]+'</b>');
+ for(let i=0;i<6;i++){const e=$('k'+i),f=i==fi&&!re;
+  e.className='pt p'+i+(st[i]?(okd.has(i)?' tok':'')+(f&&found&&!fixed?' tbad':''):' out'+(f&&!fixed?' need':'')+(gl[i]?' glued':''));
+  e.innerHTML=st[i]?ART[i](bsc):LBL[i];e.onclick=()=>partTap(i)}
+ const fv=$('fv');fv.className=front?'on':'';$('bk').parentNode.classList.toggle('gc',!!gl.c);
+ $('cab').innerHTML=st[5]&&!re?(st[3]?'<rect x="21" y="42" width="8" height="5" rx="1" fill="#222"/><path d="M25 41V47" stroke="#e08a2a" stroke-width="3"/>':'')+(st[4]?'<rect x="64" y="35" width="8" height="12" rx="1" fill="#222"/><path d="M68 36V47" stroke="#e08a2a" stroke-width="3"/>':''):'';
+ const bad=!re&&!fixed,crack=bad&&fi==0,flick=bad&&fi==5&&st[5];
+ fv.innerHTML=st[0]?'<div class="fs'+(heat?' hot':'')+(flick?' fk':'')+(crack?' cr':'')+'">'+(crack?CRK:'')+'<i class="nt'+(st[4]?'':' no')+'"></i><div class="ck">09:41</div><small>'+(heat>=3?'клей размягчён':'экран приклеен')+'</small></div>':'<div class="fs off">Экран снят'+(gl[0]?'<br>🧴 клей нанесён':'')+'</div>';
+ let h;
+ if(re)h='Откройте вкладку 💻 «Прошивки», выберите сайт и прошейте телефон. Осторожно с вирусами!';
+ else{
+  const bl=blk(fi);
+  h=stg==0?'Нагрейте клей на крышке Феном 🔥: нажмите на телефон (<b>'+screws+'</b>)':stg==1?'Клей размягчён. Приложите Присоску 🪄 к крышке и снимите её':
+   fixed?(st.every(x=>x)?(bsc<4?'Закрутите винты платы 🪛 ('+bsc+'/4)':(gl.c?'Клей нанесён. Перетащите крышку из лотка 🧰 на телефон':'Телефон собран. Нанесите Клей 🧴 на рамку (нажмите на телефон), затем перетащите крышку из лотка 🧰')):'Соберите телефон: перетащите детали из лотка 🧰 на телефон. АКБ и экран ставятся на клей 🧴'+(st[1]&&bsc<4?' и закрутите винты платы 🪛':'')):
+   !st[fi]?'Установите «'+c.k+'»: '+(fi==0||fi==2?'нанесите Клей 🧴 на место, затем ':'')+'возьмите в лотке и перетащите на телефон':
+   found?'«'+c.k+'» неисправна. Снимите её Рукой ✋'+(bl.length?'. Сначала снимите: '+nm(bl)+(fi==0?' — или нагрейте экран Феном 🔥 и снимите Присоской 🪄 с лицевой стороны (🔄)':''):fi==1&&bsc>0?'. Сначала выкрутите 4 винта платы 🪛':''):
+   'Найдите поломку: выберите Тестер 🔍 и коснитесь деталей. Порядок разборки: шлейф → батарея и камеры → плата → экран';
+  h='<div>'+h+'</div>';
+  if(fi==0&&!fixed&&!front&&(found||!st[0]))h='<div class="flipmsg">🔄 Поверните телефон, чтобы поменять экран<br><button class="btn" onclick="flip()">Повернуть</button></div>'+h;
+  h+=trayHTML(c,fi);
+  h+='<div class="tbar">'+TOOLS.map((t,i)=>'<button class="tl'+(tool==t[0]?' on':'')+'" onclick="setTool('+i+')">'+t[1]+'<small>'+t[2]+'</small></button>').join('')+'</div>';
+  h+='<button class="btn" style="width:100%;margin:8px 0 0" onclick="flip()">🔄 '+(front?'Показать заднюю сторону':'Перевернуть телефон')+'</button>'}
+ $('act').innerHTML=h;ui();
+ if(!re&&fixed&&!testing&&stg!=2&&st.every(x=>x)&&bsc==4){testing=true;setTimeout(selftest,600)}
+}
+/* ===== USE PHONE ===== */
+let pap='home',pcx='',pint=0,pshots=0,PS={};
+const APPS=[['clock','🕐','Часы'],['calc','🧮','Калькулятор'],['cam','📷','Камера'],['self','🤳','Селфи'],['snd','🔊','Звук'],['set','⚙️','Настройки']];
+function phoneState(){
+ const k=isRe()?'':S.cl.k;
+ if(!(st.every(x=>x)&&bsc==4&&stg!=2))return{m:'open'};
+ if(!fixed){if(k=='Плата')return{m:'dead'};if(k=='Экран')return{m:'blank'};if(k=='Батарея')return{m:'batt'};if(k=='Шлейф')return{m:'flick'}}
+ return{m:'ok',cam:!(k=='Камера'&&!fixed),selfie:!(k=='Фронталка'&&!fixed)}
+}
+function usePhone(){
+ sfx.click();PS=phoneState();pap=(PS.m=='ok'||PS.m=='flick'||PS.m=='batt')?'boot':'x';pshots=0;pcx='';
+ const m=$('pm');m.className='on';
+ m.innerHTML='<div class="pz"><div class="pf"><div class="pn"></div><div class="pw" id="pw"></div></div><div class="pcap" id="pcap"></div><button class="px" onclick="closePhone()">✖ Закрыть</button></div>';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>m.firstChild.classList.add('big')));
+ prender()
+}
+function closePhone(){clearInterval(pint);clearTimeout(PS.t);$('pm').className='';$('pm').innerHTML='';sfx.click()}
+function pgo(a){pap=a;sfx.click();prender()}
+function pshot(){pshots++;beep(1200,.05);prender()}
+function pk(k){
+ if(k=='C')pcx='';else if(k=='='){try{if(/^[0-9+\-*\/.() ]+$/.test(pcx))pcx=String(+(Function('return '+pcx)()).toFixed(8))}catch(e){pcx='Ошибка'}}else pcx=(pcx=='Ошибка'?'':pcx)+k;
+ sfx.click();$('cd').textContent=pcx||'0'
+}
+function prender(){
+ const w=$('pw'),cap=$('pcap'),c=S.cl,t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+ if(!w)return;clearInterval(pint);cap.textContent='';
+ const bar='<div class="sb"><span>'+hm+'</span><span>'+(PS.m=='batt'?'🪫 1%':'🔋 100%')+'</span></div>',back='<div class="hb" onclick="pgo(\'home\')"></div>';
+ if(PS.m=='open'){w.innerHTML='<div class="pc">🔧<br>Телефон разобран</div>';cap.textContent='Соберите телефон и закройте крышку, чтобы включить его';return}
+ if(PS.m=='dead'){w.innerHTML='<div class="blk"></div>';cap.textContent='Телефон не включается: ни реакции, ни зарядки';return}
+ if(PS.m=='blank'){w.innerHTML='<div class="blk" onclick="beep(660,.15)"><svg viewBox="0 0 100 190" preserveAspectRatio="none"><path d="M70 0L52 60L30 90L40 140L20 190M52 60L90 100L100 130M30 90L0 80M40 140L80 170" stroke="#9ab" stroke-width="1" fill="none"/></svg></div>';cap.textContent='Экран разбит, картинки нет. Нажмите на экран: звук есть, значит телефон работает';return}
+ if(PS.m=='bdead'){w.innerHTML='<div class="blk"></div>';cap.textContent='Телефон выключился: аккумулятор не держит заряд';return}
+ if(pap=='boot'){w.innerHTML='<div class="pc boot">'+c.m+'</div>';cap.textContent='Загрузка…';sfx.ok();PS.t=setTimeout(()=>{pap='home';prender()},1500);return}
+ if(PS.m=='batt'&&!PS.armed){PS.armed=1;PS.t=setTimeout(()=>{PS.m='bdead';sfx.bad();prender()},4000)}
+ if(PS.m=='flick')cap.textContent='Экран мерцает: проблема со шлейфом';
+ let b;
+ if(pap=='home')b='<div class="tm">'+hm+'</div><div class="dt">'+t.toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'})+'</div><div class="ag">'+APPS.map(a=>'<button onclick="pgo(\''+a[0]+'\')">'+a[1]+'<small>'+a[2]+'</small></button>').join('')+'</div>';
+ else if(pap=='clock'){b='<div class="ck2" id="pclk">'+t.toLocaleTimeString('ru')+'</div>'+back;pint=setInterval(()=>{const e=$('pclk');if(e)e.textContent=new Date().toLocaleTimeString('ru')},500)}
+ else if(pap=='calc'){b='<div class="cd" id="cd">'+(pcx||'0')+'</div><div class="kp">'+['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=',''].map(k=>k?'<button onclick="pk(\''+k+'\')">'+k+'</button>':'<span></span>').join('')+'</div>'+back}
+ else if(pap=='cam'||pap=='self'){const ok=pap=='cam'?PS.cam:PS.selfie;b=ok?'<div class="vf">'+(pap=='cam'?'☀️':'🙂')+'<div class="shut" onclick="pshot()"></div></div><div class="dt">Снимков: '+pshots+'</div>'+back:'<div class="vf er">❌ Ошибка камеры<br>Модуль не отвечает</div>'+back}
+ else if(pap=='snd')b='<div class="pc">🔊<br><button class="btn" onclick="[523,659,784,1047].forEach((f,i)=>beep(f,.2,\'triangle\',.1,i*.18))">Проверить динамик</button></div>'+back;
+ else b=[['Модель',c.m],['Система',isRe()?'Android (старая прошивка)':'Android 14'],['Аккумулятор',PS.m=='batt'?'1%':'100%'],['Основная камера',PS.cam===false?'ошибка':'исправна'],['Фронтальная камера',PS.selfie===false?'ошибка':'исправна'],['Память','128 ГБ']].map(r=>'<div class="li"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('')+back;
+ w.innerHTML='<div class="hs'+(PS.m=='flick'?' fk':'')+'">'+bar+b+'</div>'
+}
+
+function selftest(){
+ const o=$('ov'),L=['Питание доходит до платы','Экран показывает изображение','Камера работает','Динамик звучит','Зарядка определяется','Сеть ловит','Все винты на месте'];
+ o.className='on stm';o.innerHTML='<div class="box"><h3>Самотест</h3><div id="stl"></div></div>';
+ L.forEach((t,i)=>setTimeout(()=>{$('stl').insertAdjacentHTML('beforeend','<p>✔ '+t+'</p>');beep(600+i*60,.06,'triangle')},400*(i+1)));
+ setTimeout(()=>{$('stl').insertAdjacentHTML('afterend','<button class="btn g" id="stok">К верстаку</button>');
+  $('stok').onclick=()=>{o.className='';o.innerHTML='';done(Math.round(BASE*KF[fIdx()]*MULT[instQ]*(1+.05*(lvl()-1))))}},400*(L.length+1))
+}
+function done(pay){
+ S.money+=pay;S.xp+=25;S.q.rep++;S.q.earn+=pay;save();sfx.ok();ui();
+ toast('✅ Ремонт завершён! +'+pay+' ₽');newClient()
+}
+
+/* ===== БАРАХОЛКА ===== */
+function rMarket(){
+    let h = '<div class="card"><b>Купить телефон:</b><div class="grid" style="grid-template-columns: 1fr;">';
+    MODELS_SHOP.forEach(p => {
+        h += `<div class="q" style="padding:8px 0;"><span>${p.m}</span><button class="btn" onclick="buyPhone('${p.m}', ${p.p})">${p.p} ₽</button></div>`;
+    });
+    h += '</div></div>';
+
+    const invPhones = S.inv.filter(item => item.isPhone);
+    if(invPhones.length > 0) {
+        h += '<div class="card"><b>Продать телефон:</b>';
+        invPhones.forEach((p, i) => {
+            h += `<div class="q" style="padding:8px 0;"><span>${p.k} (Цена: ${p.sellPrice} ₽)</span><button class="btn g" onclick="sellPhone(${i})">Продать</button></div>`;
+        });
+        h += '</div>';
+    } else {
+        h += '<p style="text-align:center;color:#89a">У вас нет телефонов для продажи. Купите и продайте дороже!</p>';
+    }
+    $('bh').innerHTML = h;
+    ui();
+}
+
+function buyPhone(name, price) {
+    if(S.money < price) { sfx.bad(); toast('Не хватает денег'); return; }
+    S.money -= price;
+    S.inv.push({ k: name, q: 2, isPhone: true, buyPrice: price, sellPrice: Math.round(price * (1.1 + Math.random() * 0.2)) });
+    save(); sfx.buy(); toast('Куплено: ' + name);
+    rMarket();
+}
+
+function sellPhone(index) {
+    const invPhones = S.inv.filter(item => item.isPhone);
+    const phone = invPhones[index];
+    if(phone) {
+        const sellPrice = phone.sellPrice;
+        S.money += sellPrice;
+        const realIndex = S.inv.findIndex(item => item.k === phone.k && item.buyPrice === phone.buyPrice && item.isPhone);
+        if(realIndex !== -1) S.inv.splice(realIndex, 1);
+        save(); sfx.ok(); toast('Продан: ' + phone.k + ' за ' + sellPrice + ' ₽');
+        rMarket();
+    }
+}
+
+/* ===== CASES (ТОЛЬКО ТЕЛЕФОНЫ) ===== */
+function rCases(){
+    $('cs').innerHTML = PHONE_CASES.map((c,i)=>'<button class="case" style="border-color:'+c.c+';color:'+c.c+'" onclick="openCase('+i+')"><b>📦</b>'+c.n+'<br>'+c.p+' ₽</button>').join('');
+    $('inv').innerHTML = S.inv.length ? S.inv.map(p=>'<span class="part q'+p.q+'">'+p.k+' · '+Q[p.q]+'</span>').join('') : '<br>Пусто';
+    ui();
+}
+function openCase(i){
+    const c = PHONE_CASES[i];
+    if(S.money < c.p){ sfx.bad(); toast('Не хватает денег'); return; }
+    S.money -= c.p;
+    let r = R(100), q = 0;
+    if(r >= c.w[0]) q = (r < c.w[0] + c.w[1]) ? 1 : 2;
+    let modelObj = MODELS_SHOP[R(MODELS_SHOP.length)];
+    let phoneName = modelObj.m;
+    let sellPrice = Math.round(modelObj.p * QP[q] * (0.8 + Math.random() * 0.4));
+    const p = { k: phoneName, q: q, isPhone: true, buyPrice: c.p, sellPrice: sellPrice };
+    S.inv.push(p);
+    S.q.buy++; save(); sfx.buy(); setTimeout(sfx.ok, 150);
+    toast('🎁 Выпал телефон: ' + phoneName + ' (' + Q[q] + ')');
+    rCases();
+}
+
+/* ===== FIRMWARE ===== */
+let site=null;
+function rBrowser(){
+ const re=S.cl.k=='reflash';
+ let h='<div class="bar">🔒 '+(site?site.u:'start.page')+'</div>';
+ if(!site)h+='<b>Скачать прошивку:</b>'+SITES.map((s,i)=>'<button class="site" onclick="pick('+i+')">🌐 '+s.u+'</button>').join('')+'<p style="margin-top:8px;color:#666">'+(re?'Клиент ждёт перепрошивку '+S.cl.m:'Сейчас клиент не просил перепрошивку.')+'</p>';
+ else h+='<h3>'+site.u+'</h3><p>Прошивка для '+S.cl.m+'</p><div class="pr"><i id="pi"></i></div><button class="btn" id="dl" onclick="flash()">⬇ Скачать и прошить</button><button class="btn" style="background:#999" onclick="site=null;rBrowser()">← Назад</button>';
+ $('br').innerHTML=h
+}
+function pick(i){site=SITES[i];sfx.click();rBrowser()}
+function flash(){
+ $('dl').disabled=true;let w=0;const iv=setInterval(()=>{w+=5;$('pi').style.width=w+'%';beep(300+w*5,.04,'square',.03);if(w>=100){clearInterval(iv);end()}},80);
+ function end(){
+  const s=site;site=null;
+  if(Math.random()<s.v){virus();return}
+  if(S.cl.k=='reflash')done(1500+lvl()*50);else{toast('Прошито, но клиент не просил 🤷');rBrowser()}
+ }
+}
+function virus(){
+ siren();sfx.bad();S.money=Math.max(0,S.money-1000);save();
+ const o=$('br');o.classList.add('bsodw');o.innerHTML='<h1>:(</h1><p style="font-size:22px">Ваш телефон столкнулся с вирусом и нуждается в перезагрузке.</p><p style="margin-top:20px">VIRUS_DETECTED_0x0000666<br><br>Штраф: −1000 ₽</p>';
+ setTimeout(()=>{o.classList.remove('bsodw');rBrowser();ui()},3200)
+}
+
+/* ===== QUESTS ===== */
+const QS=[{id:0,t:'Починить 5 телефонов',k:'rep',n:5,r:1000},{id:1,t:'Заработать 5000 ₽',k:'earn',n:5000,r:1500},{id:2,t:'Купить 3 детали',k:'buy',n:3,r:700}];
+function rQuests(){
+ daily();
+ $('qs').innerHTML=QS.map(q=>{const v=Math.min(S.q[q.k],q.n),ok=v>=q.n,dn=S.q.done.includes(q.id);
+  return '<div class="card"><div class="q"><b>'+q.t+'</b><span>🎁 '+q.r+' ₽</span></div><div class="pb"><i style="width:'+v/q.n*100+'%"></i></div><div class="q" style="margin-top:6px"><small>'+v+' / '+q.n+'</small><button class="btn g" '+(ok&&!dn?'':'disabled')+' onclick="claim('+q.id+')">'+(dn?'Получено ✔':'Забрать')+'</button></div></div>'}).join('')+'<p style="text-align:center;color:#89a">Задания обновляются каждый день</p>';ui()
+}
+function claim(id){const q=QS[id];S.q.done.push(id);S.money+=q.r;S.xp+=40;save();sfx.ok();toast('+'+q.r+' ₽');rQuests()}
+
+/* ===== 3D CUSTOM ===== */
+let rot=-20;
+function rCustom(){
+ $('sw').innerHTML=COLORS.map(c=>'<span class="sw" style="background:'+c+';'+(c==S.color?'border-color:#fff':'')+'" onclick="setColor(\''+c+'\')"></span>').join('');
+ const d=new Date();$('fc').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+ $('bt').textContent=S.cl.m;$('bcam').innerHTML=cam(S.cl.m);ui()
+}
+$('cb').onclick=()=>{rot+=360;$('cb').style.transform='rotateY('+rot+'deg)';sfx.open()};
+function setColor(c){S.color=c;save();sfx.click();rCustom()}
+
+/* ===== CAMERAS ===== */
+const ln=(x,y,s)=>'<i class="ln" style="left:'+x+'%;top:'+y+'%;width:'+s+'%"></i>';
+const box=(l,t,w,ar,c,in_)=>'<div class="cam '+c+'" style="left:'+l+'%;top:'+t+'%;width:'+w+'%;aspect-ratio:'+ar+'">'+in_+'</div>';
+function cam(m){
+ const n=+(m.match(/\d+/)||[0])[0],x=/Xiaomi/.test(m);
+ if(x){
+  if(n==10)return box(8,7,34,'1/2.1','h',ln(10,3,80)+ln(31,41,38)+ln(31,61,38)+ln(31,80,38)+'<i class="fl" style="left:12%;top:55%"></i>');
+  if(n==11)return box(6,7,74,'2.1/1','h',ln(3,4,44)+ln(52,6,20)+ln(52,52,20)+'<i class="rs" style="left:77%;top:10%;width:19%;height:80%"></i>');
+  if(n==12)return box(6,7,56,'1/1','h c',ln(12,12,76)+'<i class="fl" style="left:80%;top:20%"></i>');
+  if(n==13)return box(6,7,56,'1/1','h c',ln(8,8,40)+ln(52,8,40)+ln(8,52,40)+ln(52,52,40));
+  return box(6,7,60,'1/1','h c',ln(6,6,54)+ln(64,10,28)+ln(64,42,28)+ln(30,66,28));
+ }
+ if(n==20)return box(8,7,30,'1/2.3','h',ln(15,5,70)+ln(15,36,70)+ln(15,67,70));
+ if(n==21)return box(8,7,30,'1/2.3','s',ln(15,5,70)+ln(15,36,70)+ln(15,67,70));
+ return box(8,7,24,'1/2.6','',ln(6,1,88)+ln(6,34,88)+ln(6,66,88));
+}
+
+/* ===== SHOP ===== */
+const ICON={'Экран':'📱','Плата':'🟩','Батарея':'🔋','Камера':'📷','Фронталка':'🤳','Шлейф':'🔗'},PB={'Экран':400,'Плата':500,'Батарея':250,'Камера':350,'Фронталка':150,'Шлейф':100},QP=[.4,.8,1.5],QC=['#667','#2a6df4','#c98a10'];
+const price=(k,q)=>Math.round(PB[k]*QP[q]);
+function rShop(){
+ $('sh').innerHTML=KINDS.map((k,i)=>'<div class="card"><b>'+ICON[k]+' '+k+'</b><br>'+Q.map((n,q)=>'<button class="btn" style="background:'+QC[q]+'" onclick="buyPart('+i+','+q+')">'+n+' · '+price(k,q)+' ₽</button>').join('')+'</div>').join('')+'<div class="card"><b>В инвентаре</b><div>'+(S.inv.length?S.inv.map(p=>'<span class="part q'+p.q+'">'+p.k+' · '+Q[p.q]+'</span>').join(''):'<br>Пусто')+'</div></div>';ui()
+}
+function buyPart(i,q){
+ const k=KINDS[i],p=price(k,q);
+ if(S.money<p){sfx.bad();toast('Не хватает денег');return}
+ S.money-=p;S.inv.push({k,q});S.q.buy++;save();sfx.buy();toast('Куплено: '+k+' · '+Q[q]);rShop()
+}
+
+/* ===== START ===== */
+daily();if(!S.cl)S.cl={m:MODELS[R(12)],k:KINDS[R(KINDS.length)]};
+buildPhone();go(0);ui();
+</script></body></html>
