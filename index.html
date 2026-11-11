@@ -1130,36 +1130,30 @@ const TUT_STEPS=[
  {t:'Шаг 1. Найти поломку',p:'Выбери инструмент «Тестер» 🔍 и касайся деталей внутри телефона. Если тестер пишет «0 Ом, замыкание» — это и есть неисправная деталь.'},
  {t:'Шаг 2. Разобрать',p:'Сначала феном нагрей клей на крышке, потом присоской сними её. Дальше снимай детали по порядку: шлейф → динамик/вибро → батарея и камеры → плата (выкрути 4 винта битой T6) → экран.'},
  {t:'Шаг 3. Купить запчасть',p:'Перейди во вкладку «Запчасти» 🛒 и купи нужную деталь (Б/У, Аналог или Оригинал). Чем лучше качество — тем больше заплатят за ремонт.'},
- {t:'Шаг 4. Собрать',p:'Нанеси клей на место АКБ или экрана, перетащи новую деталь из лотка на телефон. Закрути винты платы, нанеси клей на рамку и поставь крышку.'},
- {t:'Шаг 5. Проверить',p:'Нажми «Включить» 📱 и протестируй: звук, вибрацию, камеры, экран. Если всё ок — ремонт завершён, деньги твои!'},
- {t:'Готово!',p:'Открой вкладку «Помощь» ❓ в любой момент — там схема всех деталей со стрелками и названиями. Удачного ремонта! 🔧'}
-];
-let tutStep=0;
+ ];let tutStep=0;
 function startTutorial(){
- tutStep=0;showTut();
-}
-function showTut(){
- const s=TUT_STEPS[tutStep],ov=document.createElement('div');ov.className='tut';ov.id='tutOv';
- ov.innerHTML='<div class="box"><h3>'+s.t+'</h3><p>'+s.p+'</p><div class="nav">'
-  +(tutStep>0?'<button class="btn" style="background:#456" onclick="tutStep--;showTut()">← Назад</button>':'')
-  +'<button class="btn g" onclick="'+(tutStep<TUT_STEPS.length-1?'tutStep++;showTut()':'closeTut()')+'">'+(tutStep<TUT_STEPS.length-1?'Далее →':'Понятно ✔')+'</button></div></div>';
- const old=$('tutOv');if(old)old.remove();document.body.appendChild(ov);sfx.click();
-}
-function closeTut(){const o=$('tutOv');if(o)o.remove();sfx.ok();if(!S.tutDone){S.tutDone=1;save()}}
+ 
+tutStep=0;showTut();
+  }
+  function showTut(){
+    const s=TUT_STEPS[tutStep],ov=document.createElement('div');ov.className='tut';ov.id='tutOv';
+    ov.innerHTML='<div class="box"><h3>'+s.t+'</h3><p>'+s.p+'</p><div class="nav">'
+    +(tutStep>0?'<button class="btn" style="background:#456" onclick="tutStep--;showTut()">Назад</button>':'')
+    +'<button class="btn g" onclick="'+(tutStep<TUT_STEPS.length-1?'tutStep++;showTut()':'closeTut()')+'">'+(tutStep<TUT_STEPS.length-1?'Далее':'Понятно!')+'</button></div></div>';
+    const old=$('tutOv');if(old)old.remove();document.body.appendChild(ov);sfx.click();
+  }
+  function closeTut(){const o=$('tutOv');if(o)o.remove();sfx.ok();}
 
 /* ===== START ===== */
-/* ===== 3D РЕМОНТ НАУШНИКОВ (фен) И ЧАСОВ (винты на задней крышке) =====
-   Вставить ПЕРЕД строкой  /* ===== START ===== */  */
+/* ===== 3D РЕМОНТ НАУШНИКОВ (фен) И ЧАСОВ ===== */
 (function(){
 if(!window.THREE||!THREE.OrbitControls)return;
 const host=$('ph3'),div=document.createElement('div');
 div.id='acc3';div.style.cssText='position:absolute;inset:0;z-index:1;display:none';host.appendChild(div);
-const rd=new THREE.WebGLRenderer({antialias:true});rd.setPixelRatio(Math.min(devicePixelRatio,2));rd.outputEncoding=THREE.sRGBEncoding;div.appendChild(rd.domElement);
+const rd=new THREE.WebGLRenderer({antialias:true});rd.setPixelRatio(Math.min(devicePixelRatio,2));
 const sc=new THREE.Scene();sc.background=new THREE.Color(0x14100c);
 const cm=new THREE.PerspectiveCamera(40,1,.1,100);
-const ctl=new THREE.OrbitControls(cm,rd.domElement);ctl.enableDamping=true;ctl.enablePan=false;ctl.minDistance=6;ctl.maxDistance=18;ctl.maxPolarAngle=1.5;
-const fit=()=>{const w=host.clientWidth,h=host.clientHeight;if(w&&h){rd.setSize(w,h);cm.aspect=w/h;cm.updateProjectionMatrix()}};
-new ResizeObserver(fit).observe(host);
+const ctl=new THREE.OrbitControls(cm,rd.domElement);ctl.enableDamping=true;ew ResizeObserver(fit).observe(host);
 sc.add(new THREE.HemisphereLight(0xffe2b8,0x2a1a10,.9));
 const sun=new THREE.DirectionalLight(0xffcf99,1.1);sun.position.set(5,9,4);sc.add(sun);
 const lamp=new THREE.PointLight(0xff9a50,.8,30);lamp.position.set(-5,6,3);sc.add(lamp);
