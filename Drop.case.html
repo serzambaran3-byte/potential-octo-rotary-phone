@@ -1,1 +1,1825 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Phone Master Studio 4.0 · 3D</title>
+<style>
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent;user-select:none}
+:root{--c:#2a6df4;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;background:#0b0f1a;color-scheme:dark}
+body{height:100%;background:#0b0f1a;color:#eef;font-family:system-ui,sans-serif;overflow:hidden}
+#app{max-width:720px;height:100%;margin:auto;display:flex;flex-direction:column;background:linear-gradient(#121a30,#0b0f1a)}
+header{display:flex;align-items:center;gap:8px;padding:10px 12px;background:#0006;font-weight:700;font-size:16px}
+header .xp{flex:1;height:8px;background:#234;border-radius:4px;overflow:hidden}
+header .xp i{display:block;height:100%;background:#4f8;width:0}
+.ib{background:#234;border:0;color:#fff;border-radius:10px;padding:6px 9px;font-size:16px}
+.ib.off{opacity:.35}
+main{flex:1;overflow-y:auto;padding:10px 12px}
+.tab{display:none}.tab.on{display:block}
+nav{display:flex;background:#0008}
+nav button{flex:1;padding:12px 0;background:none;border:0;color:#9ab;font-size:22px}
+nav button.on{color:#fff;background:#2a6df433}
+nav small{display:block;font-size:10px}
+.card{background:#1a2440;border-radius:14px;padding:12px;margin:8px 0}
+.btn{background:#2a6df4;color:#fff;border:0;border-radius:12px;padding:11px 14px;font-size:15px;font-weight:700;margin:3px}
+.btn:disabled{opacity:.4}
+.btn.g{background:#2ea44f}
+.ph{position:relative;width:min(62vw,290px);aspect-ratio:9/17;margin:8px auto;border-radius:28px;background:#111;border:4px solid #444;overflow:hidden}
+.in{position:absolute;inset:0;padding:14px;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.slot{border-radius:8px;padding:12px;text-align:center;font-size:13px;font-weight:700;border:2px solid transparent}
+.s0{background:#222;color:#8af;height:30%}.s1{background:#1b5e35;height:25%}.s2{background:#555;height:30%}
+.need{border-color:#fc3;box-shadow:0 0 14px #fc3}
+.bk{position:absolute;inset:0;background:var(--c);transition:transform 1.2s cubic-bezier(.6,0,.4,1);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:22px;text-align:center;padding:10px;color:#fffd;text-shadow:0 2px 6px #0008}
+.bk.open{transform:translateY(105%)}
+.sc{position:absolute;width:26px;height:26px;border-radius:50%;background:radial-gradient(#eee,#777);border:2px solid #333;transition:.45s;color:#333;font-weight:900;text-align:center;line-height:22px}
+.sc::after{content:'+'}
+.sc.gone{transform:scale(2.2) rotate(360deg);opacity:0;pointer-events:none}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.case{text-align:center;padding:14px 4px;border-radius:14px;border:2px solid;font-weight:700;background:#1a2440;color:#fff}
+.case b{font-size:38px;display:block}
+.part{display:inline-block;padding:6px 10px;margin:3px;border-radius:10px;background:#234;font-size:13px}
+.q0{color:#aaa}.q1{color:#6cf}.q2{color:#fc3}
+.cam{position:absolute;pointer-events:none;z-index:1}
+.cam.h{background:#15161c;border:2px solid #3a3c46;border-radius:16px;box-shadow:0 2px 6px #0006}
+.cam.c{border-radius:50%}
+.cam.s{background:linear-gradient(#0004,#0004),var(--c);border-radius:14px;box-shadow:0 1px 4px #0005}
+.ln{position:absolute;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#6a7fb0 0,#1a2238 22%,#000 60%);border:2px solid #9aa;box-shadow:inset 0 0 0 3px #000,0 1px 3px #0008}
+.rs{position:absolute;background:linear-gradient(135deg,#2a2d38,#000);border:1.5px solid #555;border-radius:6px}
+.fl{position:absolute;aspect-ratio:1;border-radius:50%;background:#ffe9a8;width:7%}
+.lap{background:#cfd4dc;border-radius:14px 14px 4px 4px;padding:10px;color:#000}
+.lap .scr{background:#fff;border-radius:6px;min-height:250px;padding:8px;font-size:13px}
+.lap .base{height:12px;background:#9aa2b0;margin:0 -16px;border-radius:0 0 14px 14px}
+.bar{background:#eef;border-radius:6px;padding:5px 8px;margin-bottom:8px;font-size:12px;color:#235;word-break:break-all}
+.site{display:block;width:100%;text-align:left;background:#eef;border:1px solid #bcd;border-radius:6px;padding:8px;margin:5px 0;font-size:13px;color:#036}
+.pr{height:12px;background:#ddd;border-radius:6px;overflow:hidden;margin:8px 0}.pr i{display:block;height:100%;width:0;background:#2a6df4}
+.scr.bsodw{background:#0078d7;color:#fff;animation:fl .4s infinite;text-align:left;padding:16px}
+.bsodw h1{font-size:64px;font-weight:200}
+.bsodw p{font-size:14px!important;line-height:1.4}
+#wb{background-color:#17335c;background-image:repeating-linear-gradient(0deg,#ffffff0a 0 1px,transparent 1px 20px),repeating-linear-gradient(90deg,#ffffff0a 0 1px,transparent 1px 20px);border-radius:16px;padding:10px;margin:8px 0}
+#wb .ph{margin:0 auto;box-shadow:0 8px 20px #0008}
+.s1{background-image:radial-gradient(#9c6 1px,transparent 2px);background-size:12px 12px}
+.slot.out{background:transparent!important;border:2px dashed #fc3!important;color:transparent!important}
+.slot.tbad{border-color:#f44;box-shadow:0 0 14px #f44}
+.slot.tok{border-color:#4f8}
+.tbar{display:flex;gap:6px;margin-top:10px}
+.tl{flex:1;background:#234;color:#cde;border:2px solid transparent;border-radius:10px;padding:8px 2px;font-size:20px}
+.tl small{display:block;font-size:10px}
+.tl.on{border-color:#fc3;background:#345}
+.tp{touch-action:none;border:1px solid #fc3}
+.stm{background:#000b}.stm .box{background:#1a2440;border-radius:16px;padding:18px;width:min(86%,360px);text-align:left}
+.stm p{margin:6px 0}
+#wb{position:relative}
+#pu{position:absolute;right:8px;top:8px;z-index:6;background:#1a2440;border:2px solid #fc3;color:#fff;border-radius:12px;padding:6px 8px;font-size:22px}
+#pu small{display:block;font-size:9px}
+#pm{position:fixed;inset:0;z-index:8;display:none;background:#000c;align-items:center;justify-content:center}
+#pm.on{display:flex}
+.pz{display:flex;flex-direction:column;align-items:center;gap:10px;transform:scale(.25) translateY(25%);opacity:0;transition:transform .7s cubic-bezier(.2,.9,.2,1),opacity .5s}
+.pz.big{transform:none;opacity:1}
+.pf{position:relative;width:min(78vw,330px);aspect-ratio:9/18;border-radius:34px;border:6px solid #444;background:#000;overflow:hidden;box-shadow:0 10px 40px #000}
+.wf{position:relative;width:min(52vw,200px);aspect-ratio:1;border-radius:28px;border:5px solid #3a3f4a;background:#111;overflow:hidden;box-shadow:0 8px 28px #000a,inset 0 0 0 2px #222}
+.ww{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+.wd{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#1a2a4a,#0a1020);color:#e8f0ff;text-align:center;padding:12px}
+.wd.low{background:#1a0a0a;color:#f66;font-size:28px}
+.wd.crack{position:relative}
+.wd.crack .wcr{position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 8px,#fff2 8px,#fff2 9px),repeating-linear-gradient(-45deg,transparent,transparent 12px,#0004 12px,#0004 13px);pointer-events:none}
+.wtm{font-size:36px;font-weight:200;letter-spacing:1px;line-height:1}
+.wtm .wsec{font-size:14px;opacity:.55;margin-left:4px}
+.wdt{font-size:11px;opacity:.7;margin-top:4px}
+.wrow{display:flex;gap:12px;margin-top:10px;font-size:12px}
+.wapps{display:flex;gap:8px;margin-top:12px}
+.wapps button{width:36px;height:36px;border-radius:12px;border:0;background:#fff2;color:#fff;font-size:16px}
+.pw{position:absolute;inset:0;display:flex;flex-direction:column}
+.pn{position:absolute;top:10px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#000;border:2px solid #556;z-index:3}
+.pcap{max-width:min(78vw,330px);text-align:center;font-size:13px;color:#cde;min-height:34px}
+.px{background:#e53935;border:0;color:#fff;border-radius:12px;padding:10px 18px;font-weight:700}
+.sb{display:flex;justify-content:space-between;padding:8px 18px 0;font-size:12px}
+.hs{flex:1;display:flex;flex-direction:column;background:linear-gradient(160deg,#2a4a7a,#1a1040 60%,#3a1050);position:relative;overflow:hidden}
+.hs.fk{animation:fk .18s infinite}
+@keyframes fk{50%{opacity:.3}}
+.tm{font-size:54px;font-weight:200;text-align:center;margin-top:26px}
+.dt{text-align:center;font-size:12px;opacity:.8}
+.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:18px 14px;margin-top:auto}
+.ag button{background:#fff2;border:0;color:#fff;border-radius:16px;padding:10px 0;font-size:26px}
+.ag small{display:block;font-size:9px}
+.hb{position:absolute;bottom:6px;left:50%;width:90px;height:5px;margin-left:-45px;border-radius:3px;background:#fffa}
+.pc{margin:auto;text-align:center;font-size:22px;padding:20px;color:#cde}
+.pc.boot{font-size:20px;font-weight:700;letter-spacing:1px}
+.blk{flex:1;background:#000}
+.blk svg{width:100%;height:100%}
+.ck2{margin:auto;font-size:40px;font-weight:200}
+.cd{margin:34px 14px 8px;font-size:34px;text-align:right;min-height:46px;overflow:hidden}
+.kp{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 8px 20px}
+.kp button{background:#fff2;border:0;color:#fff;border-radius:10px;padding:12px 0;font-size:18px}
+.vf{flex:1;margin:34px 10px 10px;border-radius:14px;background:linear-gradient(#6bb7ff,#d8f0ff 60%,#7ab55c);display:flex;align-items:center;justify-content:center;font-size:56px;position:relative}
+.vf.er{background:#000;font-size:14px;color:#f66;text-align:center;padding:10px}
+.shut{position:absolute;bottom:10px;left:50%;width:44px;height:44px;margin-left:-22px;border-radius:50%;border:4px solid #fff;background:#fff4}
+.li{display:flex;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #fff2;font-size:13px}
+.in{display:block;padding:0;z-index:1}
+#cab{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none}
+.trayb{background:#10182e;border:2px dashed #4a5b86;border-radius:12px;padding:8px;margin-top:8px}
+.tw .part{display:inline-flex;align-items:center;gap:6px}
+.ti{display:inline-block}
+.part.bad{opacity:.6}
+.pt.out.glued{border-color:#ffd54f!important;box-shadow:inset 0 0 14px #ffd54f}
+#wb .ph.gc{box-shadow:0 0 0 3px #ffd54f,0 8px 20px #0008}
+.crk{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.fs.cr{overflow:hidden}.fs.cr .ck{opacity:.6}
+.fs.fk{animation:fk .18s infinite}
+.flipmsg{background:#5a3b00;border:2px solid #fc3;border-radius:12px;padding:10px;margin-bottom:8px;text-align:center;font-weight:700}
+.pt svg{width:100%;height:100%;display:block;border-radius:inherit}
+.bk{z-index:2}
+.pt{position:absolute;display:flex;align-items:center;justify-content:center;text-align:center;font-size:11px;font-weight:700;border-radius:8px;border:2px solid transparent;transition:all .3s;color:#cde}
+.p0{inset:5px;background:linear-gradient(160deg,#16203a,#06090f);color:#8af;border-radius:20px;z-index:0}
+.p1{left:12%;top:24%;width:76%;height:34%;background:radial-gradient(#9c6 1px,transparent 2px) 0 0/12px 12px,#1b5e35;z-index:1}
+.p2{left:12%;top:68%;width:76%;height:26%;background:#555;z-index:2}
+.p3{left:10%;top:7%;width:30%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#456,#000 70%);border-color:#889;z-index:2;font-size:16px}
+.p4{left:58%;top:9%;width:20%;aspect-ratio:1;border-radius:50%;background:radial-gradient(#456,#000 70%);border-color:#889;z-index:2;font-size:12px}
+.p5{left:38%;top:59%;width:24%;height:7%;background:#e08a2a;z-index:3;font-size:10px;border-radius:4px}
+.pt.out{background:#0004!important;border:2px dashed #fff5!important;color:#fff6!important}
+.pt.need{border-color:#fc3!important;box-shadow:0 0 14px #fc3}
+.pt.tbad{border-color:#f44;box-shadow:0 0 14px #f44}
+.pt.tok{border-color:#4f8}
+#fv{position:absolute;inset:0;z-index:4;display:none;background:#05070c}
+#fv.on{display:block}
+.fs{position:absolute;inset:6px;border-radius:22px;background:linear-gradient(160deg,#2a4a7a,#0a1020);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#cde;transition:box-shadow .4s}
+.fs.hot{box-shadow:inset 0 0 40px #f80,0 0 20px #f80}
+.fs.off{background:#10131c;border:2px dashed #fff4;font-size:13px}
+.ck{font-size:40px;font-weight:200}
+.nt{position:absolute;top:12px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#000;border:2px solid #556}
+.nt.no{border-style:dashed;border-color:#fc3}
+.st{perspective:900px;height:360px;display:grid;place-items:center}
+.cb{width:170px;height:330px;position:relative;transform-style:preserve-3d;transition:transform 1.4s;transform:rotateY(-20deg)}
+.fc,.bc{position:absolute;inset:0;border-radius:24px;backface-visibility:hidden;border:5px solid #222}
+.fc{background:linear-gradient(160deg,#16304f,#050a14);display:flex;align-items:center;justify-content:center;font-size:40px;font-weight:200}
+.bc{transform:rotateY(180deg);background:var(--c);display:flex;align-items:center;justify-content:center;font-weight:800;text-align:center;color:#fffc}
+.sw{display:inline-block;width:44px;height:44px;border-radius:50%;margin:5px;border:3px solid #fff4}
+.q{display:flex;justify-content:space-between;align-items:center}
+.pb{height:8px;background:#234;border-radius:4px;overflow:hidden;margin-top:6px}.pb i{display:block;height:100%;background:#4f8}
+#ov{position:fixed;inset:0;display:none;z-index:9;align-items:center;justify-content:center;text-align:center}
+#ov.on{display:flex}
+.lock{background:linear-gradient(#1b2a5a,#2a0d3a);flex-direction:column;gap:20px;color:#fff}
+.lock .t{font-size:84px;font-weight:200}
+.lock .n{background:#fff2;border-radius:16px;padding:14px 22px;max-width:80%;backdrop-filter:blur(8px)}
+.bsod{background:#0078d7;color:#fff;flex-direction:column;padding:30px;align-items:flex-start;text-align:left;animation:fl .4s infinite}
+.bsod h1{font-size:90px;font-weight:200}
+@keyframes fl{50%{background:#0a5fb0}}
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:#000c;padding:10px 18px;border-radius:20px;opacity:0;transition:.3s;z-index:10;pointer-events:none;max-width:90%;text-align:center}
+#toast.on{opacity:1}
+#wb .ph{width:100%;aspect-ratio:auto;height:min(66vh,560px);min-height:280px;border:0;border-radius:14px;margin:0;background:#0d0a08;overflow:hidden;position:relative;box-shadow:none}
+#ph3 canvas{width:100%!important;height:100%!important;display:block;min-height:280px}
+.ic{width:1.1em;height:1.1em;vertical-align:-.18em;display:inline-block;flex:none}
+#act:empty{display:none}
+#hb{position:absolute;left:0;right:0;top:0;z-index:3;pointer-events:none;background:linear-gradient(#000d,#0000);padding:8px 10px 20px;font-size:13px}
+#hb .h1{font-weight:800;border-left:4px solid #ff9a3c;padding-left:8px;margin-bottom:3px}
+#hb .h2{padding-left:12px}
+#tb{position:absolute;left:0;right:0;bottom:0;z-index:3;background:linear-gradient(#0000,#000d 40%);padding-top:16px}
+#tb .tools{display:flex;gap:3px;overflow-x:auto;padding:4px 6px 6px}
+.tl2{flex:0 0 auto;min-width:58px;background:#1a2440;color:#cde;border:0;border-top:3px solid transparent;border-radius:8px;padding:6px 4px;font-size:20px}
+.tl2 small{display:block;font-size:10px}
+.tl2.on{border-top-color:#ff9a3c;background:#2c3a60;color:#fff}
+.bits{display:flex;gap:6px;padding:0 8px 4px}
+.bt{background:#ffb30033;border:2px solid #ffb300;color:#ffe;border-radius:14px;padding:4px 10px;font-size:12px;font-weight:700}
+.bt.on{background:#ffb300;color:#000}
+#rg{position:absolute;width:120px;height:120px;display:none;z-index:4;touch-action:none}
+#rg svg{width:100%;height:100%}
+.rb{fill:#0006;stroke:#ffffff55;stroke-width:6}
+.rp{fill:none;stroke:#ff9a3c;stroke-width:6;stroke-dasharray:301.6;stroke-dashoffset:301.6;stroke-linecap:round}
+#rg small{position:absolute;left:-24px;right:-24px;top:124px;text-align:center;font-size:11px;background:#000a;border-radius:8px;padding:2px 6px}
+nav{overflow-x:auto}nav::-webkit-scrollbar{display:none}nav button{flex:1 0 66px}
+.hschema{position:relative;width:min(92vw,340px);height:520px;margin:12px auto;background:#0d1220;border-radius:18px;border:2px solid #2a3a5a;overflow:hidden}
+.hschema .phone{position:absolute;left:50%;top:20px;width:150px;height:300px;margin-left:-75px;border-radius:22px;border:4px solid #555;background:linear-gradient(160deg,#1a2440,#0a1020);box-shadow:0 8px 24px #000a}
+.hschema .partbox{position:absolute;border:1.5px solid;border-radius:6px;font-size:9px;font-weight:700;text-align:center;padding:2px 1px;line-height:1.15;color:#eef;pointer-events:none}
+.hschema .arrow{position:absolute;pointer-events:none}
+.hschema .arrow line{stroke:#ff9a3c;stroke-width:2;marker-end:url(#arr)}
+.hschema .lbl{position:absolute;font-size:11px;font-weight:700;color:#ffd54f;white-space:nowrap;text-shadow:0 1px 3px #000;pointer-events:none}
+.hschema .lbl small{display:block;font-weight:400;color:#9ab;font-size:9px}
+.tut{position:fixed;inset:0;z-index:20;background:#000c;display:flex;align-items:center;justify-content:center;padding:16px}
+.tut .box{background:#1a2440;border-radius:16px;padding:18px;max-width:360px;width:100%;border:2px solid #ff9a3c}
+.tut .box h3{margin:0 0 8px;color:#ffd54f}
+.tut .box p{margin:6px 0;line-height:1.4;font-size:14px}
+.tut .box .steps{margin:10px 0;padding-left:18px;font-size:13px;color:#cde}
+.tut .nav{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
+/* ===== AVITO / BAZARO MARKET ===== */
+.av{background:#f2f4f7;color:#1a1a1a;border-radius:0;margin:-10px -12px;padding:0 0 20px;min-height:100%}
+.av *{box-sizing:border-box}
+.av-top{background:#fff;padding:10px 12px 8px;border-bottom:1px solid #e5e8ee;position:sticky;top:0;z-index:2}
+.av-brand{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.av-logo{font-weight:800;font-size:20px;color:#00aaff;letter-spacing:-.5px}
+.av-logo span{color:#ff6163}
+.av-bal{font-size:12px;text-align:right;color:#333}
+.av-bal b{font-size:14px}
+.av-search{width:100%;padding:10px 14px;border:1px solid #d0d5dd;border-radius:24px;font-size:14px;background:#f7f8fa;color:#333}
+.av-chips{display:flex;gap:6px;overflow-x:auto;padding:8px 0 4px;scrollbar-width:none}
+.av-chips::-webkit-scrollbar{display:none}
+.av-chip{flex:0 0 auto;padding:6px 12px;border-radius:20px;border:1px solid #d0d5dd;background:#fff;font-size:12px;color:#333;font-weight:600}
+.av-chip.on{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.av-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:10px 12px}
+.av-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 1px 4px #0001;cursor:pointer}
+.av-card .pic{height:160px;background:#e8ecf2;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.av-card .pic .bg{position:absolute;inset:0;background:linear-gradient(145deg,#c4a882,#8b6b4a)}
+.av-card .pic .bg.g{background:linear-gradient(145deg,#d0d5dc,#9aa3b0)}
+.av-card .pic .bg.w{background:linear-gradient(145deg,#eef1f5,#c8ced8)}
+.av-card .pic .phv{position:relative;width:72px;height:140px;border-radius:12px;border:3px solid #222;background:#111;overflow:hidden;box-shadow:0 6px 16px #0005}
+.av-card .pic .phv .scr{position:absolute;inset:4px;border-radius:8px;background:linear-gradient(160deg,#1a2a4a,#0a1020);display:flex;flex-direction:column;align-items:center;padding-top:18px}
+.av-card .pic .phv .scr .tm{font-size:14px;font-weight:200;color:#fff;letter-spacing:1px}
+.av-card .pic .phv .scr .icons{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:12px;width:80%}
+.av-card .pic .phv .scr .icons i{display:block;aspect-ratio:1;border-radius:6px;background:#fff3}
+.av-card .pic .badge{position:absolute;top:8px;left:8px;background:#000a;color:#fff;font-size:10px;padding:2px 6px;border-radius:6px}
+.av-card .info{padding:8px 10px 10px}
+.av-card .price{font-weight:800;font-size:16px;color:#1a1a1a}
+.av-card .title{font-size:12px;color:#333;margin-top:2px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.av-card .meta{font-size:10px;color:#888;margin-top:4px}
+.av-card.broken .pic .phv .scr{background:#222}
+.av-card.broken .pic .phv .scr::after{content:'❌';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;background:#0008}
+.av-card.broken .pic:after{content:'❌ СЛОМАНО';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#0006;color:#fff;font-size:16px;font-weight:900;text-shadow:0 2px 5px #000;letter-spacing:.5px;z-index:2}
+.av-card.broken .pic .badge{z-index:3}
+.av-sec{padding:8px 12px;font-weight:700;font-size:14px;color:#333}
+.av-my{padding:0 12px 12px}
+.av-my .av-card{margin-bottom:10px}
+.av-btns{display:flex;gap:6px;margin-top:6px}
+.av-btns button{flex:1;padding:7px 4px;border:0;border-radius:8px;font-size:12px;font-weight:700;background:#00aaff;color:#fff}
+.av-btns button.g{background:#2ea44f}
+.av-btns button.s{background:#eee;color:#333}
+.av-empty{text-align:center;padding:24px;color:#888;font-size:13px}
+.av-bot{display:flex;background:#fff;border-top:1px solid #e5e8ee;position:sticky;bottom:0;z-index:2}
+.av-bot button{flex:1;padding:10px 0;background:none;border:0;font-size:11px;color:#888}
+.av-bot button.on{color:#ff6163}
+.av-bot small{display:block;font-size:18px}
+.acc3d{perspective:900px;min-height:250px;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse,#25334c,#0a1020 72%);border:1px solid #34445f;border-radius:18px;padding:18px;overflow:hidden}
+.acc-device{position:relative;transform:rotateX(12deg) rotateY(-16deg);transform-style:preserve-3d;width:230px;height:155px;display:flex;align-items:center;justify-content:center;transition:.5s}
+.acc-shell{position:absolute;inset:12px 18px;border-radius:34px;background:linear-gradient(145deg,#d8e0eb,#6e7b8e 45%,#222b3a);border:3px solid #aab7c8;box-shadow:12px 18px 25px #0009,inset 0 2px 8px #fff8;transform:translateZ(14px)}
+.acc-watch .acc-shell{inset:2px 55px;border-radius:28px;width:120px;height:145px;left:calc(50% - 60px);top:2px}
+.acc-watch .acc-shell:before,.acc-watch .acc-shell:after{content:'';position:absolute;left:28px;width:58px;height:40px;background:linear-gradient(90deg,#343d4d,#929eae,#343d4d);border-radius:12px;z-index:-1}
+.acc-watch .acc-shell:before{top:-38px}.acc-watch .acc-shell:after{bottom:-38px}
+.acc-lid{position:absolute;inset:18px 24px;border-radius:30px;background:linear-gradient(145deg,#303d52,#111827);border:2px solid #a9b5c5;transform:translateZ(27px);box-shadow:0 6px 12px #0009;display:flex;align-items:center;justify-content:center;color:#c8d7ee;font-size:13px;letter-spacing:2px;transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+.acc-watch .acc-lid{inset:9px 63px;border-radius:22px;width:104px;left:calc(50% - 52px)}
+.acc-screw{position:absolute;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#8995a5 45%,#252b35 70%);border:1px solid #171d28;box-shadow:0 1px 2px #000;z-index:4}
+.acc-screw:after{content:'';position:absolute;left:1px;right:1px;top:3px;height:1px;background:#29303b;transform:rotate(35deg)}
+.acc-screw.off{opacity:.2;transform:scale(.6)}
+.acc-chip{position:absolute;width:55px;height:30px;background:linear-gradient(135deg,#247a55,#102d27);border:2px solid #c2a85b;border-radius:5px;left:calc(50% - 28px);top:calc(50% - 15px);transform:translateZ(4px);box-shadow:0 0 12px #4dff9a55}
+.acc-battery{position:absolute;width:62px;height:27px;background:linear-gradient(#e7eaf0,#929ba8);border:2px solid #596575;border-radius:5px;left:calc(50% - 31px);top:calc(50% + 22px);transform:translateZ(4px);font-size:8px;color:#222;text-align:center;padding-top:7px}
+.acc-lid.open{transform:translate3d(120px,-95px,100px) rotateZ(18deg)}.acc-watch .acc-lid.open{transform:translate3d(100px,-90px,100px) rotateZ(18deg)}
+.acc-steps{font-size:12px;color:#cbd6e8;text-align:center;margin-top:9px}
+.acc-heat{position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 30px #ff8a00aa;pointer-events:none;opacity:0;transition:.3s}
+.acc-heat.on{opacity:1}
+</style></head><body>
+<div id="app">
+<header><span id="mn">💰0</span><span id="lv">Ур.1</span><div class="xp"><i id="xb"></i></div>
+<button class="ib" id="bs">🔊</button><button class="ib" id="bm">🎵</button></header>
+<main>
+<section class="tab on" id="t0">
+ <div class="card" id="cl"></div>
+ <div id="wb"><button id="pu" onclick="usePhone()">📱<small>Включить</small></button><div class="ph" id="ph3"><div id="hb"></div><div id="rg"></div><div id="tb"></div></div></div>
+ <div class="card" id="act"></div>
+</section>
+<section class="tab" id="tHelp">
+ <div class="card"><b>❓ Помощь и схема телефона</b><br><small>Все детали внутри телефона. Стрелки указывают на расположение.</small>
+  <div style="margin-top:8px"><button class="btn g" onclick="startTutorial()">🎓 Начать обучение</button></div>
+ </div>
+ <div id="helpSchema"></div>
+ <div class="card" id="helpTools"></div>
+ <div class="card" id="helpTips"></div>
+</section>
+<section class="tab" id="t1"><div class="card">Открой кейс — выпадет случайный телефон: сломанный или рабочий. Чини и продавай на Авито 📱</div><div class="grid" id="cs"></div>
+ <div class="card"><b>Мои телефоны</b><div id="inv"></div></div></section>
+<section class="tab" id="t2"><div class="lap"><div class="scr" id="br"></div><div class="base"></div></div></section>
+<section class="tab" id="t3"><div id="qs"></div></section>
+<section class="tab" id="t4"><div class="st"><div class="cb" id="cb"><div class="fc" id="fc">12:00</div><div class="bc" id="bc"><span id="bt"></span><div id="bcam"></div></div></div></div>
+ <div class="card" style="text-align:center">Нажми на телефон — он повернётся<div id="sw"></div></div></section>
+<section class="tab" id="t5"><div class="card">Выбери деталь и качество — она попадёт в инвентарь.</div><div id="sh"></div></section>
+<section class="tab" id="t6"><div id="mk"></div></section>
+<section class="tab" id="tMP"><div id="mp"></div></section>
+<section class="tab" id="t7"><div id="iv"></div></section>
+</main>
+<nav id="nv"></nav>
+</div>
+<div id="pm"></div><div id="ov"></div><div id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+const $=i=>document.getElementById(i),R=n=>Math.floor(Math.random()*n);
+const MODELS=['Samsung S20','Samsung S21','Samsung S22','Samsung S23','Samsung S24','Samsung S25','Samsung S26','Xiaomi 10 Ultra','Xiaomi 11 Ultra','Xiaomi 12S Ultra','Xiaomi 13 Ultra','Xiaomi 14 Ultra'];
+const Q=['Б/У','Аналог','Оригинал'],MULT=[.6,.85,1.3],KINDS=['Экран','Плата','Батарея','Камера','Фронталка','Шлейф','Динамик','Вибромотор'],BASE=900;
+const CASES=[{n:'Обычная',p:500,w:[70,25,5],c:'#9aa'},{n:'Редкая',p:2000,w:[30,45,25],c:'#4af'},{n:'Золотая',p:5000,w:[5,30,65],c:'#fc3'}];
+const SITES=[{u:'miui.com',v:0},{u:'lineageos.org',v:.1},{u:'sborka.vasi.com',v:.9},{u:'besplatnye-proshivki.net',v:.99}];
+const COLORS=['#2a6df4','#e53935','#43a047','#fbc02d','#8e24aa','#111','#eee','#ff7043'];
+const def=()=>({money:2000,xp:0,inv:[],ph:[],mk:null,nid:0,color:COLORS[0],cl:null,day:'',q:{rep:0,earn:0,buy:0,done:[]},sfx:1,music:1});
+let saved={};try{saved=JSON.parse(localStorage.getItem('pms4')||'{}')||{}}catch(e){}
+let S=Object.assign(def(),saved);
+if(!S.v2){S.v2=1;S.money=Math.max(S.money,2000)}
+if(!S.v3){S.v3=1;S.money=Math.max(S.money,2000)}
+if(!S.v4){S.v4=1;S.money=Math.max(S.money,2000)}
+S.money=Math.max(S.money||0,500);
+const save=()=>{try{localStorage.setItem('pms4',JSON.stringify(S))}catch(e){}};
+const lvl=()=>Math.floor(S.xp/100)+1;
+function daily(){const d=new Date().toDateString();if(S.day!==d){S.day=d;S.q={rep:0,earn:0,buy:0,done:[]};save()}}
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(t._);t._=setTimeout(()=>t.classList.remove('on'),2200)}
 
+/* ===== AUDIO ===== */
+let ac;const A=()=>{ac=ac||new(window.AudioContext||window.webkitAudioContext)();if(ac.state=='suspended')ac.resume();return ac};
+function beep(f,d=.12,t='square',v=.06,w=0){if(!S.sfx)return;try{const a=A(),o=a.createOscillator(),g=a.createGain();o.type=t;o.frequency.value=f;g.gain.setValueAtTime(v,a.currentTime+w);g.gain.exponentialRampToValueAtTime(.001,a.currentTime+w+d);o.connect(g);g.connect(a.destination);o.start(a.currentTime+w);o.stop(a.currentTime+w+d+.02)}catch(e){}}
+const sfx={screw:()=>beep(700,.08,'square'),open:()=>{beep(200,.3,'sawtooth');beep(400,.2,'sawtooth',.05,.15)},ok:()=>[523,659,784,1047].forEach((f,i)=>beep(f,.15,'triangle',.08,i*.1)),buy:()=>beep(880,.1,'triangle'),bad:()=>beep(150,.4,'sawtooth',.1),click:()=>beep(500,.05)};
+function siren(){if(!S.sfx)return;try{const a=A(),o=a.createOscillator(),g=a.createGain();o.type='sawtooth';g.gain.value=.08;o.connect(g);g.connect(a.destination);for(let i=0;i<8;i++)o.frequency.setValueAtTime(i%2?600:950,a.currentTime+i*.4);o.start();o.stop(a.currentTime+3.2)}catch(e){}}
+const NOTES=[262,330,392,330,294,349,440,349,262,330,392,523,494,392,330,262];let ni=0;
+setInterval(()=>{if(!S.music||!ac)return;const f=NOTES[ni++%16];try{const o=ac.createOscillator(),g=ac.createGain();o.type='triangle';o.frequency.value=f/2;g.gain.setValueAtTime(.04,ac.currentTime);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+.4);o.connect(g);g.connect(ac.destination);o.start();o.stop(ac.currentTime+.42)}catch(e){}},400);
+$('bs').onclick=()=>{S.sfx=S.sfx?0:1;save();ui()};$('bm').onclick=()=>{try{A()}catch(e){}S.music=S.music?0:1;save();ui()};
+document.addEventListener('touchstart',()=>{try{A()}catch(e){}},{once:true});document.addEventListener('click',()=>{try{A()}catch(e){}},{once:true});
+
+/* ===== UI ===== */
+function ui(){
+ document.documentElement.style.setProperty('--c',S.color);
+ $('mn').textContent='💰'+S.money;$('lv').textContent='Ур.'+lvl();$('xb').style.width=(S.xp%100)+'%';
+ $('bs').classList.toggle('off',!S.sfx);$('bm').classList.toggle('off',!S.music);
+ $('bt').textContent=($('cl').dataset.m||'');
+}
+const TABS=[['🔧','Ремонт'],['❓','Помощь'],['📦','Кейсы'],['💻','Прошивки'],['📋','Задания'],['🎨','3D'],['🛒','Запчасти'],['📱','Авито'],['🏬','Маркет'],['🎒','Инвентарь']];
+const TAB_IDS=['t0','tHelp','t1','t2','t3','t4','t5','t6','tMP','t7'];
+TABS.forEach((t,i)=>{const b=document.createElement('button');b.innerHTML=t[0]+'<small>'+t[1]+'</small>';b.onclick=()=>go(i);$('nv').appendChild(b)});
+function go(i){sfx.click();document.querySelectorAll('.tab').forEach(e=>e.classList.remove('on'));const tid=TAB_IDS[i];if($(tid))$(tid).classList.add('on');[...$('nv').children].forEach((b,j)=>b.classList.toggle('on',i==j));
+ if(i==0)rRepair();if(i==1)rHelp();if(i==2)rCases();if(i==3)rBrowser();if(i==4)rQuests();if(i==5)rCustom();if(i==6)rShop();if(i==7)rMarket();if(i==8)rMarketPlace();if(i==9)rInv()}
+
+/* ===== REPAIR ===== */
+let screws=4,stg=0,tool='hand',instQ=0,fixed=false,found=false,front=false,heat=0,scrFront=false,bsc=4,testing=false,okd=new Set(),st=[];
+const LBL=['📱 Экран','Плата','🔋 Батарея','📷','🤳','🔗','🔊','📳'];
+const REQ=[[1],[5,2,3,4,6,7],[5],[5],[5],[],[5],[5]],KF=[1,1.2,.8,1,.7,.6,.75,.7];
+const CMP={'Экран':'разбит экран, нет картинки','Плата':'телефон не включается','Батарея':'быстро садится аккумулятор','Камера':'не работает основная камера','Фронталка':'не работает селфи-камера','Шлейф':'мерцает экран, нет связи между платами','Динамик':'нет звука, динамик молчит','Вибромотор':'нет вибрации'};
+let gl={};
+const TOOLS=[['hand','✋','Рука'],['driver','🪛','Отвёртка'],['suction','🪄','Присоска'],['tester','🔍','Тестер'],['fen','🔥','Фен'],['glue','🧴','Клей']];
+const isRe=()=>S.cl.k=='reflash',fIdx=()=>KINDS.indexOf(S.cl.k),blk=i=>REQ[i].filter(j=>st[j]),nm=a=>a.map(j=>KINDS[j]).join(', ');
+const GL=(id,a,b)=>'<defs><radialGradient id="'+id+'" cx=".4" cy=".35"><stop offset="0" stop-color="'+a+'"/><stop offset=".55" stop-color="'+b+'"/><stop offset="1" stop-color="#05060d"/></radialGradient></defs>';
+const lens=(id,a,b)=>'<svg viewBox="0 0 100 100">'+GL(id,a,b)+'<circle cx="50" cy="50" r="48" fill="#2a2d34" stroke="#9aa1ab" stroke-width="3"/><circle cx="50" cy="50" r="35" fill="#0a0c12" stroke="#555" stroke-width="2"/><circle cx="50" cy="50" r="25" fill="url(#'+id+')"/><circle cx="50" cy="50" r="11" fill="#06070b"/><circle cx="40" cy="39" r="6" fill="#fff" opacity=".4"/><circle cx="61" cy="61" r="3" fill="#8af" opacity=".6"/></svg>';
+const pcb=n=>{let s='<svg viewBox="0 0 118 100" preserveAspectRatio="none"><defs><linearGradient id="gp" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2f8f4e"/><stop offset="1" stop-color="#14502b"/></linearGradient></defs><rect width="118" height="100" rx="8" fill="url(#gp)"/><path d="M10 48H56V70H104M20 90H60M70 44V60H108M8 30H12" stroke="#d9b24a" stroke-width="1.2" fill="none" opacity=".75"/><rect x="14" y="12" width="44" height="32" rx="2" fill="#b9c0c9" stroke="#737a84"/><text x="36" y="32" font-size="9" font-weight="700" text-anchor="middle" fill="#444">SoC</text><rect x="64" y="14" width="22" height="22" fill="#15161a"/><text x="75" y="28" font-size="6" text-anchor="middle" fill="#9ab">RAM</text><rect x="90" y="14" width="20" height="14" fill="#15161a"/><rect x="90" y="32" width="20" height="10" fill="#b9c0c9" stroke="#737a84"/><rect x="14" y="52" width="26" height="20" fill="#15161a"/><rect x="46" y="54" width="16" height="12" fill="#2a2a2f"/><rect x="66" y="66" width="38" height="12" fill="#d9b24a"/><rect x="14" y="78" width="12" height="8" fill="#15161a"/><rect x="44" y="78" width="3" height="5" fill="#d8c08a"/><rect x="50" y="78" width="3" height="5" fill="#d8c08a"/>';
+ [[9,9],[109,9],[9,91],[109,91]].forEach((p,i)=>{s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="6" fill="'+(i<n?'#cfd3d8':'#0b2a16')+'" stroke="#222"/>'+(i<n?'<path d="M'+(p[0]-3)+' '+p[1]+'H'+(p[0]+3)+'M'+p[0]+' '+(p[1]-3)+'V'+(p[1]+3)+'" stroke="#555" stroke-width="1.5"/>':'')});
+ return s+'</svg>'};
+const BAT='<svg viewBox="0 0 155 100" preserveAspectRatio="none"><defs><linearGradient id="gb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d3d9e0"/><stop offset="1" stop-color="#868d97"/></linearGradient></defs><rect width="155" height="100" rx="7" fill="url(#gb)" stroke="#5b616a" stroke-width="2"/><rect x="10" y="22" width="135" height="58" rx="4" fill="#f2f4f6" opacity=".92"/><text x="77" y="46" font-size="12" font-weight="800" text-anchor="middle" fill="#222">Li-Po 4500 mAh</text><text x="77" y="61" font-size="9" text-anchor="middle" fill="#444">3.87 V · 17.4 Wh</text><text x="77" y="73" font-size="7" text-anchor="middle" fill="#a22">⚠ не вскрывать</text><rect x="62" y="0" width="31" height="9" fill="#d4a62a"/></svg>';
+const FLEX='<svg viewBox="0 0 160 28" preserveAspectRatio="none"><defs><linearGradient id="gf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e09a3a"/><stop offset=".5" stop-color="#c87820"/><stop offset="1" stop-color="#e09a3a"/></linearGradient></defs><rect y="5" width="160" height="18" rx="2" fill="url(#gf)" stroke="#8a5a18" stroke-width=".8"/><rect x="0" y="2" width="16" height="24" rx="2" fill="#1a1a1a"/><rect x="144" y="2" width="16" height="24" rx="2" fill="#1a1a1a"/><path d="M3 4V24M6 4V24M9 4V24M12 4V24M148 4V24M151 4V24M154 4V24M157 4V24" stroke="#e8c15a" stroke-width="1"/><path d="M20 9H140M20 14H140M20 19H140" stroke="#f3c26b" stroke-width="1.1" opacity=".9"/><path d="M40 5V23M80 5V23M120 5V23" stroke="#a06020" stroke-width=".6" opacity=".5"/></svg>';
+const SPK='<svg viewBox="0 0 60 40" preserveAspectRatio="none"><rect width="60" height="40" rx="4" fill="#2a2d34" stroke="#555"/><circle cx="20" cy="20" r="12" fill="#111" stroke="#888"/><circle cx="20" cy="20" r="7" fill="#333"/><circle cx="20" cy="20" r="3" fill="#666"/><rect x="38" y="10" width="16" height="20" rx="2" fill="#1a1a1a"/><path d="M42 14H50M42 20H50M42 26H50" stroke="#888" stroke-width="1.2"/></svg>';
+const VIB='<svg viewBox="0 0 50 30" preserveAspectRatio="none"><rect width="50" height="30" rx="3" fill="#3a3d45" stroke="#666"/><rect x="6" y="6" width="38" height="18" rx="2" fill="#222"/><circle cx="15" cy="15" r="5" fill="#555"/><circle cx="35" cy="15" r="5" fill="#555"/><path d="M20 15H30" stroke="#888" stroke-width="2"/><text x="25" y="26" font-size="6" text-anchor="middle" fill="#aaa">VIB</text></svg>';
+const SCR='<svg viewBox="0 0 100 190" preserveAspectRatio="none"><defs><linearGradient id="gs" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#232733"/><stop offset="1" stop-color="#090a0f"/></linearGradient></defs><rect width="100" height="190" rx="14" fill="url(#gs)"/><rect x="14" y="10" width="72" height="36" fill="#b8793a" opacity=".3"/><rect x="25" y="172" width="50" height="12" fill="#d98a2b" opacity=".85"/><text x="50" y="108" font-size="7" text-anchor="middle" fill="#456">AMOLED · 120 Hz</text></svg>';
+const ART=[()=>SCR,pcb,()=>BAT,()=>lens('g3','#6a5cff','#1b2a6a'),()=>lens('g4','#3fb0ff','#103a66'),()=>FLEX,()=>SPK,()=>VIB];
+const CRK='<svg class="crk" viewBox="0 0 100 190" preserveAspectRatio="none"><path d="M55 55L35 85L44 135L70 120L92 98Z" fill="#000" opacity=".45"/><path d="M72 0L55 55L35 85L44 135L24 190M55 55L92 98L100 128M35 85L0 78M44 135L84 168M55 55L40 30" stroke="#dfe8f5" stroke-width=".9" fill="none"/></svg>';
+function setTool(i){tool=TOOLS[i][0];sfx.click();rRepair()}
+function flip(){front=!front;sfx.click();rRepair()}
+/* Детали наушников и часов */
+const HP_PARTS=['Динамик L','Динамик R','BT-модуль','Контакт зарядки','АКБ кейса'];
+const HP_PART_PRICE=[650,650,750,500,800];
+const HP_DEF=['Нет звука','Треск в динамике','Не подключаются','Не заряжаются','Села батарея кейса'];
+const HP_DEF_TO_PART={'Нет звука':0,'Треск в динамике':1,'Не подключаются':2,'Не заряжаются':3,'Села батарея кейса':4};
+const WT_PARTS=['Дисплей','Плата','Батарея','Шагомер','Пульсометр'];
+const WT_PART_PRICE=[1400,950,800,700,650];
+const WT_DEF=['Разбит экран','Не включаются','Села батарея','Не считает шаги','Не меряет пульс'];
+const WT_DEF_TO_PART={'Разбит экран':0,'Не включаются':1,'Села батарея':2,'Не считает шаги':3,'Не меряет пульс':4};
+const CMP_ACC={'Нет звука':'нет звука в левом наушнике','Треск в динамике':'треск в правом наушнике','Не подключаются':'не подключаются по Bluetooth','Не заряжаются':'не заряжаются в кейсе','Села батарея кейса':'кейс не держит заряд','Разбит экран':'разбит дисплей','Не включаются':'часы не включаются','Села батарея':'быстро садится аккумулятор','Не считает шаги':'не считает шаги','Не меряет пульс':'датчик пульса не отвечает'};
+function isAcc(){return S.cl&&(S.cl.t==='headphones'||S.cl.t==='watch')}
+function accPartList(){return S.cl.t==='headphones'?HP_PARTS:WT_PARTS}
+function accPartPrices(){return S.cl.t==='headphones'?HP_PART_PRICE:WT_PART_PRICE}
+function accBrokenIdx(){const m=S.cl.t==='headphones'?HP_DEF_TO_PART:WT_DEF_TO_PART;return m[S.cl.k]??0}
+function accFixCost(){const prices=accPartPrices(),i=accBrokenIdx();return prices[i]||1000}
+function accPartKey(i){return (S.cl.t==='headphones'?'hp:':'wt:')+accPartList()[i]}
+let accStage=0,accHeat=0,accScrews=4,accLid=false,accScOn=[1,1,1,1],accSt=[1,1,1,1,1],accFixedPart=false;
+function resetAcc(){accStage=0;accHeat=0;accScrews=4;accLid=false;found=false;fixed=false;accScOn=[1,1,1,1];accSt=[1,1,1,1,1];accFixedPart=false}
+function newClient(){
+ const r=Math.random();
+ if(r<1/3){const i=R(HP_MODELS.length),k=HP_DEF[R(HP_DEF.length)];S.cl={t:'headphones',m:HP_MODELS[i],k};}
+ else if(r<2/3){const i=R(WT_MODELS.length),k=WT_DEF[R(WT_DEF.length)];S.cl={t:'watch',m:WT_MODELS[i],k};}
+ else S.cl={t:'phone',m:MODELS[R(MODELS.length)],k:Math.random()<.25?'reflash':KINDS[R(KINDS.length)]};
+ resetAcc();save();if(S.cl.t==='phone'){buildPhone()}else{if(window.reset3d)reset3d()}rRepair();if(window.sync3d)setTimeout(function(){try{sync3d()}catch(e){}},80)
+}
+function probeAcc(){
+ if(!isAcc())return;
+ if(tool!=='tester')return toast('Выберите Тестер 🔍');
+ found=true;accStage=0;accHeat=0;accScrews=4;accLid=false;sfx.bad();toast('Найдена неисправность: '+(CMP_ACC[S.cl.k]||S.cl.k)+' ❌ · деталь: '+accPartList()[accBrokenIdx()]);rRepair()
+}
+/* Наушники: фен → винты → крышка → …  Часы: винты → крышка → …  Инструменты как у телефона */
+function needAccTool(){
+ if(!isAcc())return null;
+ if(!found)return 'tester';
+ const hp=S.cl.t==='headphones';
+ /* Наушники: 0 открыть кейс, 1 снять/поставить деталь, 2 закрыть, 3 готово
+    Часы: 0 винты, 1 крышка, 2 внутр.винты, 3 деталь, 4 крышка, 5 винты, 6 готово */
+ if(hp)return 'hand';
+ if(accStage===0||accStage===2||accStage===5)return 'driver';
+ if(accStage===1||accStage===3||accStage===4)return 'hand';
+ return null;
+}
+function accAction(){
+ if(!isAcc())return;
+ if(!found)return probeAcc();
+ const hp=S.cl.t==='headphones';
+ /* ===== НАУШНИКИ: простое открытие кейса без отвёртки ===== */
+ if(hp){
+  if(tool!=='hand'&&tool!=='suction'&&tool!=='tester'){
+   return toast('Для наушников нужна Рука ✋');
+  }
+  /* 0 — открыть кейс */
+  if(accStage===0){
+   accLid=true;accStage=1;sfx.open();toast('Кейс открыт — достаньте сломанную деталь');rRepair();return;
+  }
+  /* 1 — снять / поставить деталь */
+  if(accStage===1){
+   const bi=accBrokenIdx(), parts=accPartList(), key=accPartKey(bi);
+   if(accSt[bi]&&!accFixedPart){
+    accSt[bi]=0;sfx.open();toast('Снято: '+parts[bi]+' ❌ → в лоток');rRepair();return;
+   }
+   if(!accSt[bi]&&!accFixedPart){
+    S.accParts=S.accParts||[];
+    let ix=S.accParts.indexOf(key);
+    if(ix<0){
+     const cost=accFixCost();
+     if(S.money<cost){sfx.bad();return toast('Нет «'+parts[bi]+'». Купите в Запчастях или нужно '+cost+' ₽')}
+     S.money-=cost;S.accParts.push(key);save();
+    }
+    ix=S.accParts.indexOf(key);if(ix>=0)S.accParts.splice(ix,1);
+    accSt[bi]=1;accFixedPart=true;fixed=true;save();sfx.ok();toast('Установлено: '+parts[bi]+' ✅');rRepair();return;
+   }
+   /* деталь стоит — закрываем */
+   accLid=false;accStage=2;sfx.open();toast('Кейс закрыт');rRepair();return;
+  }
+  /* 2 — завершить */
+  if(accStage>=2){
+   const pay=Math.round(accFixCost()*1.8*(1+.04*(lvl()-1)));done(pay);return;
+  }
+  return;
+ }
+ /* ===== ЧАСЫ: как раньше с винтами ===== */
+ const need=needAccTool();
+ const okTool=tool===need||(need==='hand'&&(tool==='hand'||tool==='suction'));
+ if(need&&!okTool){
+  const names={tester:'Тестер 🔍',driver:'Отвёртка 🪛',hand:'Рука ✋'};
+  return toast('Нужен: '+(names[need]||need));
+ }
+ if(accStage===0){if(accScrews>0){accScrews--;sfx.screw();if(accScrews===0){accStage++;toast('Винты сняты — снимите крышку')}else toast('Винт · ост. '+accScrews);rRepair();return}}
+ if(accStage===1){accLid=true;accScrews=4;accStage++;sfx.open();toast('Крышка снята');rRepair();return}
+ if(accStage===2){if(accScrews>0){accScrews--;sfx.screw();if(accScrews===0){accStage++;toast('Внутренние винты сняты')}else toast('Винт · ост. '+accScrews);rRepair();return}}
+ if(accStage===3){
+  const bi=accBrokenIdx(), parts=accPartList(), key=accPartKey(bi);
+  if(accSt[bi]&&!accFixedPart){accSt[bi]=0;sfx.open();toast('Снято: '+parts[bi]+' → в лоток');rRepair();return}
+  if(!accSt[bi]&&!accFixedPart){
+   S.accParts=S.accParts||[];
+   let ix=S.accParts.indexOf(key);
+   if(ix<0){const cost=accFixCost();if(S.money<cost){sfx.bad();return toast('Нет «'+parts[bi]+'» ('+cost+' ₽)')}S.money-=cost;S.accParts.push(key);save()}
+   ix=S.accParts.indexOf(key);if(ix>=0)S.accParts.splice(ix,1);
+   accSt[bi]=1;accFixedPart=true;fixed=true;save();sfx.ok();toast('Установлено: '+parts[bi]);rRepair();return
+  }
+  accStage++;rRepair();return
+ }
+ if(accStage===4){accLid=false;accScOn=[0,0,0,0];accScrews=0;accStage++;sfx.open();toast('Крышка на месте — закрутите винты');rRepair();return}
+ if(accStage===5){if(accScrews<4)return toast('Закрутите винты 🪛 ('+accScrews+'/4)');accStage++;rRepair();return}
+ if(accStage>=6){const pay=Math.round(accFixCost()*1.8*(1+.04*(lvl()-1)));done(pay)}
+}
+
+function accBtnLabel(){
+ if(!found)return '🔍 Проверить поломку';
+ const hp=S.cl.t==='headphones',step=accStage;
+ if(hp&&step===0)return '🔥 Нагреть феном ('+accHeat+'/3)';
+ if(step===(hp?1:0)||step===(hp?3:2))return '🪛 Выкрутить винт (ост. '+accScrews+')';
+ if(step===(hp?2:1))return '🧰 Снять крышку';
+ if(step===(hp?4:3))return '🔧 Установить запчасть';
+ if(step===(hp?5:4))return '📦 Закрыть корпус';
+ return '✅ Завершить ремонт';
+}
+function renderAccBench(){
+ if(window.showDev3d)try{showDev3d()}catch(e){}
+ if(window.sync3d)sync3d();
+}
+function buildPhone(){
+ screws=3;stg=0;fixed=false;found=false;front=false;heat=0;scrFront=false;scSet(1);testing=false;okd=new Set();gl={};st=KINDS.map(()=>1);
+ if(window.reset3d)reset3d()
+}
+function probe(i){
+ if(i==fIdx()){found=true;sfx.bad();toast(KINDS[i]+': 0 Ом, замыкание ❌'+(i==0?'. Поверните телефон, чтобы поменять экран 🔄':''))}else{okd.add(i);sfx.click();toast(KINDS[i]+': 12 Ом, норма ✅')}rRepair()
+}
+function partTap(i){
+ if(isRe()||stg<2||front)return;const fi=fIdx();
+ if(tool=='tester'){if(st[i])probe(i);return}
+ if(tool=='driver')return toast(i==1?'Нажмите прямо на винт платы':'Винты есть только у платы');
+ if(tool=='glue'){if(!st[i]&&(i==0||i==2)){gl[i]=1;sfx.screw();toast('Клей нанесён 🧴');return rRepair()}if(fixed&&st.every(x=>x)&&bsc==4)return;return toast('Клей нужен только для АКБ, экрана и крышки')}
+ if(tool=='suction'&&fixed&&st.every(x=>x)&&bsc==4)return;
+ if(tool!='hand')return toast('Здесь нужна Рука ✋');
+ if(st[i]){
+  if(fixed)return;
+  if(i==1&&bsc>0)return toast('Выкрутите винты платы 🪛 ('+bsc+')');
+  if(blk(i).length)return toast('Сначала снимите: '+nm(blk(i))+(i==0?' или снимите экран спереди 🔄':''));
+  st[i]=0;gl[i]=0;sfx.open();return rRepair()}
+ return toast('Перетащите деталь из лотка 🧰 на телефон')
+}
+function fvTap(){
+ if(isRe())return;const fi=fIdx();
+ if(tool=='tester'){if(st[0])probe(0);return}
+ if(tool=='fen'){if(!st[0]||fixed)return;heat=Math.min(3,heat+1);sfx.screw();toast(heat<3?'Греем… '+heat+'/3 🔥':'Клей размягчён 🔥');return rRepair()}
+ if(tool=='suction'){if(!st[0]||fixed)return;if(heat<3)return toast('Экран приклеен — прогрейте Феном 🔥');st[0]=0;gl[0]=0;scrFront=true;sfx.open();return rRepair()}
+ if(tool=='glue'&&!st[0]){gl[0]=1;sfx.screw();toast('Клей нанесён 🧴');return rRepair()}
+ if(tool=='hand'&&!st[0])return toast('Перетащите экран из лотка 🧰 на телефон')
+}
+const TS=[[22,44],[44,38],[50,32],[38,38],[30,30],[72,18],[36,24],[30,20]];
+function put(j){
+ if(j==fIdx()&&!fixed)return toast('Эта деталь неисправна — нужна новая');
+ if((j==0||j==2)&&!gl[j])return toast('Сначала нанесите клей 🧴 на место детали');
+ if(blk(j).length&&!(j==0&&scrFront))return toast('Сначала снимите: '+nm(blk(j)));
+ st[j]=1;gl[j]=0;if(j==1)scSet(0);if(j==0){heat=0;scrFront=false}sfx.ok();rRepair()
+}
+function dragP(e,j){
+ e.preventDefault();const g=document.createElement('div');g.className='part';
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent=KINDS[j];document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph')&&(!front||j==0))put(j);else toast(front&&j!=0?'Переверните телефон 🔄':'Перетащите деталь на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function trayHTML(c,fi){
+ if(stg<2&&st[0])return '';
+ const gone=KINDS.map((_,j)=>j).filter(j=>!st[j]),th=(j,n)=>'<i class="ti" style="width:'+TS[j][0]+'px;height:'+TS[j][1]+'px">'+ART[j](n)+'</i>';
+ let h='<div class="trayb"><b>🧰 Лоток</b><div class="tw">';
+ gone.forEach(j=>{h+=(j==fi&&!fixed)?'<span class="part bad">'+th(j,0)+'❌ '+KINDS[j]+' (сломана)</span>':'<span class="part tp" onpointerdown="dragP(event,'+j+')">'+th(j,0)+KINDS[j]+'</span>'});
+ if(stg==2)h+='<span class="part tp" onpointerdown="dragC(event)"><i class="ti" style="width:26px;height:46px;background:var(--c);border-radius:6px;border:1px solid #888"></i>Крышка</span>';
+ if(!st[fi]&&!fixed){const L=S.inv.map((p,i)=>[p,i]).filter(x=>x[0].k==c.k);
+  h+=L.map(x=>'<span class="part q'+x[0].q+' tp" onpointerdown="drag(event,'+x[1]+')">'+th(fi,4)+'новая · '+Q[x[0].q]+'</span>').join('');
+  if(!L.length)h+='<div>❌ Нет новой детали «'+c.k+'». Купите её во вкладке «Запчасти» 🛒 или откройте кейс 📦.<br><button class="btn" onclick="go(6)">🛒 В магазин запчастей</button></div>'}
+ if(!gone.length&&stg!=2)h+='<span style="color:#89a">Снятые детали появятся здесь</span>';
+ return h+'</div></div>'
+}
+function putCover(){
+ if(front)return toast('Переверните телефон 🔄');
+ if(!(fixed&&st.every(x=>x)&&bsc==4))return toast('Сначала соберите телефон полностью');
+ if(!gl.c)return toast('Нанесите клей на рамку 🧴');
+ gl.c=0;stg=3;sfx.ok();rRepair()
+}
+function dragC(e){
+ e.preventDefault();const g=document.createElement('div');g.className='part';
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent='Крышка';document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph'))putCover();else toast('Перетащите крышку на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function place(i){
+ const fi=fIdx();
+ if(st[fi])return toast('Сначала достаньте неисправную деталь');
+ if((fi==0||fi==2)&&!gl[fi])return toast('Сначала нанесите клей 🧴 на место детали');
+ if(blk(fi).length&&!(fi==0&&scrFront))return toast('Сначала снимите: '+nm(blk(fi)));
+ const q=S.inv.splice(i,1)[0];instQ=q.q;st[fi]=1;gl[fi]=0;fixed=true;heat=0;if(fi==1)scSet(0);sfx.ok();rRepair()
+}
+function drag(e,i){
+ e.preventDefault();const p=S.inv[i],g=document.createElement('div');g.className='part q'+p.q;
+ g.style.cssText='position:fixed;z-index:20;pointer-events:none;background:#345;transform:translate(-50%,-50%)';g.textContent=p.k+' · '+Q[p.q];document.body.appendChild(g);
+ const mv=ev=>{g.style.left=ev.clientX+'px';g.style.top=ev.clientY+'px'};mv(e);
+ const up=ev=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();
+  const fi=fIdx(),t=document.elementFromPoint(ev.clientX,ev.clientY);
+  if(t&&t.closest('.ph')&&(!front||fi==0))place(i);else toast(front&&fi!=0?'Переверните телефон 🔄':'Перетащите деталь на телефон')};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)
+}
+function rRepair(){
+ const c=S.cl,re=isRe(),fi=fIdx(),acc=isAcc();
+ $('cl').dataset.m=c.m;
+ const icon=c.t==='headphones'?'🎧':c.t==='watch'?'⌚':'📱';
+ const complaint=re?'Просит <b>перепрошивку</b> 💻':('Жалоба: <b>'+((c.t==='phone'?CMP[c.k]:(CMP_ACC[c.k]||CMP[c.k]))||c.k)+'</b>');
+ $('cl').innerHTML=(c.own?icon+' Ваше устройство: <b>':'👤 Клиент: <b>')+c.m+'</b><br>'+complaint;
+ const pu=$('pu');if(pu){const hide=acc&&c.t!=='watch';pu.style.display=hide?'none':'';pu.innerHTML=c.t==='watch'?'⌚<small>Включить</small>':'📱<small>Включить</small>'}
+ if(window.sync3d){const host=$('ph3');if(host)host.style.opacity='1';if(acc){renderAccBench()}else sync3d()}
+ let h='',top='';
+ if(acc){
+  const hp=c.t==='headphones';
+  const bi=accBrokenIdx(), pname=accPartList()[bi];
+  const stages=hp
+   ?['Нажмите на кейс — открыть','Достаньте «'+pname+'» в лоток / поставьте новую','Закройте кейс и завершите']
+   :['Выкрутите 4 винта сзади','Снимите заднюю крышку','Выкрутите 4 внутренних винта','Снимите/замените: '+pname,'Закройте корпус','Закрутите 4 винта','Завершите ремонт'];
+  const step=accStage;
+  top=!found?'Заказ на '+(hp?'наушники':'часы')+'. Проверьте устройство.':(stages[Math.min(step,stages.length-1)]+(!hp&&(step===0||step===2||step===5)?' · винтов: '+accScrews+'/4':''));
+  const need=needAccTool();
+  const hint=!found?'Выберите Тестер 🔍 и нажмите на устройство'
+   :(hp?(
+     accStage===0?'Рука ✋ — нажмите на кейс, чтобы открыть'
+     :accStage===1&&accSt[bi]&&!accFixedPart?'Рука ✋ — нажмите, чтобы вынуть «'+pname+'» в лоток'
+     :accStage===1&&!accSt[bi]?'Рука ✋ — нажмите, чтобы поставить новую «'+pname+'»'
+     :accStage===1?'Рука ✋ — нажмите, чтобы закрыть кейс'
+     :'Нажмите, чтобы завершить ремонт'
+    ):(
+     need==='driver'?(accStage===5?'Отвёртка 🪛 — закрутите винты ('+accScrews+'/4)':'Отвёртка 🪛 — выкрутите винты ('+accScrews+'/4)')
+     :need==='hand'&&!accLid?'Рука ✋ — снимите крышку'
+     :need==='hand'&&fixed&&accLid?'Рука ✋ — поставьте крышку'
+     :need==='hand'?'Рука ✋ — замените деталь'
+     :accStage>=6?'Нажмите, чтобы завершить'
+     :'Работайте по подсказке'
+    ));
+  $('hb').innerHTML='<div class="h1">Клиент · '+c.m+' · '+(CMP_ACC[c.k]||CMP[c.k]||c.k)+'</div><div class="h2">'+hint+'</div>';
+  const accTools=hp?['hand','tester']:['hand','driver','tester','suction'];
+  $('tb').innerHTML='<div class="tools">'+TOOLS.filter(t=>accTools.includes(t[0])).map(t=>{
+   const idx=TOOLS.findIndex(x=>x[0]===t[0]);
+   return '<button class="tl2'+(tool===t[0]?' on':'')+'" onclick="setTool('+idx+')">'+t[1]+'<small>'+t[2]+'</small></button>';
+  }).join('')+(hp?'':'<button class="tl2" onclick="flip()">🔄<small>'+(front?'Зад (винты)':'Экран')+'</small></button>')+'</div>';
+  let tray='<div class="trayb"><b>🧰 Лоток</b><div class="tw">';
+  if(!found)tray+='<span style="color:#89a">Сначала тестер 🔍</span>';
+  else if(hp){
+   const bi=accBrokenIdx(), parts=accPartList(), key=accPartKey(bi), cost=accFixCost();
+   const icons=['🎧','🎧','📶','🔌','🔋'];
+   if(accStage===0)tray+='<span style="color:#9ab">Откройте кейс рукой ✋</span>';
+   else if(accStage===1&&accSt[bi]&&!accFixedPart){
+    tray+='<span class="part bad" onclick="accAction()">'+icons[bi]+' ❌ '+parts[bi]+'</span>';
+    tray+='<small style="display:block;color:#9ab;margin-top:4px">Нажмите — вынуть в лоток</small>';
+   }else if(accStage===1&&!accSt[bi]){
+    tray+='<span class="part tp" style="border:2px solid #4f8" onclick="accAction()">'+icons[bi]+' '+parts[bi]+' · новая</span>';
+    tray+='<small style="display:block;color:#9ab;margin-top:4px">Нажмите — установить ('+cost+' ₽)</small>';
+   }else if(accStage===1){
+    tray+='<span class="part" style="border:2px solid #4f8">✅ '+parts[bi]+' · закройте кейс</span>';
+   }else{
+    tray+='<span class="part" style="border:2px solid #4f8">✅ Готово</span>';
+   }
+   tray+='<div style="margin-top:8px;font-size:11px;color:#89a">';
+   parts.forEach((n,i)=>{tray+='<span style="margin:0 3px;'+(i===bi?'color:#fc3;font-weight:700':'')+'">'+(accSt[i]?'●':'○')+' '+n+'</span>'});
+   tray+='</div>';
+  }else if(accLid&&accStage===3){
+   const bi=accBrokenIdx(), parts=accPartList(), key=accPartKey(bi), cost=accFixCost();
+   if(accSt[bi]&&!accFixedPart)tray+='<span class="part bad" onclick="accAction()">❌ '+parts[bi]+'</span>';
+   else if(!accSt[bi])tray+='<span class="part tp" style="border:2px solid #4f8" onclick="accAction()">'+parts[bi]+' · новая</span>';
+   else tray+='<span class="part" style="border:2px solid #4f8">✅ '+parts[bi]+'</span>';
+  }else if(accStage===5){
+   tray+='<span class="part" style="border:2px solid #ff9a3c">🔩 Винты '+accScrews+'/4</span>';
+  }else{
+   tray+='<span style="color:#89a">Снятые детали появятся здесь</span>';
+  }
+  tray+='</div></div>';
+  $('act').innerHTML=tray;ui();return
+ }
+ if(re)top='Откройте вкладку 💻 «Прошивки», выберите сайт и прошейте телефон. Осторожно с вирусами!';
+ else{
+  const bl=blk(fi);
+  top=stg==0?'Нагрейте клей на крышке Феном 🔥: нажмите на телефон (<b>'+screws+'</b>)':stg==1?'Клей размягчён. Приложите Присоску 🪄 к крышке и снимите её':
+   fixed?(st.every(x=>x)?(bsc<4?'Закрутите винты платы 🪛 ('+bsc+'/4)':(gl.c?'Клей нанесён. Перетащите крышку из лотка 🧰 на телефон':'Телефон собран. Нанесите Клей 🧴 на рамку (нажмите на телефон), затем перетащите крышку из лотка 🧰')):'Соберите телефон: перетащите детали из лотка 🧰 на телефон. АКБ и экран ставятся на клей 🧴'+(st[1]&&bsc<4?' и закрутите винты платы 🪛':'')):
+   !st[fi]?'Установите «'+c.k+'»: '+(fi==0||fi==2?'нанесите Клей 🧴 на место, затем ':'')+'возьмите в лотке и перетащите на телефон':
+   found?'«'+c.k+'» неисправна. Снимите её Рукой ✋'+(bl.length?'. Сначала снимите: '+nm(bl)+(fi==0?' — или нагрейте экран Феном 🔥 и снимите Присоской 🪄 с лицевой стороны (🔄)':''):fi==1&&bsc>0?'. Сначала выкрутите 4 винта платы 🪛':''):
+   'Найдите поломку: выберите Тестер 🔍 и коснитесь деталей. Порядок: шлейф → динамик/вибро → батарея и камеры → плата → экран';
+  if(fi==0&&!fixed&&!front&&(found||!st[0]))top+=' Поверните телефон, чтобы поменять экран.';
+  h+=trayHTML(c,fi);
+  }
+
+ $('hb').innerHTML='<div class="h1">'+(c.own?'Ваш телефон':'Клиент')+' · '+c.m+(re?'':' · '+CMP[c.k])+'</div><div class="h2">'+top+'</div>';
+ $('tb').innerHTML=re?'':(tool=='driver'?'<div class="bits">'+BITS.map(b=>'<button class="bt'+(bit==b?' on':'')+'" onclick="setBit(\''+b+'\')">Бита '+b+'</button>').join('')+'</div>':'')+'<div class="tools">'+TOOLS.map((t,i)=>'<button class="tl2'+(tool==t[0]?' on':'')+'" onclick="setTool('+i+')">'+t[1]+'<small>'+t[2]+'</small></button>').join('')+'<button class="tl2" onclick="flip()">🔄<small>'+(front?'Сзади':'Экран')+'</small></button></div>';
+ $('act').innerHTML=h;ui();
+ if(!re&&fixed&&!testing&&stg!=2&&st.every(x=>x)&&bsc==4){testing=true;setTimeout(selftest,600)}
+}
+/* ===== USE PHONE ===== */
+let pap='home',pcx='',pint=0,pshots=0,PS={};
+const APPS=[['clock','🕐','Часы'],['calc','🧮','Калькулятор'],['cam','📷','Камера'],['self','🤳','Селфи'],['snd','🔊','Звук'],['vib','📳','Вибрация'],['set','⚙️','Настройки']];
+function phoneState(){
+ const k=isRe()?'':S.cl.k;
+ if(!(st.every(x=>x)&&bsc==4&&stg!=2))return{m:'open'};
+ if(!fixed){if(k=='Плата')return{m:'dead'};if(k=='Экран')return{m:'blank'};if(k=='Батарея')return{m:'batt'};if(k=='Шлейф')return{m:'flick'}}
+ return{m:'ok',cam:!(k=='Камера'&&!fixed),selfie:!(k=='Фронталка'&&!fixed),snd:!(k=='Динамик'&&!fixed),vib:!(k=='Вибромотор'&&!fixed)}
+}
+function usePhone(){
+ if(S.cl&&S.cl.t==='headphones'){sfx.bad();return toast('Наушники проверяются на верстаке, не через «Включить»')}
+ if(S.cl&&S.cl.t==='watch'){useWatch();return}
+ sfx.click();PS=phoneState();pap=(PS.m=='ok'||PS.m=='flick'||PS.m=='batt')?'boot':'x';pshots=0;pcx='';
+ const m=$('pm');m.className='on';
+ m.innerHTML='<div class="pz"><div class="pf"><div class="pn"></div><div class="pw" id="pw"></div></div><div class="pcap" id="pcap"></div><button class="px" onclick="closePhone()">✖ Закрыть</button></div>';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>m.firstChild.classList.add('big')));
+ prender()
+}
+function watchState(){
+ const k=S.cl.k,ok=fixed||!k;
+ if(accLid||accStage>0&&accStage<(S.cl.t==='watch'?5:6)&&!fixed){
+  /* разобраны — не включаются, кроме если уже починены и закрыты */
+ }
+ if(!fixed&&k){
+  if(k==='Не включаются')return{m:'dead'};
+  if(k==='Разбит экран')return{m:'crack'};
+  if(k==='Села батарея')return{m:'batt'};
+  if(k==='Не считает шаги')return{m:'ok',steps:false,pulse:true};
+  if(k==='Не меряет пульс')return{m:'ok',steps:true,pulse:false};
+ }
+ return{m:'ok',steps:true,pulse:true};
+}
+function useWatch(){
+ sfx.click();const WS=watchState();
+ const m=$('pm');m.className='on';
+ m.innerHTML='<div class="pz"><div class="wf"><div class="ww" id="ww"></div></div><div class="pcap" id="pcap"></div><button class="px" onclick="closePhone()">✖ Закрыть</button></div>';
+ requestAnimationFrame(()=>requestAnimationFrame(()=>m.firstChild.classList.add('big')));
+ renderWatch(WS)
+}
+function renderWatch(WS){
+ const w=$('ww'),cap=$('pcap');if(!w)return;
+ const t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+ const sec=String(t.getSeconds()).padStart(2,'0');
+ clearInterval(pint);
+ if(WS.m==='dead'){w.innerHTML='<div class="wd">⌚</div>';cap.textContent='Часы не включаются';return}
+ if(WS.m==='batt'){w.innerHTML='<div class="wd low">🪫<br><small>1%</small></div>';cap.textContent='Батарея села — часы выключатся';pint=setTimeout(()=>{WS.m='dead';renderWatch(WS);sfx.bad()},3500);return}
+ if(WS.m==='crack'){w.innerHTML='<div class="wd crack"><div class="wtm">'+hm+'</div><div class="wcr"></div></div>';cap.textContent='Экран разбит — картинка видна плохо';return}
+ const steps=WS.steps!==false?8420:'— — —';
+ const pulse=WS.pulse!==false?'72':'— —';
+ w.innerHTML='<div class="wd ok">'
+  +'<div class="wtm" id="wtm">'+hm+'<span class="wsec">'+sec+'</span></div>'
+  +'<div class="wdt">'+t.toLocaleDateString('ru',{weekday:'short',day:'numeric',month:'short'})+'</div>'
+  +'<div class="wrow"><span>👟 '+steps+'</span><span>❤️ '+pulse+'</span></div>'
+  +'<div class="wapps">'
+  +'<button onclick="wApp(\'steps\')">👟</button>'
+  +'<button onclick="wApp(\'pulse\')">❤️</button>'
+  +'<button onclick="wApp(\'timer\')">⏱️</button>'
+  +'</div></div>';
+ cap.textContent=WS.steps===false?'Шагомер не работает':(WS.pulse===false?'Пульс не определяется':'Часы работают');
+ pint=setInterval(()=>{
+  const e=$('wtm');if(!e)return clearInterval(pint);
+  const n=new Date();e.innerHTML=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+'<span class="wsec">'+String(n.getSeconds()).padStart(2,'0')+'</span>';
+ },1000)
+}
+function wApp(a){
+ const WS=watchState();
+ if(a==='steps'){if(WS.steps===false){sfx.bad();toast('Шагомер не отвечает ❌')}else{sfx.ok();toast('Шаги: 8 420 👟')}}
+ if(a==='pulse'){if(WS.pulse===false){sfx.bad();toast('Датчик пульса не отвечает ❌')}else{sfx.ok();toast('Пульс: 72 уд/мин ❤️')}}
+ if(a==='timer'){sfx.click();toast('Таймер: 00:00')}
+}
+function closePhone(){clearInterval(pint);clearTimeout(PS.t);$('pm').className='';$('pm').innerHTML='';sfx.click()}
+function pgo(a){pap=a;sfx.click();prender()}
+function pshot(){pshots++;beep(1200,.05);prender()}
+function pk(k){
+ if(k=='C')pcx='';else if(k=='='){try{if(/^[0-9+\-*\/.() ]+$/.test(pcx))pcx=String(+(Function('return '+pcx)()).toFixed(8))}catch(e){pcx='Ошибка'}}else pcx=(pcx=='Ошибка'?'':pcx)+k;
+ sfx.click();$('cd').textContent=pcx||'0'
+}
+function prender(){
+ const w=$('pw'),cap=$('pcap'),c=S.cl,t=new Date(),hm=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+ if(!w)return;clearInterval(pint);cap.textContent='';
+ const bar='<div class="sb"><span>'+hm+'</span><span>'+(PS.m=='batt'?'🪫 1%':'🔋 100%')+'</span></div>',back='<div class="hb" onclick="pgo(\'home\')"></div>';
+ if(PS.m=='open'){w.innerHTML='<div class="pc">🔧<br>Телефон разобран</div>';cap.textContent='Соберите телефон и закройте крышку, чтобы включить его';return}
+ if(PS.m=='dead'){w.innerHTML='<div class="blk"></div>';cap.textContent='Телефон не включается: ни реакции, ни зарядки';return}
+ if(PS.m=='blank'){w.innerHTML='<div class="blk" onclick="beep(660,.15)"><svg viewBox="0 0 100 190" preserveAspectRatio="none"><path d="M70 0L52 60L30 90L40 140L20 190M52 60L90 100L100 130M30 90L0 80M40 140L80 170" stroke="#9ab" stroke-width="1" fill="none"/></svg></div>';cap.textContent='Экран разбит, картинки нет. Нажмите на экран: звук есть, значит телефон работает';return}
+ if(PS.m=='bdead'){w.innerHTML='<div class="blk"></div>';cap.textContent='Телефон выключился: аккумулятор не держит заряд';return}
+ if(pap=='boot'){w.innerHTML='<div class="pc boot">'+c.m+'</div>';cap.textContent='Загрузка…';sfx.ok();PS.t=setTimeout(()=>{pap='home';prender()},1500);return}
+ if(PS.m=='batt'&&!PS.armed){PS.armed=1;PS.t=setTimeout(()=>{PS.m='bdead';sfx.bad();prender()},4000)}
+ if(PS.m=='flick')cap.textContent='Экран мерцает: проблема со шлейфом';
+ let b;
+ if(pap=='home')b='<div class="tm">'+hm+'</div><div class="dt">'+t.toLocaleDateString('ru',{weekday:'long',day:'numeric',month:'long'})+'</div><div class="ag">'+APPS.map(a=>'<button onclick="pgo(\''+a[0]+'\')">'+a[1]+'<small>'+a[2]+'</small></button>').join('')+'</div>';
+ else if(pap=='clock'){b='<div class="ck2" id="pclk">'+t.toLocaleTimeString('ru')+'</div>'+back;pint=setInterval(()=>{const e=$('pclk');if(e)e.textContent=new Date().toLocaleTimeString('ru')},500)}
+ else if(pap=='calc'){b='<div class="cd" id="cd">'+(pcx||'0')+'</div><div class="kp">'+['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','=',''].map(k=>k?'<button onclick="pk(\''+k+'\')">'+k+'</button>':'<span></span>').join('')+'</div>'+back}
+ else if(pap=='cam'||pap=='self'){const ok=pap=='cam'?PS.cam:PS.selfie;b=ok?'<div class="vf">'+(pap=='cam'?'☀️':'🙂')+'<div class="shut" onclick="pshot()"></div></div><div class="dt">Снимков: '+pshots+'</div>'+back:'<div class="vf er">❌ Ошибка камеры<br>Модуль не отвечает</div>'+back}
+ else if(pap=='snd'){const ok=PS.snd!==false;b=ok?'<div class="pc">🔊<br><button class="btn" onclick="[523,659,784,1047].forEach((f,i)=>beep(f,.2,\'triangle\',.1,i*.18))">Проверить динамик</button></div>'+back:'<div class="pc">🔇<br>Нет звука<br><small>Динамик не отвечает</small></div>'+back}
+ else if(pap=='vib'){const ok=PS.vib!==false;b=ok?'<div class="pc">📳<br><button class="btn" onclick="beep(80,.35,\'sawtooth\',.12);toast(\'Вибрация OK 📳\')">Проверить вибрацию</button></div>'+back:'<div class="pc">📴<br>Нет вибрации<br><small>Вибромотор не отвечает</small></div>'+back}
+ else b=[['Модель',c.m],['Система',isRe()?'Android (старая прошивка)':'Android 14'],['Аккумулятор',PS.m=='batt'?'1%':'100%'],['Основная камера',PS.cam===false?'ошибка':'исправна'],['Фронтальная камера',PS.selfie===false?'ошибка':'исправна'],['Динамик',PS.snd===false?'ошибка':'исправен'],['Вибромотор',PS.vib===false?'ошибка':'исправен'],['Память','128 ГБ']].map(r=>'<div class="li"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join('')+back;
+ w.innerHTML='<div class="hs'+(PS.m=='flick'?' fk':'')+'">'+bar+b+'</div>'
+}
+
+function selftest(){
+ const o=$('ov'),L=['Питание доходит до платы','Экран показывает изображение','Камера работает','Динамик звучит','Зарядка определяется','Сеть ловит','Все винты на месте'];
+ o.className='on stm';o.innerHTML='<div class="box"><h3>Самотест</h3><div id="stl"></div></div>';
+ L.forEach((t,i)=>setTimeout(()=>{$('stl').insertAdjacentHTML('beforeend','<p>✔ '+t+'</p>');beep(600+i*60,.06,'triangle')},400*(i+1)));
+ setTimeout(()=>{$('stl').insertAdjacentHTML('afterend','<button class="btn g" id="stok">К верстаку</button>');
+  $('stok').onclick=()=>{o.className='';o.innerHTML='';done(Math.round(BASE*KF[fIdx()]*MULT[instQ]*(1+.05*(lvl()-1))))}},400*(L.length+1))
+}
+function done(pay){
+ if(S.cl.own){S.ph.push({id:S.cl.own,t:S.cl.t||'phone',m:S.cl.m,k:null});S.xp+=25;S.q.rep++;save();sfx.ok();ui();toast('✅ Починено и в инвентаре. Можно продать на Авито');newClient();return}
+ S.money+=pay;S.xp+=25;S.q.rep++;S.q.earn+=pay;save();sfx.ok();ui();
+ toast('✅ Ремонт завершён! +'+pay+' ₽');newClient()
+}
+
+/* ===== PHONES: cases, market, inventory ===== */
+const VAL=[1000,1300,2000,2700,4500,6000,7500,1200,2300,3000,5000,7000];
+const CP=[[0,1,7,2],[2,3,8,9,4],[4,5,6,10,11]],CW=[.1,.5,.85];
+const HP_MODELS=['AirPods Pro 2','Galaxy Buds 3','Xiaomi Buds 4','Sony WF-1000XM5','Huawei FreeBuds 5','JBL Tune Beam','Nothing Ear (2)','Realme Buds Air 5'];
+const HP_VAL=[1800,1200,900,2200,1100,700,1300,600];
+const WT_MODELS=['Apple Watch SE','Galaxy Watch 6','Xiaomi Watch S3','Huawei Watch GT 4','Amazfit GTR 4','Garmin Venu 3','Haylou RS4 Plus','Band 8 Pro'];
+const WT_VAL=[2500,2200,1500,1800,1400,3200,800,900];
+const uid=()=>(S.nid=(S.nid||0)+1),r10=x=>Math.round(x/10)*10;
+const itemType=p=>p.t||'phone';
+const itemVal=p=>{
+ if(itemType(p)==='headphones')return HP_VAL[HP_MODELS.indexOf(p.m)]||800;
+ if(itemType(p)==='watch')return WT_VAL[WT_MODELS.indexOf(p.m)]||1000;
+ return VAL[MODELS.indexOf(p.m)]||1000;
+};
+const sellPrice=p=>r10(itemVal(p)*(p.k?.25:.9));
+const stateTxt=p=>p.k?'❌ сломан: '+(CMP[p.k]||p.k):'✅ исправен';
+const typeIcon=t=>t==='headphones'?'🎧':t==='watch'?'⌚':'📱';
+function rCases(){
+ $('cs').innerHTML=CASES.map((c,i)=>'<button class="case" style="border-color:'+c.c+';color:'+c.c+'" onclick="openCase('+i+')"><b>📦</b>'+c.n+'<br>'+c.p+' ₽<br><small>рабочий: '+Math.round(CW[i]*100)+'%</small></button>').join('');
+ $('inv').innerHTML=S.ph.length?S.ph.map(p=>'<span class="part '+(p.k?'q0':'q2')+'">'+typeIcon(itemType(p))+' '+p.m+(p.k?' ❌':' ✅')+'</span>').join('')+'<br><button class="btn" onclick="go(9)">🎒 Открыть инвентарь</button>':'<br>Пусто';ui()
+}
+function openCase(i){
+ const c=CASES[i];if(S.money<c.p){sfx.bad();toast('Не хватает денег');return}
+ S.money-=c.p;const p={id:uid(),t:'phone',m:MODELS[CP[i][R(CP[i].length)]],k:Math.random()<CW[i]?null:KINDS[R(KINDS.length)]};
+ S.ph.push(p);save();sfx.buy();setTimeout(sfx.ok,150);
+ toast('📦 Выпал: '+p.m+' — '+(p.k?'сломан':'исправен'));rCases()
+}
+const CITIES=['Москва','Санкт-Петербург','Казань','Нижний Новгород','Екатеринбург','Новосибирск','Краснодар','Самара','Ростов-на-Дону','Воронеж'];
+const WALLS=[['#1a2a4a','#0a1020'],['#2a1040','#1a0a30'],['#0a3020','#052015'],['#301a10','#1a0c08'],['#102040','#081028']];
+function phonePic(m,broken,seed){
+ const w=WALLS[(seed||0)%WALLS.length],bg=['','g','w'][(seed||0)%3];
+ const icons=Array(8).fill(0).map((_,i)=>'<i style="background:hsla('+(i*40)+',70%,70%,.35)"></i>').join('');
+ return '<div class="pic"><div class="bg '+bg+'"></div>'
+  +(broken?'<span class="badge">сломан</span>':'')
+  +'<div class="phv"><div class="scr" style="background:linear-gradient(160deg,'+w[0]+','+w[1]+')"><div class="tm">23:10</div><div class="icons">'+icons+'</div></div></div></div>';
+}
+function hpPic(seed,broken){
+ const c=['#111','#eee','#1a3a6a','#333'][(seed||0)%4];
+ return '<div class="pic"><div class="bg"></div>'+(broken?'<span class="badge">сломан</span>':'')+'<div style="position:relative;width:90px;height:90px">'
+  +'<div style="position:absolute;left:8px;top:20px;width:28px;height:42px;border-radius:14px 8px 12px 12px;background:'+c+';border:2px solid #555"></div>'
+  +'<div style="position:absolute;right:8px;top:20px;width:28px;height:42px;border-radius:8px 14px 12px 12px;background:'+c+';border:2px solid #555"></div>'
+  +'<div style="position:absolute;left:28px;top:8px;width:34px;height:10px;border-radius:6px;background:'+c+';border:2px solid #555"></div>'
+  +'</div></div>';
+}
+function wtPic(seed,broken){
+ const c=['#222','#c0c4cc','#1a2a4a','#3a2010'][(seed||0)%4];
+ return '<div class="pic"><div class="bg g"></div>'+(broken?'<span class="badge">сломан</span>':'')+'<div style="position:relative;width:70px;height:100px">'
+  +'<div style="width:54px;height:54px;margin:8px auto 0;border-radius:14px;background:'+c+';border:3px solid #444;box-shadow:0 4px 12px #0005;display:flex;align-items:center;justify-content:center">'
+  +'<div style="width:40px;height:40px;border-radius:10px;background:linear-gradient(160deg,#1a2a4a,#0a1020);color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center">'+(broken?'--:--':'12:00')+'</div></div>'
+  +'<div style="width:18px;height:28px;margin:2px auto;background:'+c+';border-radius:0 0 6px 6px;border:2px solid #444;border-top:0"></div>'
+  +'</div></div>';
+}
+function itemPic(it){
+ if(it.t==='headphones')return hpPic(it.id,!!it.k);
+ if(it.t==='watch')return wtPic(it.id,!!it.k);
+ return phonePic(it.m,!!it.k,it.id);
+}
+function phoneCard(p,ctx){
+ const v=sellPrice(p),t=itemType(p);
+ const defect=p.k?(CMP_ACC[p.k]||CMP[p.k]||p.k):'';
+ return '<div class="av-card'+(p.k?' broken':'')+'">'+itemPic(p)
+  +'<div class="info"><div class="price">'+v.toLocaleString('ru')+' ₽</div><div class="title">'+typeIcon(t)+' '+p.m+(p.k?' · ❌ '+defect:' · ✅ исправен')+'</div>'
+  +'<div class="av-btns">'
+  +'<button class="g" onclick="toBench('+p.id+')">'+(p.k?'В ремонт':'На стол')+'</button>'
+  +'<button onclick="sellPhone('+p.id+',\''+ctx+'\')">Продать</button></div></div></div>';
+}
+function toBench(id){
+ if(S.cl&&S.cl.own)return toast('Сначала закончите текущий ремонт');
+ const i=S.ph.findIndex(p=>p.id==id);if(i<0){toast('Устройство не найдено');return}
+ const p=S.ph.splice(i,1)[0];
+ S.cl={t:itemType(p),m:p.m,k:p.k||null,own:p.id};resetAcc();save();
+ if(S.cl.t==='phone')buildPhone();
+ else if(window.reset3d)reset3d();
+ go(0);
+ if(window.sync3d)setTimeout(function(){try{sync3d()}catch(e){}},100);
+ const label=S.cl.t==='phone'?'Телефон':S.cl.t==='headphones'?'Наушники':'Часы';
+ toast(label+' «'+p.m+'» на верстаке 🔧'+(p.k?'':' (исправен)'))
+}
+function sellPhone(id,ctx){
+ const i=S.ph.findIndex(p=>p.id==id);if(i<0)return;const p=S.ph.splice(i,1)[0],v=sellPrice(p);
+ S.money+=v;S.q.earn+=v;save();sfx.buy();toast('Продано: '+p.m+' за '+v+' ₽');if(ctx=='m')rMarket();else rInv()
+}
+function mkRandItem(){
+ const city=CITIES[R(CITIES.length)],hrs=1+R(20),r=Math.random();
+ if(r<.4){const i=R(MODELS.length),w=Math.random()<.35,v=VAL[i]||1000;return{id:uid(),t:'phone',m:MODELS[i],k:w?null:KINDS[R(KINDS.length)],p:r10(v*(w?.92+Math.random()*.3:.25+Math.random()*.2)),city,hrs,mem:[128,256,512,1024][R(4)]}}
+ if(r<.7){const i=R(HP_MODELS.length),v=HP_VAL[i],ok=Math.random()<.3;return{id:uid(),t:'headphones',m:HP_MODELS[i],k:ok?null:HP_DEF[R(HP_DEF.length)],p:r10(v*(ok?.85+Math.random()*.25:.28+Math.random()*.25)),city,hrs}}
+ const i=R(WT_MODELS.length),v=WT_VAL[i],ok=Math.random()<.3;return{id:uid(),t:'watch',m:WT_MODELS[i],k:ok?null:WT_DEF[R(WT_DEF.length)],p:r10(v*(ok?.85+Math.random()*.25:.28+Math.random()*.25)),city,hrs}
+}
+function mkNew(){
+ /* гарантируем сломанные наушники и часы в ленте */
+ const items=Array.from({length:10},mkRandItem);
+ items.push({id:uid(),t:'headphones',m:HP_MODELS[R(HP_MODELS.length)],k:HP_DEF[R(HP_DEF.length)],p:r10((HP_VAL[0]||800)*(.3+Math.random()*.25)),city:CITIES[R(CITIES.length)],hrs:1+R(12)});
+ items.push({id:uid(),t:'watch',m:WT_MODELS[R(WT_MODELS.length)],k:WT_DEF[R(WT_DEF.length)],p:r10((WT_VAL[0]||1000)*(.3+Math.random()*.25)),city:CITIES[R(CITIES.length)],hrs:1+R(12)});
+ S.mk={day:new Date().toDateString(),tab:'list',filter:'all',sort:'new',cat:'all',items};save()
+}
+let avQ='';
+function rMarket(){
+ if(!S.mk||S.mk.day!==new Date().toDateString())mkNew();
+ if(!S.mk.cat)S.mk.cat='all';
+ const tab=S.mk.tab||'list';
+ let items=S.mk.items.slice();
+ if(S.mk.cat==='phone')items=items.filter(x=>(x.t||'phone')==='phone');
+ if(S.mk.cat==='headphones')items=items.filter(x=>x.t==='headphones');
+ if(S.mk.cat==='watch')items=items.filter(x=>x.t==='watch');
+ if(S.mk.filter==='ok')items=items.filter(x=>!x.k);
+ if(S.mk.filter==='bad')items=items.filter(x=>x.k);
+ if(avQ)items=items.filter(x=>x.m.toLowerCase().includes(avQ.toLowerCase()));
+ if(S.mk.sort==='cheap')items.sort((a,b)=>a.p-b.p);
+ else if(S.mk.sort==='exp')items.sort((a,b)=>b.p-a.p);
+ const chip=(id,label,on)=>'<button class="av-chip'+(on?' on':'')+'" onclick="avFilter(\''+id+'\')">'+label+'</button>';
+ let body='';
+ if(tab==='list'){
+  body='<div class="av-chips">'
+   +chip('cat_all','Все',S.mk.cat==='all')+chip('cat_phone','Телефоны',S.mk.cat==='phone')+chip('cat_headphones','Наушники',S.mk.cat==='headphones')+chip('cat_watch','Часы',S.mk.cat==='watch')
+   +chip('ok','Исправные',S.mk.filter==='ok')+chip('bad','Сломанные',S.mk.filter==='bad')
+   +chip('cheap','Дешевле',S.mk.sort==='cheap')+chip('exp','Дороже',S.mk.sort==='exp')
+   +'</div><div class="av-grid">'
+   +(items.length?items.map(it=>{
+    const t=it.t||'phone';
+    let title=typeIcon(t)+' '+it.m;
+    if(t==='phone')title+=' '+(it.mem>=1024?(it.mem/1024)+' ТБ':(it.mem||256)+' ГБ')+', '+(it.k?'сломан':'рабочий');
+    else title+=it.k?' · ❌ '+(CMP_ACC[it.k]||it.k):' · ✅ исправен';
+    return '<div class="av-card'+(it.k?' broken':'')+'" onclick="buyPhone('+it.id+')">'
+     +itemPic(it)
+     +'<div class="info"><div class="price">'+it.p.toLocaleString('ru')+' ₽</div>'
+     +'<div class="title">'+title+'</div>'
+     +'<div class="meta">'+it.city+' · '+it.hrs+' ч назад</div></div></div>';
+   }).join(''):'<div class="av-empty" style="grid-column:1/-1">Ничего не найдено</div>')
+   +'</div>';
+ }else{
+  body='<div class="av-sec">Мои товары ('+S.ph.length+')</div><div class="av-my">'
+   +(S.ph.length?S.ph.map(p=>phoneCard(p,'m')).join(''):'<div class="av-empty">Пусто. Купите на Авито или в Маркетплейсе 🏬</div>')
+   +'</div>';
+ }
+ $('mk').innerHTML='<div class="av"><div class="av-top">'
+  +'<div class="av-brand"><div class="av-logo">Avi<span>to</span></div><div class="av-bal">Баланс <b>'+S.money.toLocaleString('ru')+' ₽</b></div></div>'
+  +'<input class="av-search" placeholder="Поиск по объявлениям" value="'+avQ.replace(/"/g,'&quot;')+'" oninput="avQ=this.value;rMarket()">'
+  +'</div>'+body
+  +'<div class="av-bot">'
+  +'<button class="'+(tab==='list'?'on':'')+'" onclick="S.mk.tab=\'list\';save();rMarket()"><small>📋</small>Объявления</button>'
+  +'<button onclick="mkNew();rMarket()"><small>🔄</small>Обновить</button>'
+  +'<button class="'+(tab==='my'?'on':'')+'" onclick="S.mk.tab=\'my\';save();rMarket()"><small>📱</small>Мои товары</button>'
+  +'</div></div>';ui()
+}
+function avFilter(id){
+ if(id.startsWith('cat_'))S.mk.cat=id.slice(4);
+ else if(id==='ok'||id==='bad'||id==='all')S.mk.filter=id;
+ else S.mk.sort=id;
+ save();rMarket();sfx.click()
+}
+function buyPhone(id){
+ const i=S.mk.items.findIndex(x=>x.id==id);if(i<0)return;const it=S.mk.items[i];
+ if(S.money<it.p){sfx.bad();toast('Не хватает денег');return}
+ S.money-=it.p;S.mk.items.splice(i,1);
+ const item={id:it.id,t:it.t||'phone',m:it.m,k:it.k||null};
+ S.ph.push(item);save();sfx.buy();
+ const ic=typeIcon(item.t);
+ toast(ic+' Куплено: '+item.m+(item.k?' (сломан)':''));
+ rMarket();
+ setTimeout(function(){go(9)},400);
+}
+/* ===== MARKETPLACE (official store, all working) ===== */
+let mpCat='all';
+function rMarketPlace(){
+ const cats=[['all','Все'],['phone','Телефоны'],['headphones','Наушники'],['watch','Часы']];
+ const goods=[];
+ MODELS.forEach((m,i)=>goods.push({t:'phone',m,p:VAL[i],mem:[256,512,1024][i%3]}));
+ HP_MODELS.forEach((m,i)=>goods.push({t:'headphones',m,p:HP_VAL[i]}));
+ WT_MODELS.forEach((m,i)=>goods.push({t:'watch',m,p:WT_VAL[i]}));
+ let list=goods;
+ if(mpCat!=='all')list=goods.filter(g=>g.t===mpCat);
+ const chip=(id,label)=>'<button class="av-chip'+(mpCat===id?' on':'')+'" onclick="mpCat=\''+id+'\';rMarketPlace()">'+label+'</button>';
+ $('mp').innerHTML='<div class="av"><div class="av-top">'
+  +'<div class="av-brand"><div class="av-logo" style="color:#7c4dff">Market<span style="color:#ff6163">place</span></div><div class="av-bal">Баланс <b>'+S.money.toLocaleString('ru')+' ₽</b></div></div>'
+  +'<div style="font-size:12px;color:#666;margin-bottom:6px">Официальный магазин · все товары новые и исправные</div>'
+  +'<div class="av-chips">'+cats.map(c=>chip(c[0],c[1])).join('')+'</div></div>'
+  +'<div class="av-grid">'+list.map((g,i)=>{
+   const it={t:g.t,m:g.m,id:1000+i,k:null};
+   let title=typeIcon(g.t)+' '+g.m+(g.mem?' · '+g.mem+' ГБ':'')+' · новый';
+   return '<div class="av-card" onclick="buyMP(\''+g.t+'\',\''+g.m.replace(/'/g,"\\'")+'\','+g.p+')">'
+    +itemPic(it)
+    +'<div class="info"><div class="price">'+g.p.toLocaleString('ru')+' ₽</div>'
+    +'<div class="title">'+title+'</div>'
+    +'<div class="meta">Официальный магазин · в наличии</div></div></div>';
+  }).join('')+'</div></div>';ui()
+}
+function buyMP(t,m,p){
+ if(S.money<p){sfx.bad();toast('Не хватает денег');return}
+ S.money-=p;S.ph.push({id:uid(),t:t,m:m,k:null});save();sfx.buy();
+ toast(typeIcon(t)+' Куплено: '+m);
+ rMarketPlace();
+ setTimeout(function(){go(9)},400);
+}
+function rInv(){
+ const phones=S.ph.filter(p=>itemType(p)==='phone');
+ const hp=S.ph.filter(p=>itemType(p)==='headphones');
+ const wt=S.ph.filter(p=>itemType(p)==='watch');
+ $('iv').innerHTML=(S.cl.own?'<div class="card">🔧 На верстаке: <b>'+S.cl.m+'</b> (в ремонте)</div>':'')
+  +'<div class="card"><b>📱 Телефоны ('+phones.length+')</b></div>'+(phones.length?phones.map(p=>phoneCard(p,'i')).join(''):'<div class="card">Пусто</div>')
+  +'<div class="card"><b>🎧 Наушники ('+hp.length+')</b></div>'+(hp.length?hp.map(p=>phoneCard(p,'i')).join(''):'<div class="card">Пусто</div>')
+  +'<div class="card"><b>⌚ Часы ('+wt.length+')</b></div>'+(wt.length?wt.map(p=>phoneCard(p,'i')).join(''):'<div class="card">Пусто</div>')
+  +'<div class="card"><b>🔩 Запчасти ('+S.inv.length+')</b><div>'+(S.inv.length?S.inv.map(p=>'<span class="part q'+p.q+'">'+p.k+' · '+Q[p.q]+'</span>').join(''):'<br>Пусто')+'</div></div>';ui()
+}
+
+/* ===== FIRMWARE ===== */
+let site=null;
+function rBrowser(){
+ const re=S.cl.k=='reflash';
+ let h='<div class="bar">🔒 '+(site?site.u:'start.page')+'</div>';
+ if(!site)h+='<b>Скачать прошивку:</b>'+SITES.map((s,i)=>'<button class="site" onclick="pick('+i+')">🌐 '+s.u+'</button>').join('')+'<p style="margin-top:8px;color:#666">'+(re?'Клиент ждёт перепрошивку '+S.cl.m:'Сейчас клиент не просил перепрошивку.')+'</p>';
+ else h+='<h3>'+site.u+'</h3><p>Прошивка для '+S.cl.m+'</p><div class="pr"><i id="pi"></i></div><button class="btn" id="dl" onclick="flash()">⬇ Скачать и прошить</button><button class="btn" style="background:#999" onclick="site=null;rBrowser()">← Назад</button>';
+ $('br').innerHTML=h
+}
+function pick(i){site=SITES[i];sfx.click();rBrowser()}
+function flash(){
+ $('dl').disabled=true;let w=0;const iv=setInterval(()=>{w+=5;$('pi').style.width=w+'%';beep(300+w*5,.04,'square',.03);if(w>=100){clearInterval(iv);end()}},80);
+ function end(){
+  const s=site;site=null;
+  if(Math.random()<s.v){virus();return}
+  if(S.cl.k=='reflash')done(1500+lvl()*50);else{toast('Прошито, но клиент не просил 🤷');rBrowser()}
+ }
+}
+function virus(){
+ siren();sfx.bad();S.money=Math.max(0,S.money-1000);save();
+ const o=$('br');o.classList.add('bsodw');o.innerHTML='<h1>:(</h1><p style="font-size:22px">Ваш телефон столкнулся с вирусом и нуждается в перезагрузке.</p><p style="margin-top:20px">VIRUS_DETECTED_0x0000666<br><br>Штраф: −1000 ₽</p>';
+ setTimeout(()=>{o.classList.remove('bsodw');rBrowser();ui()},3200)
+}
+
+/* ===== QUESTS ===== */
+const QS=[{id:0,t:'Починить 5 телефонов',k:'rep',n:5,r:1000},{id:1,t:'Заработать 5000 ₽',k:'earn',n:5000,r:1500},{id:2,t:'Купить 3 детали',k:'buy',n:3,r:700}];
+function rQuests(){
+ daily();
+ $('qs').innerHTML=QS.map(q=>{const v=Math.min(S.q[q.k],q.n),ok=v>=q.n,dn=S.q.done.includes(q.id);
+  return '<div class="card"><div class="q"><b>'+q.t+'</b><span>🎁 '+q.r+' ₽</span></div><div class="pb"><i style="width:'+v/q.n*100+'%"></i></div><div class="q" style="margin-top:6px"><small>'+v+' / '+q.n+'</small><button class="btn g" '+(ok&&!dn?'':'disabled')+' onclick="claim('+q.id+')">'+(dn?'Получено ✔':'Забрать')+'</button></div></div>'}).join('')+'<p style="text-align:center;color:#89a">Задания обновляются каждый день</p>';ui()
+}
+function claim(id){const q=QS[id];S.q.done.push(id);S.money+=q.r;S.xp+=40;save();sfx.ok();toast('+'+q.r+' ₽');rQuests()}
+
+/* ===== 3D CUSTOM ===== */
+let rot=-20;
+function rCustom(){
+ $('sw').innerHTML=COLORS.map(c=>'<span class="sw" style="background:'+c+';'+(c==S.color?'border-color:#fff':'')+'" onclick="setColor(\''+c+'\')"></span>').join('');
+ const d=new Date();$('fc').textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+ $('bt').textContent=S.cl.m;$('bcam').innerHTML=cam(S.cl.m);ui()
+}
+$('cb').onclick=()=>{rot+=360;$('cb').style.transform='rotateY('+rot+'deg)';sfx.open()};
+function setColor(c){S.color=c;save();sfx.click();rCustom()}
+
+/* ===== CAMERAS ===== */
+const ln=(x,y,s)=>'<i class="ln" style="left:'+x+'%;top:'+y+'%;width:'+s+'%"></i>';
+const box=(l,t,w,ar,c,in_)=>'<div class="cam '+c+'" style="left:'+l+'%;top:'+t+'%;width:'+w+'%;aspect-ratio:'+ar+'">'+in_+'</div>';
+function cam(m){
+ const n=+(m.match(/\d+/)||[0])[0],x=/Xiaomi/.test(m);
+ if(x){
+  if(n==10)return box(8,7,34,'1/2.1','h',ln(10,3,80)+ln(31,41,38)+ln(31,61,38)+ln(31,80,38)+'<i class="fl" style="left:12%;top:55%"></i>');
+  if(n==11)return box(6,7,74,'2.1/1','h',ln(3,4,44)+ln(52,6,20)+ln(52,52,20)+'<i class="rs" style="left:77%;top:10%;width:19%;height:80%"></i>');
+  if(n==12)return box(6,7,56,'1/1','h c',ln(12,12,76)+'<i class="fl" style="left:80%;top:20%"></i>');
+  if(n==13)return box(6,7,56,'1/1','h c',ln(8,8,40)+ln(52,8,40)+ln(8,52,40)+ln(52,52,40));
+  return box(6,7,60,'1/1','h c',ln(6,6,54)+ln(64,10,28)+ln(64,42,28)+ln(30,66,28));
+ }
+ if(n==20)return box(8,7,30,'1/2.3','h',ln(15,5,70)+ln(15,36,70)+ln(15,67,70));
+ if(n==21)return box(8,7,30,'1/2.3','s',ln(15,5,70)+ln(15,36,70)+ln(15,67,70));
+ return box(8,7,24,'1/2.6','',ln(6,1,88)+ln(6,34,88)+ln(6,66,88));
+}
+
+/* ===== SHOP ===== */
+const ICON={'Экран':'📱','Плата':'🟩','Батарея':'🔋','Камера':'📷','Фронталка':'🤳','Шлейф':'🔗','Динамик':'🔊','Вибромотор':'📳'},PB={'Экран':400,'Плата':500,'Батарея':250,'Камера':350,'Фронталка':150,'Шлейф':100,'Динамик':180,'Вибромотор':120},QP=[.4,.8,1.5],QC=['#667','#2a6df4','#c98a10'];
+const price=(k,q)=>Math.round(PB[k]*QP[q]);
+function rShop(){
+ S.accParts=S.accParts||[];
+ const accGoods=[
+  ['hp:Динамик L','🎧 Динамик L (левый)',650],['hp:Динамик R','🎧 Динамик R (правый)',650],
+  ['hp:BT-модуль','🎧 Bluetooth-модуль',750],['hp:Контакт зарядки','🎧 Контакт зарядки',500],['hp:АКБ кейса','🎧 АКБ кейса',800],
+  ['wt:Дисплей','⌚ Дисплей часов',1400],['wt:Плата','⌚ Плата часов',950],['wt:Батарея','⌚ Аккумулятор часов',800],
+  ['wt:Шагомер','⌚ Датчик шагов',700],['wt:Пульсометр','⌚ Датчик пульса',650]
+ ];
+ const accHtml='<div class="card"><b>🎧⌚ Запчасти для наушников и часов</b><div>'+accGoods.map(g=>'<div style="padding:7px;border:1px solid #39465b;border-radius:9px;margin:5px 0">'+g[1]+' · <b>'+g[2]+' ₽</b> <button class="btn" onclick="buyAccPart(\''+g[0]+'\','+g[2]+')">Купить</button></div>').join('')+'</div><small>В наличии: '+S.accParts.length+'</small></div>';
+ $('sh').innerHTML=accHtml+KINDS.map((k,i)=>'<div class="card"><b>'+ICON[k]+' '+k+'</b><br>'+Q.map((n,q)=>'<button class="btn" style="background:'+QC[q]+'" onclick="buyPart('+i+','+q+')">'+n+' · '+price(k,q)+' ₽</button>').join('')+'</div>').join('')+'<div class="card"><b>В инвентаре</b><div>'+(S.inv.length?S.inv.map(p=>'<span class="part q'+p.q+'">'+p.k+' · '+Q[p.q]+'</span>').join(''):'<br>Пусто')+'</div></div>';ui()
+}
+function buyAccPart(k,p){S.accParts=S.accParts||[];if(S.money<p){sfx.bad();return toast('Не хватает денег')}S.money-=p;S.accParts.push(k);S.q.buy++;save();sfx.buy();toast('Запчасть куплена');rShop()}
+function buyPart(i,q){
+ const k=KINDS[i],p=price(k,q);
+ if(S.money<p){sfx.bad();toast('Не хватает денег');return}
+ S.money-=p;S.inv.push({k,q});S.q.buy++;save();sfx.buy();toast('Куплено: '+k+' · '+Q[q]);rShop()
+}
+
+/* ===== ИКОНКИ (нарисованы SVG, вместо смайликов) ===== */
+const IC={
+coin:'<circle cx="12" cy="12" r="9" fill="#f5b82e" stroke="#a8721a"/><circle cx="12" cy="12" r="5.5" stroke="#a8721a"/>',
+sound:'<path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/><path d="M16 9a4 4 0 010 6M18.5 6.5a8 8 0 010 11"/>',
+music:'<path d="M9 18V6l10-2v12"/><circle cx="7" cy="18" r="2.5" fill="currentColor"/><circle cx="17" cy="16" r="2.5" fill="currentColor"/>',
+wrench:'<path d="M14.5 5.5a4 4 0 00-5 5L4 16l4 4 5.5-5.5a4 4 0 005-5l-2.5 2.5-2.5-.5-.5-2.5z"/>',
+box:'<path d="M12 3l8 4v10l-8 4-8-4V7z"/><path d="M4 7l8 4 8-4M12 11v10"/>',
+laptop:'<rect x="5" y="5" width="14" height="9" rx="1.5"/><path d="M3 18h18l-1.5-4h-15z"/>',
+clip:'<rect x="6" y="5" width="12" height="16" rx="2"/><rect x="9" y="3" width="6" height="4" rx="1" fill="currentColor"/><path d="M9 12h6M9 16h6"/>',
+palette:'<path d="M12 3a9 9 0 100 18c1.5 0 2-1 1.5-2s0-2 1.5-2H17a4 4 0 004-4c0-5-4-10-9-10z"/><circle cx="8" cy="11" r="1.2" fill="currentColor"/><circle cx="12" cy="7.5" r="1.2" fill="currentColor"/><circle cx="16" cy="10" r="1.2" fill="currentColor"/>',
+cart:'<path d="M3 4h3l2 11h10l2-8H7"/><circle cx="9" cy="19" r="1.6" fill="currentColor"/><circle cx="17" cy="19" r="1.6" fill="currentColor"/>',
+store:'<path d="M4 9l1.5-5h13L20 9z"/><path d="M5 9v11h14V9M10 20v-5h4v5"/><path d="M4 9a2.7 2.7 0 005.3 0 2.7 2.7 0 005.4 0A2.7 2.7 0 0020 9"/>',
+pack:'<path d="M8 6a4 4 0 018 0"/><rect x="5" y="6" width="14" height="15" rx="4"/><rect x="8" y="13" width="8" height="5" rx="1"/>',
+phone:'<rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/>',
+bat:'<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10v4"/><rect x="5" y="9" width="9" height="6" rx="1" fill="#4caf50" stroke="none"/>',
+batlow:'<rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 10v4"/><rect x="5" y="9" width="3" height="6" rx="1" fill="#e53935" stroke="none"/>',
+camera:'<path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+person:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0116 0"/>',
+flex:'<rect x="3" y="9" width="18" height="6" rx="1.5" fill="#e08a2a" stroke="none"/><path d="M6 9v6M9 9v6M15 9v6M18 9v6" stroke="#fff" opacity=".55"/>',
+board:'<rect x="4" y="4" width="16" height="16" rx="2" fill="#2f8f4e" stroke="none"/><rect x="8" y="8" width="8" height="8" fill="#c4cad3" stroke="none"/><path d="M2 8h2M2 12h2M2 16h2M20 8h2M20 12h2M20 16h2"/>',
+hand:'<path d="M8 12V6a1.5 1.5 0 013 0v5M11 11V4.5a1.5 1.5 0 013 0V11M14 11V6a1.5 1.5 0 013 0v7c0 4-2 7-6 7-3 0-4-2-6-5l-1-2a1.5 1.5 0 012.5-1.5L8 14"/>',
+driver:'<path d="M5 19l7-7" stroke-width="5"/><path d="M13 11l7-7" stroke-width="2"/>',
+suction:'<path d="M5 11a7 5 0 0114 0z" fill="currentColor"/><path d="M12 11v9M9 20h6"/>',
+tester:'<rect x="6" y="3" width="12" height="18" rx="2"/><rect x="8" y="5" width="8" height="5" rx="1" fill="currentColor"/><circle cx="12" cy="15" r="2.2"/>',
+dryer:'<path d="M3 9a5 5 0 015-5h6a4 4 0 010 8H8"/><path d="M8 12l-1 8h4l1-8"/><path d="M18 8h3M18 10.5l2.5 1.5M18 5.5l2.5-1.5"/>',
+glue:'<rect x="8" y="9" width="8" height="12" rx="2"/><path d="M10 9V6l2-3 2 3v3M10 14h4"/>',
+flip:'<path d="M4 12a8 8 0 0114-5l2 2M20 12a8 8 0 01-14 5l-2-2"/><path d="M20 4v5h-5M4 20v-5h5"/>',
+check:'<path d="M5 12.5l4.5 4.5L19 7.5" stroke="#43a047" stroke-width="2.6"/>',
+cross:'<path d="M6 6l12 12M18 6L6 18" stroke="#e53935" stroke-width="2.6"/>',
+warn:'<path d="M12 4l9 16H3z" fill="#f5b82e" stroke="#a8721a"/><path d="M12 10v4.5M12 17v.5" stroke="#3a2a00" stroke-width="2"/>',
+download:'<path d="M12 4v11M7.5 10.5L12 15l4.5-4.5M5 20h14"/>',
+lock:'<rect x="6" y="11" width="12" height="9" rx="2"/><path d="M8.5 11V8a3.5 3.5 0 017 0v3"/>',
+globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>',
+gift:'<rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M12 9v11M3 9h18V6H3zM12 6c-3-4-6-1-4 0M12 6c3-4 6-1 4 0"/>',
+toolbox:'<rect x="3" y="8" width="18" height="12" rx="2"/><path d="M9 8V6a1.5 1.5 0 011.5-1.5h3A1.5 1.5 0 0115 6v2M3 13h18"/>',
+clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+calc:'<rect x="5" y="3" width="14" height="18" rx="2"/><rect x="7.5" y="5.5" width="9" height="4" fill="currentColor"/><path d="M8 13h1M12 13h1M16 13h0M8 17h1M12 17h1M16 17h0" stroke-width="2.4"/>',
+gear:'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>',
+screw:'<circle cx="12" cy="12" r="7" fill="#c9ced6" stroke="#555"/><path d="M8 12h8M12 8v8" stroke="#555"/>',
+ring:'<circle cx="12" cy="12" r="5"/>',
+smile:'<circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><path d="M8 14.5a5 5 0 008 0"/>',
+sun:'<circle cx="12" cy="12" r="4" fill="#f5b82e" stroke="#a8721a"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4"/>',
+back:'<path d="M19 12H5M11 6l-6 6 6 6"/>'};
+const EM={'💰':'coin','🔊':'sound','🎵':'music','🔧':'wrench','📦':'box','💻':'laptop','📋':'clip','🎨':'palette','🛒':'cart','🏪':'store','🎒':'pack','📱':'phone','🔋':'bat','🪫':'batlow','📷':'camera','🤳':'person','🔗':'flex','🟩':'board','✋':'hand','🪛':'driver','🪄':'suction','🔍':'tester','🔥':'dryer','🧴':'glue','🔄':'flip','✅':'check','✔':'check','✓':'check','❌':'cross','✖':'cross','⚠':'warn','⬇':'download','🔒':'lock','🌐':'globe','🎁':'gift','👤':'person','🧰':'toolbox','🕐':'clock','🧮':'calc','⚙':'gear','🔩':'screw','○':'ring','🙂':'smile','☀':'sun','←':'back','🤷':'person','📳':'ring','🔇':'sound','📴':'ring','❓':'warn','🎓':'gift','🛠':'toolbox'};
+const emK=Object.keys(EM).sort((a,b)=>b.length-a.length),emTest=new RegExp(emK.join('|')),emRe=new RegExp('('+emK.join('|')+')\\uFE0F?','g');
+const icoSvg=n=>'<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+IC[n]+'</svg>';
+function fixText(n){
+ const p=n.parentNode;if(!p||!emTest.test(n.nodeValue)||/^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName)||p.namespaceURI=='http://www.w3.org/2000/svg')return;
+ const t=document.createElement('template');
+ t.innerHTML=n.nodeValue.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(emRe,(m,e)=>icoSvg(EM[e]));
+ n.replaceWith(t.content)
+}
+function iconify(root){
+ if(root.nodeType==3)return fixText(root);
+ const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),a=[];while(w.nextNode())a.push(w.currentNode);a.forEach(fixText)
+}
+new MutationObserver(ms=>{ms.forEach(m=>{if(m.type=='characterData')fixText(m.target);else m.addedNodes.forEach(n=>{if(n.nodeType==3)fixText(n);else if(n.nodeType==1&&n.nodeName!='svg')iconify(n)})})}).observe(document.body,{childList:true,subtree:true,characterData:true});
+
+/* ===== ВИНТЫ: биты и вращение по кольцу ===== */
+const BITS=['PH0','T4','T6'];let bit='PH0',scOn=[1,1,1,1];
+function setBit(b){bit=b;sfx.click();rRepair()}
+function scSet(v){scOn=[v,v,v,v];bsc=v*4}
+function screwErr(k){
+ if(isRe()||stg<2||front||!st[1])return 'Сначала снимите крышку и откройте плату';
+ if(blk(1).length)return 'Сначала снимите: '+nm(blk(1));
+ if(bit!='T6')return 'Не подходит бита: для винтов платы (3,0 мм) нужна Torx T6';
+ if(scOn[k]==(fixed?1:0))return fixed?'Этот винт уже закручен':'Этот винт уже выкручен';
+ return ''}
+function screwK(k){if(screwErr(k))return;scOn[k]=fixed?1:0;bsc=scOn.reduce((a,b)=>a+b,0);sfx.screw();rRepair()}
+
+/* ===== 3D ВЕРСТАК ===== */
+function bkTap(){
+ if(isRe())return toast('Клиент просит перепрошивку 💻');
+ if(stg==0){if(tool!='fen')return toast('Выберите Фен 🔥');screws--;sfx.screw();if(screws==0)stg=1;return rRepair()}
+ if(stg==1){if(tool!='suction')return toast('Выберите Присоску 🪄');sfx.open();stg=2;gl.c=0;rRepair()}
+}
+function phGlue(){if(isRe()||stg!=2||!fixed||!st.every(x=>x)||bsc!=4||front||tool!='glue')return;gl.c=1;sfx.screw();toast('Клей нанесён на рамку 🧴');rRepair()}
+(function(){
+const host=$('ph3');
+if(!window.THREE||!THREE.OrbitControls){window.reset3d=window.sync3d=function(){};host.innerHTML='<div class="pc">⚠️ 3D не загрузился (нужен интернет)</div>';return}
+let rd;
+try{rd=new THREE.WebGLRenderer({antialias:true})}catch(e){window.reset3d=window.sync3d=function(){};host.innerHTML='<div class="pc">⚠️ WebGL недоступен</div>';return}
+rd.setPixelRatio(Math.min(devicePixelRatio,2));rd.outputEncoding=THREE.sRGBEncoding;rd.toneMapping=THREE.ACESFilmicToneMapping;rd.toneMappingExposure=1.25;
+host.prepend(rd.domElement);
+const sc=new THREE.Scene();sc.background=new THREE.Color(0x14100c);
+const cm=new THREE.PerspectiveCamera(40,1,.1,100);cm.position.set(0,11,7.5);
+const ctl=new THREE.OrbitControls(cm,rd.domElement);ctl.enableDamping=true;ctl.enablePan=false;ctl.minDistance=6;ctl.maxDistance=16;ctl.maxPolarAngle=1.45;
+const fit=()=>{const w=host.clientWidth,h=host.clientHeight;if(w&&h){rd.setSize(w,h);cm.aspect=w/h;cm.updateProjectionMatrix()}};
+new ResizeObserver(fit).observe(host);fit();
+/* тёплый свет мастерской */
+const pm=new THREE.PMREMGenerator(rd),es=new THREE.Scene();
+/* HDR-подобная среда для бликов: яркие окна + тёплый пол */
+es.background=new THREE.Color(0x1a1520);
+[[0xffffff,4,12,8,8,.2,8],[0xfff5e0,-6,10,4,6,.2,6],[0x88aaff,0,8,-12,14,8,.3],[0xffaa66,-10,3,2,.4,6,6],[0x223344,0,-2,0,30,.3,30]].forEach(a=>{
+ const m=new THREE.Mesh(new THREE.BoxGeometry(a[4],a[5],a[6]),new THREE.MeshBasicMaterial({color:a[0]}));
+ m.position.set(a[1],a[2],a[3]);es.add(m);
+});
+sc.environment=pm.fromScene(es,0.04).texture;
+sc.add(new THREE.HemisphereLight(0xfff0e0,0x1a1010,.55));
+const sun=new THREE.DirectionalLight(0xfff0dd,1.35);sun.position.set(6,12,5);sc.add(sun);
+const sun2=new THREE.DirectionalLight(0xaaccff,.45);sun2.position.set(-8,6,-4);sc.add(sun2);
+const lamp=new THREE.PointLight(0xffb070,1.4,28);lamp.position.set(-4,6,3);sc.add(lamp);
+const lamp2=new THREE.PointLight(0x88ccff,.7,20);lamp2.position.set(5,4,-3);sc.add(lamp2);
+/* помощники */
+const tex=(w,h,f)=>{const c=document.createElement('canvas');c.width=w;c.height=h;f(c.getContext('2d'),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;t.anisotropy=4;return t};
+function rr(w,h,r){const s=new THREE.Shape(),x=w/2,y=h/2;s.moveTo(-x+r,-y);s.lineTo(x-r,-y);s.quadraticCurveTo(x,-y,x,-y+r);s.lineTo(x,y-r);s.quadraticCurveTo(x,y,x-r,y);s.lineTo(-x+r,y);s.quadraticCurveTo(-x,y,-x,y-r);s.lineTo(-x,-y+r);s.quadraticCurveTo(-x,-y,-x+r,-y);return s}
+const ext=(s,d,b)=>{const g=new THREE.ExtrudeGeometry(s,{depth:d,bevelEnabled:true,bevelSize:b,bevelThickness:b,bevelSegments:3,curveSegments:12});g.translate(0,0,-d/2);return g};
+const Mt=(c,m,r,o)=>new THREE.MeshStandardMaterial(Object.assign({color:c,metalness:m,roughness:r,envMapIntensity:1.1},o||{}));
+const Phy=(c,m,r,cc,o)=>new THREE.MeshPhysicalMaterial(Object.assign({color:c,metalness:m,roughness:r,clearcoat:cc,clearcoatRoughness:.08,envMapIntensity:1.3,reflectivity:1},o||{}));
+const glass=Phy(0x0a0d18,.15,.04,1,{transmission:0,transparent:false});
+/* цвета устройств по модели */
+const PHONE_COLS={'Samsung':'#1a1a1e','Xiaomi':'#e8e8ec','default':'#2a6df4'};
+function colPhone(m){if(/Xiaomi/i.test(m||''))return 0xe8e8ec;if(/Samsung/i.test(m||''))return 0x1c1c22;const i=(COLORS||[]).indexOf(S.color);return S.color?parseInt(String(S.color).replace('#','0x')):0x2a6df4}
+function colWatch(m){
+ if(/Apple|SE/i.test(m||''))return 0x2c2c2e;
+ if(/Galaxy|Samsung/i.test(m||''))return 0x1a2332;
+ if(/Xiaomi|Amazfit|Haylou|Band/i.test(m||''))return 0x2a3544;
+ if(/Huawei|Garmin/i.test(m||''))return 0x1e2430;
+ return 0x2c3340;
+}
+function colBand(m){
+ if(/Apple|SE/i.test(m||''))return 0x3a3a3c;
+ if(/Galaxy/i.test(m||''))return 0x1a2030;
+ return 0x3a4556;
+}
+function colHP(m){
+ if(/AirPods|Apple/i.test(m||''))return 0xf5f5f7;
+ if(/Galaxy|Samsung|Buds/i.test(m||''))return 0x1a1a1e;
+ if(/Sony|XM/i.test(m||''))return 0x222226;
+ if(/Xiaomi|Redmi|Realme|Nothing/i.test(m||''))return 0xe8eaed;
+ if(/JBL|Huawei/i.test(m||''))return 0x2a2a2e;
+ return 0xf0f2f5;
+}
+function colHPLid(m){
+ const b=colHP(m);
+ return b>0x888888?0xffffff:0x2a2a30;
+}
+const ez=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,anims=[],tw=(d,f,done)=>anims.push({t:0,d,f,done});
+const BX=THREE.BoxGeometry;
+/* верстак */
+const wood=tex(512,512,(g,w,h)=>{g.fillStyle='#6b4528';g.fillRect(0,0,w,h);for(let i=0;i<90;i++){g.strokeStyle='rgba('+(i%2?'30,15,5':'150,100,60')+',.18)';g.lineWidth=1+Math.random()*3;g.beginPath();const y=Math.random()*h;g.moveTo(0,y);g.bezierCurveTo(w*.3,y+Math.random()*14-7,w*.6,y+Math.random()*14-7,w,y);g.stroke()}});
+wood.wrapS=wood.wrapT=THREE.RepeatWrapping;wood.repeat.set(3,3);
+const bench=new THREE.Mesh(new THREE.PlaneGeometry(40,40),Mt(0xffffff,0,.8,{map:wood}));bench.rotation.x=-Math.PI/2;sc.add(bench);
+/* текстуры */
+const scrT=cr=>tex(256,512,(g,w,h)=>{const gr=g.createLinearGradient(0,0,w,h);gr.addColorStop(0,'#3a7bd5');gr.addColorStop(.5,'#6a3fb5');gr.addColorStop(1,'#d9467a');g.fillStyle=gr;g.fillRect(0,0,w,h);g.fillStyle='#fff';g.textAlign='center';g.font='200 80px sans-serif';g.fillText('9:41',w/2,190);g.fillStyle='#000';g.beginPath();g.arc(w/2,22,9,0,7);g.fill();
+ if(cr){g.strokeStyle='rgba(255,255,255,.85)';g.lineWidth=1.5;g.beginPath();[[170,0,140,110,90,170,110,270,60,512],[140,110,230,200,256,260],[90,170,0,150],[110,270,200,340]].forEach(p=>{g.moveTo(p[0],p[1]);for(let i=2;i<p.length;i+=2)g.lineTo(p[i],p[i+1])});g.stroke();g.fillStyle='rgba(0,0,0,.5)';g.beginPath();g.moveTo(140,110);g.lineTo(90,170);g.lineTo(110,270);g.lineTo(190,240);g.lineTo(230,200);g.fill()}});
+const scrN=scrT(0),scrC=scrT(1);
+const pcbT=tex(256,256,(g,w,h)=>{g.fillStyle='#1f7a3a';g.fillRect(0,0,w,h);g.strokeStyle='#d9b24a';g.lineWidth=1.5;for(let i=0;i<40;i++){g.beginPath();let x=Math.random()*w,y=Math.random()*h;g.moveTo(x,y);for(let k=0;k<3;k++){x+=(Math.random()-.5)*80;g.lineTo(x,y);y+=(Math.random()-.5)*80;g.lineTo(x,y)}g.stroke()}g.fillStyle='#c9a23a';for(let i=0;i<60;i++){g.beginPath();g.arc(Math.random()*w,Math.random()*h,2,0,7);g.fill()}});
+const batT=tex(256,256,(g,w,h)=>{const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#dfe4ea');gr.addColorStop(1,'#98a0aa');g.fillStyle=gr;g.fillRect(0,0,w,h);g.fillStyle='#222';g.textAlign='center';g.font='bold 30px sans-serif';g.fillText('Li-Po 4500 mAh',w/2,105);g.font='22px sans-serif';g.fillText('3.87 V · 17.4 Wh',w/2,140);g.fillStyle='#b22';g.font='18px sans-serif';g.fillText('ВНИМАНИЕ: не вскрывать',w/2,180)});
+const lc=document.createElement('canvas');lc.width=512;lc.height=96;const lg=lc.getContext('2d'),logoT=new THREE.CanvasTexture(lc);logoT.encoding=THREE.sRGBEncoding;
+const setLogo=t=>{lg.clearRect(0,0,512,96);lg.fillStyle='#e8eef8';lg.textAlign='center';lg.font='bold 46px sans-serif';lg.fillText(t,256,64);logoT.needsUpdate=true};
+/* телефон лежит крышкой вверх; детали P[0..5] = экран, плата, батарея, камера, фронталка, шлейф */
+const piv=new THREE.Group(),ph=new THREE.Group();piv.add(ph);ph.rotation.x=-Math.PI/2;piv.position.y=.35;sc.add(piv);
+const P=[],G=[],X=[],H=[];for(let i=0;i<8;i++){const g=new THREE.Group();g.userData={id:i,on:true};ph.add(g);P.push(g)}
+const put=(i,o,x,y,z)=>{o.position.set(x,y,z);P[i].add(o);return o};
+const fs=rr(3,6.2,.42);fs.holes.push(rr(2.84,6.04,.34));
+const frame=new THREE.Mesh(ext(fs,.3,.03),Phy(0xb8bec8,.9,.2,.5,{envMapIntensity:1.4}));ph.add(frame);
+const fp=new THREE.Mesh(new THREE.PlaneGeometry(2.8,6),new THREE.MeshBasicMaterial({visible:false}));fp.position.z=-.15;ph.add(fp);
+put(0,new THREE.Mesh(new THREE.PlaneGeometry(2.8,6),Mt(0x15181f,.5,.4)),0,0,-.13);
+put(0,new THREE.Mesh(new BX(.9,.5,.01),Mt(0xe08a2a,0,.6)),0,-2.6,-.125);
+const scrM=Mt(0x111111,0,.1,{map:scrN,emissive:0xffffff,emissiveMap:scrN,emissiveIntensity:.7});
+const sg=put(0,new THREE.Mesh(new THREE.PlaneGeometry(2.8,6),scrM),0,0,-.15);sg.rotation.y=Math.PI;
+put(1,new THREE.Mesh(new BX(2.6,2.7,.07),Mt(0xffffff,0,.6,{map:pcbT})),0,1.55,-.05);
+const chip=(w,h,d,c,m,x,y,z)=>put(1,new THREE.Mesh(new BX(w,h,d),Mt(c,m,m>.5?.3:.4)),x,y,z);
+chip(.95,.95,.08,0xc4cad3,1,-.55,1.4,.02);chip(.6,.45,.06,0x15161a,.2,.65,2,.01);chip(.45,.45,.06,0x15161a,.2,.7,1.3,.01);chip(.5,.3,.05,0x2a2a30,.2,-.6,.65,.01);chip(1,.12,.05,0xd4a62a,1,0,.28,0);
+for(let i=0;i<8;i++)chip(.1,.06,.05,0xd8c08a,.5,-1+i*.16,.5,.01);
+const sc4=[[-1.15,2.65],[1.15,2.65],[-1.15,.45],[1.15,.45]].map(p=>{const h=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.07,20),Mt(0xc9ced6,1,.3));h.rotation.x=Math.PI/2;return put(1,h,p[0],p[1],.03)});
+const hl=sc4.map(s=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.11,.11,.02,20),Mt(0x0a0a0a,.2,.8));m.rotation.x=Math.PI/2;return put(1,m,s.position.x,s.position.y,.03)});
+const lens=(r,h,x,y,z,gl2)=>{const g=new THREE.Group();g.add(new THREE.Mesh(new THREE.CylinderGeometry(r,r,h,32),Mt(0x9aa0aa,1,.25)),new THREE.Mesh(new THREE.CylinderGeometry(r*.72,r*.72,h*1.05,32),gl2||glass));g.rotation.x=Math.PI/2;g.position.set(x,y,z);return g};
+P[3].add(lens(.33,.14,-.8,2.35,.07));P[4].add(lens(.18,.12,.75,2.55,.06,new THREE.MeshPhysicalMaterial({color:0x10305a,metalness:.2,roughness:.05,clearcoat:1})));
+const side=Mt(0x7d848e,.8,.4),lab=Mt(0xffffff,.3,.35,{map:batT});
+put(2,new THREE.Mesh(new BX(2.6,2.7,.12),[side,side,side,side,lab,side]),0,-1.55,-.04);
+/* главный шлейф + отдельный шлейф у каждой детали к плате */
+const flexMat=Mt(0xd98a2b,.15,.55);
+put(5,new THREE.Mesh(new BX(2.2,.18,.015),flexMat),0,.15,-.02);
+put(5,new THREE.Mesh(new BX(.18,1.8,.015),flexMat),-.95,-.7,-.02);
+put(5,new THREE.Mesh(new BX(.18,1.1,.015),flexMat),.95,-.35,-.02);
+put(5,new THREE.Mesh(new BX(.55,.35,.02),flexMat),0,-.05,-.025);
+put(5,new THREE.Mesh(new BX(.12,.45,.015),flexMat),-.8,2.05,.01);
+put(5,new THREE.Mesh(new BX(.12,.35,.015),flexMat),.75,2.2,.01);
+/* шлейф экрана → плата (идёт с деталью экрана) */
+put(0,new THREE.Mesh(new BX(.55,.12,.012),flexMat),0,1.9,-.11);
+put(0,new THREE.Mesh(new BX(.12,.9,.012),flexMat),0,1.35,-.11);
+/* шлейф батареи → плата */
+put(2,new THREE.Mesh(new BX(.7,.12,.012),flexMat),0,-.1,-.02);
+put(2,new THREE.Mesh(new BX(.12,.7,.012),flexMat),0,.3,-.02);
+/* шлейф основной камеры → плата */
+put(3,new THREE.Mesh(new BX(.1,.55,.012),flexMat),-.8,1.95,.02);
+put(3,new THREE.Mesh(new BX(.35,.1,.012),flexMat),-.55,1.7,.02);
+/* шлейф фронталки → плата */
+put(4,new THREE.Mesh(new BX(.1,.45,.012),flexMat),.75,2.2,.02);
+put(4,new THREE.Mesh(new BX(.4,.1,.012),flexMat),.5,1.95,.02);
+/* шлейф динамика → плата (через боковой канал) */
+put(6,new THREE.Mesh(new BX(.1,1.2,.012),flexMat),-.4,-1.9,-.01);
+put(6,new THREE.Mesh(new BX(.55,.1,.012),flexMat),-.15,-1.3,-.01);
+/* шлейф вибромотора → плата */
+put(7,new THREE.Mesh(new BX(.1,.9,.012),flexMat),1.05,-1.3,-.01);
+put(7,new THREE.Mesh(new BX(.45,.1,.012),flexMat),.8,-.85,-.01);
+/* динамик (снизу, у края) */
+const spkG=new THREE.Group();
+spkG.add(new THREE.Mesh(new THREE.BoxGeometry(.9,.35,.12),Mt(0x2a2d34,.4,.4)));
+spkG.add(new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,.08,16),Mt(0x111111,.2,.3)));
+spkG.children[1].rotation.x=Math.PI/2;spkG.children[1].position.set(-.2,0,.06);
+spkG.add(new THREE.Mesh(new THREE.BoxGeometry(.25,.2,.06),Mt(0x1a1a1a,.3,.5)));
+spkG.children[2].position.set(.28,0,.04);
+put(6,spkG,0,-2.7,-.02);
+/* вибромотор (сбоку у батареи) */
+const vibG=new THREE.Group();
+vibG.add(new THREE.Mesh(new THREE.BoxGeometry(.55,.28,.14),Mt(0x3a3d45,.5,.35)));
+vibG.add(new THREE.Mesh(new THREE.CylinderGeometry(.08,.08,.22,12),Mt(0x555555,.6,.3)));
+vibG.children[1].rotation.z=Math.PI/2;vibG.children[1].position.set(0,0,.02);
+put(7,vibG,1.05,-1.9,-.02);
+/* контуры снятых деталей, подсветка проверки, зоны нажатия */
+[[2.8,6,.1,0,0,-.13],[2.6,2.7,.1,0,1.55,-.05],[2.6,2.7,.14,0,-1.55,-.04],[.7,.7,.16,-.8,2.35,.07],[.4,.4,.14,.75,2.55,.06],[2.2,2.2,.06,0,-.4,-.02],[.95,.4,.14,0,-2.7,-.02],[.6,.35,.16,1.05,-1.9,-.02]].forEach((d,i)=>{
+ const geo=new BX(d[0],d[1],d[2]);
+ const g=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:0xffffff,transparent:true,opacity:.7}));
+ const x=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({visible:false}));x.userData.id=i;
+ const h=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({color:0xff4444,transparent:true,opacity:.25,depthWrite:false}));h.scale.setScalar(1.04);
+ [g,x,h].forEach(o=>{o.position.set(d[3],d[4],d[5]);o.visible=o==x;ph.add(o)});G.push(g);X.push(x);H.push(h)});
+/* крышка с блоком камер конкретной модели */
+const C=new THREE.Group();C.userData.id='c';C.position.z=.19;ph.add(C);
+C.mat=Phy(0x2a6df4,.6,.18,1,{clearcoatRoughness:.06,envMapIntensity:1.5});
+C.add(new THREE.Mesh(ext(rr(2.9,6.1,.4),.05,.02),C.mat));
+/* боковая рамка с металлом */
+const frameShine=Phy(0xc0c6d0,.85,.22,.6,{envMapIntensity:1.4});
+const logo=new THREE.Mesh(new THREE.PlaneGeometry(2,.38),new THREE.MeshBasicMaterial({map:logoT,transparent:true}));logo.position.set(0,-.5,.04);C.add(logo);
+const cb=new THREE.Group();C.add(cb);
+const ring=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(rr(2.8,5.9,.38).getPoints(24).map(p=>new THREE.Vector3(p.x,p.y,.2))),new THREE.LineBasicMaterial({color:0xffd54f}));ring.visible=false;ph.add(ring);
+function spec(m){const n=+(m.match(/\d+/)||[0])[0];
+ if(/Xiaomi/.test(m)){
+  if(n==10)return{h:[-.75,1.9,1,1.95],l:[[-.75,2.5,.34],[-.75,1.8,.24],[-.75,1.3,.24]]};
+  if(n==11)return{h:[-.15,2.2,2.3,1.1],l:[[-.9,2.2,.42],[-.1,2.5,.22],[-.1,1.95,.22]],rs:[.7,2.2,.42,.85]};
+  if(n==12)return{h:[-.5,2.1,1.9,1.9,1],l:[[-.5,2.1,.6]]};
+  if(n==13)return{h:[-.5,2.1,1.9,1.9,1],l:[[-.85,2.45,.32],[-.15,2.45,.32],[-.85,1.75,.32],[-.15,1.75,.32]]};
+  return{h:[-.5,2.1,2,2,1],l:[[-.5,2.1,.58],[.15,2.65,.28],[.15,1.95,.28],[-.5,1.45,.28]]}}
+ const l=[[-.95,2.65,.3],[-.95,2,.3],[-.95,1.35,.3]];
+ return n<22?{h:[-.95,2,.85,2.3,0,n==21],l}:{l}}
+function buildCam(m){
+ while(cb.children.length)cb.remove(cb.children[0]);const s=spec(m);
+ if(s.h){const a=s.h,mt=a[5]?C.mat:Mt(0x14161b,.6,.3),hm=a[4]?new THREE.Mesh(new THREE.CylinderGeometry(a[2]/2,a[2]/2,.07,40),mt):new THREE.Mesh(ext(rr(a[2],a[3],.22),.07,.02),mt);if(a[4])hm.rotation.x=Math.PI/2;hm.position.set(a[0],a[1],.045);cb.add(hm)}
+ s.l.forEach(a=>cb.add(lens(a[2],.1,a[0],a[1],.1)));
+ if(s.rs){const r=new THREE.Mesh(new BX(s.rs[2],s.rs[3],.02),glass);r.position.set(s.rs[0],s.rs[1],.1);cb.add(r)}
+}
+/* ===== 3D часы и наушники — лежат на столе как телефон (rotation.x=-PI/2) ===== */
+const accRoot=new THREE.Group();piv.add(accRoot);accRoot.visible=false;
+const wtG=new THREE.Group(),hpG=new THREE.Group();
+accRoot.add(wtG,hpG);
+wtG.rotation.x=hpG.rotation.x=-Math.PI/2;
+/* часы */
+try{(function(){
+ const bodyMat=Phy(0x2c3340,.7,.22,.7,{envMapIntensity:1.4});
+ const bandMat=Mt(0x3a4556,.25,.55);
+ const body=new THREE.Mesh(ext(rr(2.0,2.4,.42),.42,.05),bodyMat);wtG.add(body);wtG.userData.bodyMat=bodyMat;
+ const bezel=new THREE.Mesh(ext(rr(1.75,2.1,.32),.06,.02),Phy(0x1a1f2a,.8,.18,.5));bezel.position.z=.22;wtG.add(bezel);wtG.userData.bezel=bezel;
+ wtG.userData.bandMat=bandMat;
+ const dial=tex(256,256,(g,w,h)=>{
+  const gr=g.createLinearGradient(0,0,0,h);gr.addColorStop(0,'#1a3a6a');gr.addColorStop(1,'#0a1020');
+  g.fillStyle=gr;g.fillRect(0,0,w,h);
+  g.fillStyle='#e8f0ff';g.font='200 52px sans-serif';g.textAlign='center';g.fillText('09:41',w/2,h/2-8);
+  g.font='16px sans-serif';g.fillStyle='#9ab';g.fillText('Четверг',w/2,h/2+28);
+  g.fillStyle='#4f8';g.beginPath();g.arc(w/2,h-36,6,0,7);g.fill();
+ });
+ /* 0 Дисплей — отдельная группа */
+ const scrG=new THREE.Group();scrG.userData.part=0;
+ const scr=new THREE.Mesh(new THREE.PlaneGeometry(1.5,1.85),new THREE.MeshStandardMaterial({map:dial,emissiveMap:dial,emissive:0xffffff,emissiveIntensity:.7,metalness:.05,roughness:.25}));
+ scr.position.z=.30;scrG.add(scr);wtG.add(scrG);wtG.userData.scr=scr;wtG.userData.parts=wtG.userData.parts||[];
+ wtG.userData.parts[0]=scrG;
+ const bandT=new THREE.Mesh(new BX(1.15,1.6,.28),bandMat);bandT.position.set(0,1.9,0);wtG.add(bandT);
+ const bandB=new THREE.Mesh(new BX(1.15,1.6,.28),bandMat);bandB.position.set(0,-1.9,0);wtG.add(bandB);
+ const backFace=new THREE.Mesh(ext(rr(1.95,2.35,.4),.08,.02),Mt(0x1c212b,.5,.4));
+ backFace.position.z=-.24;wtG.add(backFace);wtG.userData.backFace=backFace;
+ const lid=new THREE.Mesh(ext(rr(1.9,2.3,.38),.06,.015),Mt(0x252b36,.55,.32));
+ lid.position.z=-.29;lid.userData.id='accLid';wtG.add(lid);wtG.userData.lid=lid;
+ wtG.userData.screws=[];
+ [[-.78,.95],[.78,.95],[-.78,-.95],[.78,-.95]].forEach(p=>{
+  const s=new THREE.Mesh(new THREE.CylinderGeometry(.16,.16,.12,24),Mt(0xf0f2f6,1,.18));
+  s.rotation.x=Math.PI/2;s.position.set(p[0],p[1],-.38);s.userData.id='accScrew';
+  const cross=new THREE.Mesh(new BX(.16,.035,.025),Mt(0x4a5060,.3,.5));cross.position.z=.07;s.add(cross);
+  const cross2=new THREE.Mesh(new BX(.035,.16,.025),Mt(0x4a5060,.3,.5));cross2.position.z=.07;s.add(cross2);
+  wtG.add(s);wtG.userData.screws.push(s);
+ });
+ /* 1 Плата */
+ const boardG=new THREE.Group();boardG.userData.part=1;
+ const chip=new THREE.Mesh(new BX(.85,.5,.05),Mt(0x1f7a45,.25,.4));chip.position.set(0,.25,-.335);boardG.add(chip);
+ const dark=Mt(0x15161a,.3,.4),gold=Mt(0xd8c08a,.5,.4),led=Mt(0x22ff88,0,.3,{emissive:0x22aa55});
+ boardG.add((()=>{const m=new THREE.Mesh(new BX(.9,.4,.05),Mt(0x1f6a3a,.25,.5));m.position.set(0,.85,-.335);return m})());
+ [[-.22,.85],[.22,.85]].forEach(c=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.05,16),led);l.rotation.x=Math.PI/2;l.position.set(c[0],c[1],-.37);boardG.add(l)});
+ boardG.add((()=>{const m=new THREE.Mesh(new BX(.4,.3,.05),dark);m.position.set(-.72,.7,-.335);return m})());
+ boardG.visible=false;wtG.add(boardG);wtG.userData.parts[1]=boardG;wtG.userData.chip=chip;
+ /* 2 Батарея */
+ const batG=new THREE.Group();batG.userData.part=2;
+ const bat=new THREE.Mesh(new BX(1.1,.55,.07),Mt(0xc8cdd6,.2,.5));bat.position.set(0,-.45,-.34);batG.add(bat);
+ batG.visible=false;wtG.add(batG);wtG.userData.parts[2]=batG;wtG.userData.bat=bat;
+ /* 3 Шагомер */
+ const stepG=new THREE.Group();stepG.userData.part=3;
+ const step=new THREE.Mesh(new BX(.45,.3,.06),Mt(0x3a6aa5,.3,.4));step.position.set(.7,.15,-.335);stepG.add(step);
+ stepG.add((()=>{const m=new THREE.Mesh(new BX(.1,.5,.015),Mt(0xd98a2b,.15,.55));m.position.set(.55,.4,-.325);return m})());
+ stepG.visible=false;wtG.add(stepG);wtG.userData.parts[3]=stepG;
+ /* 4 Пульсометр */
+ const pulseG=new THREE.Group();pulseG.userData.part=4;
+ const pulse=new THREE.Mesh(new THREE.CylinderGeometry(.22,.22,.04,20),Mt(0x222830,.4,.3,{emissive:0x880022,emissiveIntensity:.3}));
+ pulse.rotation.x=Math.PI/2;pulse.position.set(0,-.95,-.34);pulseG.add(pulse);
+ const ring=new THREE.Mesh(new THREE.TorusGeometry(.4,.04,10,40),Mt(0xc9822e,.9,.3));ring.position.set(0,-.95,-.34);pulseG.add(ring);
+ pulseG.visible=false;wtG.add(pulseG);wtG.userData.parts[4]=pulseG;
+ wtG.userData.iscrew=[];
+ [[-.35,.25],[.35,.25],[-.35,-.25],[.35,-.25]].forEach(p=>{
+  const s=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.06,12),Mt(0xd0d5dc,1,.25));
+  s.rotation.x=Math.PI/2;s.position.set(p[0],p[1],-.40);s.visible=false;s.userData.id='accScrew';
+  wtG.add(s);wtG.userData.iscrew.push(s);
+ });
+ wtG.userData.inner=[];
+ wtG.userData.lidHome={x:0,y:0,z:-.29};
+})()}catch(e){console.error('wt3d',e)}
+/* наушники: кейс на столе */
+(function(){
+ try{
+  const caseMat=Phy(0xf5f5f7,.15,.2,1,{envMapIntensity:1.6,clearcoatRoughness:.05});
+  const lidMat=Phy(0xffffff,.12,.15,1,{envMapIntensity:1.7,clearcoatRoughness:.04});
+  const body=new THREE.Mesh(ext(rr(3.6,2.4,.95),.6,.08),caseMat);
+  hpG.add(body);hpG.userData.caseMat=caseMat;
+  const lid=new THREE.Mesh(ext(rr(3.4,2.2,.9),.25,.05),lidMat);
+  lid.position.set(0,0,.42);lid.userData.id='accLid';
+  hpG.add(lid);hpG.userData.lid=lid;hpG.userData.lidPivot=null;hpG.userData.lidMat=lidMat;
+  const hinge=new THREE.Mesh(new BX(2.8,.14,.14),Mt(0x8899aa,.5,.3));
+  hinge.position.set(0,1.15,.32);hpG.add(hinge);
+  /* 4 винта сверху */
+  hpG.userData.screws=[];
+  [[-1.3,.75],[1.3,.75],[-1.3,-.75],[1.3,-.75]].forEach(function(p){
+   const s=new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,.08,16),Mt(0xdde2ea,1,.2));
+   s.rotation.x=Math.PI/2;s.position.set(p[0],p[1],.62);s.userData.id='accScrew';
+   hpG.add(s);hpG.userData.screws.push(s);
+  });
+  hpG.userData.parts=[];
+  /* 0 Динамик L */
+  const budM=Mt(0x1a1e28,.6,.25);
+  const budLG=new THREE.Group();budLG.userData.part=0;
+  budLG.add((()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.4,16,12),budM);m.position.set(-.8,.1,.55);return m})());
+  budLG.add((()=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.11,.13,.36,12),budM);m.position.set(-.8,-.28,.55);return m})());
+  budLG.visible=false;hpG.add(budLG);hpG.userData.parts[0]=budLG;
+  /* 1 Динамик R */
+  const budRG=new THREE.Group();budRG.userData.part=1;
+  budRG.add((()=>{const m=new THREE.Mesh(new THREE.SphereGeometry(.4,16,12),budM);m.position.set(.8,.1,.55);return m})());
+  budRG.add((()=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(.11,.13,.36,12),budM);m.position.set(.8,-.28,.55);return m})());
+  budRG.visible=false;hpG.add(budRG);hpG.userData.parts[1]=budRG;
+  /* 2 BT */
+  const btG=new THREE.Group();btG.userData.part=2;
+  const chip=new THREE.Mesh(new BX(1.0,.4,.06),Mt(0x1f7a45,.25,.4));chip.position.set(0,.4,.48);
+  btG.add(chip);btG.visible=false;hpG.add(btG);hpG.userData.parts[2]=btG;hpG.userData.chip=chip;
+  /* 3 Контакт */
+  const chG=new THREE.Group();chG.userData.part=3;
+  [[-.8,.1],[.8,.1],[-.8,-.1],[.8,-.1]].forEach(function(p){
+   const pin=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.1,10),Mt(0xffd54f,1,.2));
+   pin.position.set(p[0],p[1],.5);chG.add(pin);
+  });
+  chG.visible=false;hpG.add(chG);hpG.userData.parts[3]=chG;
+  /* 4 АКБ */
+  const batG=new THREE.Group();batG.userData.part=4;
+  const bat=new THREE.Mesh(new BX(1.6,.45,.1),Mt(0xc8cdd6,.2,.5));bat.position.set(0,-.55,.48);
+  batG.add(bat);batG.visible=false;hpG.add(batG);hpG.userData.parts[4]=batG;hpG.userData.bat=bat;
+  /* внутренние винты */
+  hpG.userData.iscrew=[];
+  [[-.5,.25],[.5,.25],[-.5,-.25],[.5,-.25]].forEach(function(p){
+   const s=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,.06,12),Mt(0xd0d5dc,1,.25));
+   s.rotation.x=Math.PI/2;s.position.set(p[0],p[1],.52);s.visible=false;s.userData.id='accScrew';
+   hpG.add(s);hpG.userData.iscrew.push(s);
+  });
+  hpG.userData.buds=[];
+  hpG.userData.lidHome={x:0,y:0,z:.42};
+  console.log('hp3d ok',hpG.children.length);
+ }catch(e){console.error('hp3d fail',e)}
+})();
+
+/* связь с игровой логикой 4.0 */
+let cOff=false,fCur=false,flick=false,accLidOpen=false;
+function applyDeviceColors(){
+ const m=S.cl&&S.cl.m||'';
+ if(C&&C.mat){const c=colPhone(m);C.mat.color.setHex(typeof c==='number'?c:0x2a6df4);C.mat.needsUpdate=true}
+ if(wtG.userData.bodyMat){wtG.userData.bodyMat.color.setHex(colWatch(m));wtG.userData.bodyMat.needsUpdate=true}
+ if(wtG.userData.bandMat){wtG.userData.bandMat.color.setHex(colBand(m));wtG.userData.bandMat.needsUpdate=true}
+ if(hpG.userData.caseMat){hpG.userData.caseMat.color.setHex(colHP(m));hpG.userData.caseMat.needsUpdate=true}
+ if(hpG.userData.lidMat){hpG.userData.lidMat.color.setHex(colHPLid(m));hpG.userData.lidMat.needsUpdate=true}
+}
+window.showDev3d=function showDev3d(){
+ const t=S.cl&&S.cl.t,acc=t==='headphones'||t==='watch',hp=t==='headphones';
+ ph.visible=!acc;
+ accRoot.visible=!!acc;
+ wtG.visible=!!(acc&&!hp);
+ hpG.visible=!!(acc&&hp);
+ applyDeviceColors();
+ if(acc){
+  accRoot.visible=true;ph.visible=false;
+  piv.position.set(0,.6,0);piv.rotation.set(0,0,0);
+  if(hp){
+   hpG.visible=true;wtG.visible=false;
+   hpG.position.set(0,0,0);hpG.scale.set(1.3,1.3,1.3);
+   accRoot.rotation.set(0,0,0);
+  }else{
+   wtG.visible=true;hpG.visible=false;
+   wtG.position.set(0,0,0);wtG.scale.set(1.2,1.2,1.2);
+   accRoot.rotation.set(0,0,Math.PI);
+  }
+  try{cm.position.set(0,10,8);ctl.target.set(0,0,0);ctl.update()}catch(e){}
+ }
+}
+let accCl=null;
+function resetAccView(){
+ const hp=S.cl.t==='headphones';accCl=S.cl;accLidOpen=false;front=false;fCur=false;
+ [wtG,hpG].forEach(g=>{
+  const h=g.userData.lidHome||{x:0,y:0,z:.42};
+  if(g.userData.lid){g.userData.lid.rotation.set(0,0,0);g.userData.lid.position.set(h.x||0,h.y||0,h.z!=null?h.z:.42);g.userData.lid.scale.set(1,1,1)}
+  if(g.userData.parts)g.userData.parts.forEach(pg=>{if(!pg)return;pg.visible=false;pg.position.set(0,0,0);pg.scale.set(1,1,1);pg.userData.wasOn=true});
+ });
+ showDev3d();
+ anims.length=0;accLidOpen=false;
+}
+function syncAcc3d(){
+ if(!isAcc())return;
+ if(accCl!==S.cl)resetAccView();
+ const hp=S.cl.t==='headphones',g=hp?hpG:wtG,opened=!!accLid;
+ const tighten=accStage===(hp?6:5);
+ const outerGone=accStage>=(hp?2:1)&&!tighten,innerGone=accStage>=(hp?4:3);
+ const needOuter=found&&(accStage===(hp?1:0)||tighten),needInner=found&&accStage===(hp?3:2);
+ /* переворот: front=экран, !front=зад с винтами (rotation.y) */
+ if(front!==fCur){
+  fCur=front;
+  const from=accRoot.rotation.z,to=(front===hp)?Math.PI:0;
+  tw(.9,k=>{const t=ez(k);accRoot.rotation.z=from+(to-from)*t;piv.position.y=.2+Math.sin(k*Math.PI)*1.4});
+ }
+ if(g.userData.scr){const broken=S.cl.k==='Разбит экран'&&!fixed;g.userData.scr.material.emissiveIntensity=broken?.05:.7;g.userData.scr.material.color.setHex(broken?0x222222:0xffffff)}
+ g.userData.screws.forEach((s,i)=>{
+  if(hp){s.visible=false;return}
+  const show=tighten||(!outerGone&&!!accScOn[i]);
+  s.visible=show;
+  if(tighten){s.scale.setScalar(accScOn[i]?1:.55);s.material.opacity=accScOn[i]?1:.45;s.material.transparent=!accScOn[i]}
+  else{s.scale.setScalar(1);s.material.transparent=false;s.material.opacity=1}
+  if(!s.material.emissive)s.material.emissive=new THREE.Color(0x000000);
+  const glow=needOuter&&(tighten?!accScOn[i]:!!accScOn[i]);
+  s.material.emissive.setHex(glow?0xff9a3c:0x000000);
+  s.material.emissiveIntensity=glow?.85:0;
+ });
+ g.userData.iscrew.forEach((s,i)=>{
+  s.visible=opened&&!innerGone&&!!accScOn[i];
+  if(!s.material.emissive)s.material.emissive=new THREE.Color(0x000000);
+  s.material.emissive.setHex(needInner&&accScOn[i]?0xff9a3c:0x000000);
+  s.material.emissiveIntensity=needInner&&accScOn[i]?.85:0;
+ });
+ /* отдельные детали: видимость + анимация снятия */
+ if(g.userData.parts){
+  const bi=accBrokenIdx();
+  g.userData.parts.forEach((pg,i)=>{
+   if(!pg)return;
+   const on=!!accSt[i];
+   const shouldShow=opened||(i===0&&!hp); /* дисплей часов виден всегда спереди */
+   if(on!==pg.userData.wasOn){
+    pg.userData.wasOn=on;
+    if(on){
+     pg.visible=shouldShow;pg.position.set(0,0,0);pg.scale.set(1,1,1);
+     if(opened||i===0)tw(.55,k=>{const t=ez(k);pg.position.z=(hp?.6:-.5)*(1-t);pg.scale.setScalar(.5+.5*t)});
+    }else{
+     tw(.7,k=>{const t=ez(k);pg.position.x=(i%2?1:-1)*1.6*t;pg.position.z=(hp?.8:-.6)*t;pg.scale.setScalar(1-.4*t)},
+      ()=>{if(!pg.userData.wasOn)pg.visible=false});
+    }
+   }else{
+    pg.visible=on&&shouldShow;
+   }
+   /* подсветка сломанной */
+   pg.traverse(o=>{
+    if(o.isMesh&&o.material&&o.material.emissive){
+     if(opened&&i===bi&&!accFixedPart&&on){o.material.emissive.setHex(0xff3333);o.material.emissiveIntensity=.35}
+     else if(opened&&i===bi&&accFixedPart){o.material.emissive.setHex(0x33ff66);o.material.emissiveIntensity=.25}
+     else{o.material.emissiveIntensity=Math.min(o.material.emissiveIntensity||0,.05)}
+    }
+   });
+  });
+ }
+ if(opened!==accLidOpen){
+  accLidOpen=opened;
+  const lid=g.userData.lid,home=g.userData.lidHome;
+  if(hp){
+   const homeZ=(home&&home.z!=null)?home.z:.42;
+   const a=lid.position.z,b=opened?1.6:homeZ;
+   const ay=lid.position.y,by=opened?1.2:0;
+   const ar=lid.rotation.x,br=opened?-1.2:0;
+   tw(.85,k=>{const t=ez(k);lid.position.z=a+(b-a)*t;lid.position.y=ay+(by-ay)*t;lid.rotation.x=ar+(br-ar)*t});
+  }else{
+   const ax=lid.position.x,ay=lid.position.y,az=lid.position.z,ar=lid.rotation.z;
+   tw(.95,k=>{const t=ez(k);
+    lid.position.x=ax+(opened?2.6:0)*t;
+    lid.position.y=ay+(opened?.9:0)*t;
+    lid.position.z=az+(opened?.55:0)*t;
+    lid.rotation.z=ar+(opened?.35:0)*t;
+    lid.scale.setScalar(1-.12*t*(opened?1:0));
+   });
+  }
+ }
+ if(g.userData.lid&&g.userData.lid.material){
+  if(hp&&accStage===0&&accHeat>0){
+   if(!g.userData.lid.material.emissive)g.userData.lid.material.emissive=new THREE.Color(0x000000);
+   g.userData.lid.material.emissive.setHex(0xff6600);
+   g.userData.lid.material.emissiveIntensity=.12*accHeat;
+  }else if(g.userData.lid.material.emissive)g.userData.lid.material.emissiveIntensity=0;
+ }
+}
+window.reset3d=function(){
+ showDev3d();
+ if(isAcc()){resetAccView();syncAcc3d();return}
+ ph.visible=true;accRoot.visible=false;
+ P.forEach(o=>{o.visible=true;o.userData.on=true;o.position.set(0,0,0);o.scale.set(1,1,1);o.rotation.set(0,0,0)});
+ C.position.set(0,0,.19);C.rotation.set(0,0,0);C.scale.set(1,1,1);cOff=false;
+ piv.rotation.set(0,0,0);piv.position.set(0,.35,0);fCur=false;front=false;anims.length=0;
+ try{cm.position.set(0,11,7.5);ctl.target.set(0,0,0);ctl.update()}catch(e){}
+ setLogo(S.cl&&S.cl.m||'Phone');buildCam(S.cl&&S.cl.m||'Samsung S22');
+ try{fit()}catch(e){}
+};
+window.sync3d=function(){
+ showDev3d();
+ if(isAcc()){syncAcc3d();return}
+ ph.visible=true;accRoot.visible=false;
+ const re=isRe(),fi=fIdx(),bad=!re&&!fixed,crack=bad&&fi==0;flick=bad&&fi==5&&!!st[5];
+ C.mat.color.set(S.color||colPhone(S.cl&&S.cl.m));C.mat.emissive.setHex(0xff5a00);C.mat.emissiveIntensity=stg<2?(3-screws)*.2:0;if(C.mat.envMapIntensity!=null)C.mat.envMapIntensity=1.5;
+ scrM.map=scrM.emissiveMap=crack?scrC:scrN;scrM.emissive.setHex(heat?0xff8a40:0xffffff);scrM.emissiveIntensity=.6+heat*.15;scrM.needsUpdate=true;
+ const off=stg==2;if(off!=cOff){cOff=off;
+  const a=C.position.y,b=off?-9.5:0,ax=C.position.x,ar=C.rotation.z;
+  tw(1.15,k=>{const t=ez(k);C.position.y=a+(b-a)*t;C.position.x=ax+(off?1.6:0)*t;C.rotation.z=ar+(off?.25:0)*t;C.scale.setScalar(1-.08*t*(off?1:0))},
+   ()=>{if(!off){C.position.x=0;C.rotation.z=0;C.scale.set(1,1,1)}})
+ }
+ for(let i=0;i<8;i++){const on=!!st[i],o=P[i],f=i==fi&&!re;
+  if(on!=o.userData.on){o.userData.on=on;const dir=i==0&&front?-1:1;
+   const side=(i%2?1:-1)*1.8;
+   if(on){
+    o.visible=true;o.scale.set(1,1,1);o.rotation.z=0;o.position.x=0;
+    tw(.75,k=>{const t=ez(k);o.position.z=dir*2.8*(1-t);o.position.x=side*(1-t);o.scale.setScalar(.55+.45*t);o.rotation.z=(1-t)*side*.4})
+   }else{
+    tw(.85,k=>{const t=ez(k);o.position.z=dir*2.8*t;o.position.x=side*t;o.scale.setScalar(1-.45*t);o.rotation.z=t*side*.5},
+     ()=>{if(!o.userData.on){o.visible=false;o.position.x=0;o.position.z=0;o.scale.set(1,1,1);o.rotation.z=0}})
+   }
+  }
+  G[i].visible=!on;G[i].material.color.setHex(gl[i]?0xffd54f:(f&&!fixed?0xffc107:0xffffff));
+  const hot=on&&(f&&found&&!fixed||okd.has(i));H[i].visible=hot;H[i].material.color.setHex(f&&found&&!fixed?0xff4444:0x44ff88)}
+ sc4.forEach((s,k)=>s.visible=!!scOn[k]);hl.forEach((m,k)=>m.visible=!scOn[k]);ring.visible=!!gl.c;
+ if(front!=fCur){fCur=front;const a=piv.rotation.z,b=front?Math.PI:0;tw(.9,k=>{piv.rotation.z=a+(b-a)*ez(k);piv.position.y=.2+Math.sin(k*Math.PI)*1.6})}
+};
+/* нажатия по 3D-телефону */
+const ray=new THREE.Raycaster(),pt=new THREE.Vector2(),el=rd.domElement;let dn=null;
+el.addEventListener('pointerdown',e=>dn={x:e.clientX,y:e.clientY,t:performance.now()});
+el.addEventListener('pointerup',e=>{if(!dn)return;const ok=Math.hypot(e.clientX-dn.x,e.clientY-dn.y)<8&&performance.now()-dn.t<500;dn=null;if(ok)tap(e)});
+const rg=$('rg');let rs=null;
+function hideRing(){rg.style.display='none';rs=null}
+function startRing(k,mesh,onDone,dir){
+ const v=new THREE.Vector3();mesh.getWorldPosition(v);v.project(cm);
+ const x=(v.x+1)/2*host.clientWidth,y=(1-v.y)/2*host.clientHeight;
+ const d=dir!=null?dir:(fixed?1:-1);
+ rg.innerHTML='<svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="48" class="rb"/><circle id="rp" cx="60" cy="60" r="48" class="rp" transform="rotate(-90 60 60)"/></svg><small>'+(d<0?'Крутите против часовой':'Крутите по часовой')+'</small>';
+ rg.style.display='block';rg.style.left=(x-60)+'px';rg.style.top=(y-60)+'px';
+ rs={k,dir:d,acc:0,last:null,cx:x,cy:y,drag:false,mesh,onDone}
+}
+function startPhoneRing(k){
+ const er=screwErr(k);if(er){toast(er);return}
+ startRing(k,sc4[k],()=>screwK(k),fixed?1:-1)
+}
+function startAccRing(mesh,idx,list){
+ if(tool!=='driver')return toast('Выберите Отвёртку 🪛');
+ if(!found)return toast('Сначала найдите поломку Тестером 🔍');
+ const hp=S.cl.t==='headphones';
+ const outerStage=accStage===(hp?1:0),innerStage=accStage===(hp?3:2),tighten=accStage===(hp?6:5);
+ if(!outerStage&&!innerStage&&!tighten)return toast('Сейчас винты не нужно крутить');
+ if(tighten){
+  if(accScOn[idx])return toast('Этот винт уже закручен');
+  startRing(idx,mesh,()=>{
+   accScOn[idx]=1;mesh.scale.setScalar(1);mesh.material.transparent=false;mesh.material.opacity=1;
+   accScrews=accScOn.reduce((a,b)=>a+b,0);sfx.screw();
+   if(accScrews>=4){accStage++;toast('Все винты закручены ✅');}
+   else toast('Винт закручен · '+accScrews+'/4');
+   rRepair()
+  },1);
+  return
+ }
+ if(!accScOn[idx])return toast('Этот винт уже выкручен');
+ startRing(idx,mesh,()=>{
+  accScOn[idx]=0;mesh.visible=false;accScrews=accScOn.reduce((a,b)=>a+b,0);sfx.screw();
+  if(accScrews===0){accStage++;if(outerStage){accScOn=[1,1,1,1];accScrews=4}toast(outerStage?'Все винты выкручены — снимите крышку Рукой ✋':'Внутренние винты сняты')}
+  else toast('Винт выкручен · осталось '+accScrews);
+  rRepair()
+ },-1)
+}
+const ang=e=>{const r=host.getBoundingClientRect();return Math.atan2(e.clientY-r.top-rs.cy,e.clientX-r.left-rs.cx)};
+rg.addEventListener('pointerdown',e=>{if(!rs)return;e.preventDefault();rg.setPointerCapture(e.pointerId);rs.drag=true;rs.last=ang(e)});
+rg.addEventListener('pointermove',e=>{
+ if(!rs||!rs.drag)return;const a=ang(e);let d=a-rs.last;if(d>Math.PI)d-=2*Math.PI;if(d<-Math.PI)d+=2*Math.PI;rs.last=a;
+ rs.acc=Math.max(0,rs.acc+d*rs.dir);const p=Math.min(1,rs.acc/(Math.PI*2.4));
+ const rp=$('rp');if(rp)rp.style.strokeDashoffset=301.6*(1-p);
+ if(rs.mesh)rs.mesh.rotation.z=-rs.acc*rs.dir;
+ if(p>=1){const done=rs.onDone,mesh=rs.mesh;hideRing();if(mesh)mesh.rotation.z=0;if(done)done()}
+});
+const endR=()=>{if(rs&&rs.drag){rs.drag=false;rs.acc=0;rs.last=null;const rp=$('rp');if(rp)rp.style.strokeDashoffset=301.6;if(rs.mesh)rs.mesh.rotation.z=0}};
+rg.addEventListener('pointerup',endR);rg.addEventListener('pointercancel',endR);
+function tap(e){
+ hideRing();const r=el.getBoundingClientRect();pt.set((e.clientX-r.left)/r.width*2-1,-((e.clientY-r.top)/r.height)*2+1);ray.setFromCamera(pt,cm);
+ if(isAcc()){
+  const hp=S.cl.t==='headphones',g=hp?hpG:wtG;
+  if(!found){
+   if(tool==='tester'){probeAcc();return}
+   return toast('Выберите Тестер 🔍');
+  }
+  /* Наушники: любой тап рукой = действие */
+  if(hp){
+   if(tool!=='hand'&&tool!=='suction'&&tool!=='tester')return toast('Рука ✋ — откройте кейс / достаньте деталь');
+   accAction();return
+  }
+  if(tool==='fen'){return toast('Фен только для телефона')}
+  if(tool==='driver'){
+   const tighten=accStage===(hp?6:5);
+   const outerStage=accStage===(hp?1:0),innerStage=accStage===(hp?3:2);
+   if(!outerStage&&!innerStage&&!tighten)return toast('Сейчас отвёртка не нужна');
+   /* найти видимый винт */
+   const list=outerStage||tighten?(g.userData.screws||[]):(g.userData.iscrew||[]);
+   let idx=-1;
+   if(tighten){idx=list.findIndex((s,i)=>!accScOn[i])}
+   else{idx=list.findIndex((s,i)=>accScOn[i]&&s.visible)}
+   if(idx<0)idx=list.findIndex(s=>s.visible);
+   if(idx<0){/* без луча — просто крутим счётчик */
+    if(tighten){
+     for(let i=0;i<4;i++)if(!accScOn[i]){accScOn[i]=1;break}
+     accScrews=accScOn.reduce((a,b)=>a+b,0);sfx.screw();
+     if(accScrews>=4){accStage++;toast('Все винты закручены ✅')}
+     else toast('Винт закручен · '+accScrews+'/4');
+     rRepair();return
+    }
+    if(accScrews>0){accScrews--;sfx.screw();
+     if(accScrews===0){accStage++;if(outerStage){accScOn=[1,1,1,1];accScrews=4}toast(outerStage?'Винты сняты — снимите крышку ✋':'Внутренние винты сняты')}
+     else toast('Винт · осталось '+accScrews);
+     rRepair();return
+    }
+    return toast('Винты уже сняты');
+   }
+   startAccRing(list[idx],idx,list);return
+  }
+  if(tool==='hand'||tool==='suction'){
+   accAction();return
+  }
+  const need=needAccTool();
+  const names={tester:'Тестер 🔍',fen:'Фен 🔥',driver:'Отвёртка 🪛',hand:'Рука ✋'};
+  if(need)toast('Нужен: '+(names[need]||need));
+  else if(accStage>=(hp?7:6))accAction();
+  return
+ }
+ const objs=front?[fp,frame]:[frame,...(stg<2?[C]:[]),...P.map((o,i)=>st[i]?o:X[i])];
+ const h=ray.intersectObjects(objs,true)[0];if(!h)return;
+ if(front){fvTap();return}
+ let o=h.object;while(o&&o.userData.id===undefined)o=o.parent;
+ if(tool=='driver'&&o&&o.userData.id==1){ph.updateMatrixWorld();const lp=ph.worldToLocal(h.point.clone());let kk=-1,bd=.8;sc4.forEach((s,k)=>{const d=Math.hypot(lp.x-s.position.x,lp.y-s.position.y);if(d<bd){bd=d;kk=k}});if(kk>=0){startPhoneRing(kk);return}}
+ if(o&&o.userData.id=='c')bkTap();else if(o)partTap(o.userData.id);
+ phGlue()
+}
+const clk=new THREE.Clock();let tm=0;
+(function loop(){
+ requestAnimationFrame(loop);const dt=Math.min(clk.getDelta(),.05);tm+=dt;
+ for(let i=anims.length-1;i>=0;i--){const a=anims[i];a.t+=dt/a.d;const k=Math.min(a.t,1);a.f(k);if(k>=1){anims.splice(i,1);if(a.done)a.done()}}
+ if(flick)scrM.emissiveIntensity=Math.random()<.5?.1:.9;
+ H.forEach(h=>{if(h.visible)h.material.opacity=.2+.12*Math.sin(tm*6)});
+ if(host.clientWidth&&host.clientHeight&&(rd.domElement.width===0||Math.abs(rd.domElement.width-host.clientWidth)>2))fit();
+ if(host.offsetParent===null)return;ctl.update();rd.render(sc,cm)
+})();
+setTimeout(fit,100);setTimeout(fit,500);setTimeout(()=>{try{if(window.sync3d)sync3d()}catch(e){}},200);
+})();
+
+
+if(!window.sync3d){window.reset3d=window.sync3d=window.showDev3d=function(){};console.error('3D init failed')}
+/* ===== HELP + TUTORIAL ===== */
+
+const HELP_PARTS=[
+ {n:'Экран',desc:'AMOLED-дисплей',x:50,y:28,bx:18,by:8,bw:64,bh:55,col:'#4a90e2'},
+ {n:'Плата',desc:'материнская плата + SoC',x:50,y:52,bx:22,by:38,bw:56,bh:28,col:'#2f8f4e'},
+ {n:'Батарея',desc:'Li-Po 4500 mAh',x:50,y:78,bx:22,by:68,bw:56,bh:22,col:'#9aa2b0'},
+ {n:'Камера',desc:'основной модуль',x:28,y:18,bx:18,by:12,bw:18,bh:14,col:'#6a5cff'},
+ {n:'Фронталка',desc:'селфи-камера',x:72,y:16,bx:62,by:10,bw:14,bh:12,col:'#3fb0ff'},
+ {n:'Шлейф',desc:'соединяет платы и модули',x:50,y:62,bx:30,by:58,bw:40,bh:8,col:'#e08a2a'},
+ {n:'Динамик',desc:'нижний разговорный',x:50,y:92,bx:35,by:88,bw:30,bh:8,col:'#c45'},
+ {n:'Вибромотор',desc:'вибрация при звонках',x:82,y:72,bx:72,by:68,bw:18,bh:10,col:'#a67'}
+];
+function rHelp(){
+ const sch=$('helpSchema');
+ let svg='<svg class="hschema" viewBox="0 0 340 520" xmlns="http://www.w3.org/2000/svg">';
+ svg+='<defs><marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#ff9a3c"/></marker></defs>';
+ // phone body
+ svg+='<rect x="95" y="40" width="150" height="300" rx="22" fill="#121a30" stroke="#555" stroke-width="4"/>';
+ svg+='<rect x="105" y="52" width="130" height="250" rx="8" fill="#0a1020"/>';
+ // part boxes inside phone
+ HELP_PARTS.forEach(p=>{
+  const px=95+p.bx*1.5,py=40+p.by*3,pw=p.bw*1.5,ph=p.bh*3;
+  svg+='<rect x="'+px+'" y="'+py+'" width="'+pw+'" height="'+ph+'" rx="4" fill="'+p.col+'" fill-opacity=".35" stroke="'+p.col+'" stroke-width="1.5"/>';
+ });
+ // arrows + labels outside
+ const labels=[
+  {n:'📷 Камера',sub:'основная',tx:20,ty:70,ax:130,ay:85},
+  {n:'🤳 Фронталка',sub:'селфи',tx:260,ty:55,ax:210,ay:75},
+  {n:'📱 Экран',sub:'AMOLED 120Hz',tx:20,ty:160,ax:130,ay:140},
+  {n:'🟩 Плата',sub:'SoC + RAM',tx:260,ty:180,ax:210,ay:170},
+  {n:'🔗 Шлейф',sub:'ленточный кабель',tx:20,ty:240,ax:140,ay:230},
+  {n:'🔋 Батарея',sub:'4500 mAh',tx:260,ty:280,ax:210,ay:270},
+  {n:'📳 Вибромотор',sub:'вибрация',tx:260,ty:320,ax:220,ay:300},
+  {n:'🔊 Динамик',sub:'звук',tx:20,ty:360,ax:150,ay:330}
+ ];
+ labels.forEach(l=>{
+  svg+='<line x1="'+l.tx+'" y1="'+l.ty+'" x2="'+l.ax+'" y2="'+l.ay+'" stroke="#ff9a3c" stroke-width="2" marker-end="url(#arr)"/>';
+  svg+='<text x="'+l.tx+'" y="'+(l.ty-6)+'" fill="#ffd54f" font-size="12" font-weight="700" '+(l.tx>170?'text-anchor="start"':'text-anchor="start')+'>'+l.n+'</text>';
+  svg+='<text x="'+l.tx+'" y="'+(l.ty+8)+'" fill="#9ab" font-size="9">'+l.sub+'</text>';
+ });
+ svg+='<text x="170" y="370" text-anchor="middle" fill="#6a7a9a" font-size="11">Вид сзади · крышка снята</text>';
+ svg+='</svg>';
+ sch.innerHTML=svg;
+ $('helpTools').innerHTML='<b>🛠 Инструменты</b><div style="margin-top:6px;font-size:13px;line-height:1.5">'
+  +'✋ <b>Рука</b> — снимать и ставить детали, крышки<br>'
+  +'🪛 <b>Отвёртка</b> (бита T6) — винты платы / корпуса часов и наушников<br>'
+  +'🪄 <b>Присоска</b> — снять крышку телефона / экран / крышку часов<br>'
+  +'🔍 <b>Тестер</b> — найти неисправную деталь<br>'
+  +'🔥 <b>Фен</b> — нагреть клей (крышка телефона, экран, кейс наушников)<br>'
+  +'🧴 <b>Клей</b> — перед установкой АКБ, экрана и крышки телефона</div>';
+ $('helpTips').innerHTML='<b>📋 Порядок разборки телефона</b><ol style="margin:6px 0 0 16px;font-size:13px;line-height:1.45">'
+  +'<li>Феном нагреть клей крышки → присоской снять крышку</li>'
+  +'<li>Тестером найти неисправную деталь (0 Ом = поломка)</li>'
+  +'<li>Шлейф → динамик / вибромотор → батарея и камеры → плата (винты T6) → экран</li>'
+  +'<li>Купить новую деталь во вкладке «Запчасти»</li>'
+  +'<li>Нанести клей (АКБ/экран) → поставить деталь → закрутить винты → клей на рамку → крышка</li>'
+  +'<li>Включить телефон и проверить</li></ol>'
+  +'<p style="margin-top:8px;font-size:12px;color:#89a">💡 Экран можно снять с лицевой стороны (кнопка 🔄): фен → присоска.</p>'
+  +'<p style="margin-top:8px;font-size:12px;color:#89a">🔗 У каждой детали свой шлейф к плате — при снятии детали шлейф уходит вместе с ней.</p>'
+  +'<div style="margin-top:14px;padding-top:10px;border-top:1px solid #2a3a5a"><b>⌚ Ремонт часов</b><ol style="margin:6px 0 0 16px;font-size:13px;line-height:1.45">'
+  +'<li>Тестер 🔍 — найти поломку</li>'
+  +'<li>Отвёртка 🪛 — 4 винта сзади → снять крышку → 4 внутренних винта</li>'
+  +'<li>Внутри отдельные детали: <b>Дисплей, Плата, Батарея, Шагомер, Пульсометр</b></li>'
+  +'<li>Снять сломанную (подсвечена красным) → купить/установить новую из лотка</li>'
+  +'<li>Закрыть крышку → закрутить 4 винта по часовой</li></ol></div>'
+  +'<div style="margin-top:14px;padding-top:10px;border-top:1px solid #2a3a5a"><b>🎧 Ремонт наушников</b><ol style="margin:6px 0 0 16px;font-size:13px;line-height:1.45">'
+  +'<li>Тестер 🔍 — найти поломку</li>'
+  +'<li>Рука ✋ — <b>нажать на кейс</b>, он откроется (без отвёртки)</li>'
+  +'<li>Нажать на сломанную деталь — она уйдёт в <b>лоток</b></li>'
+  +'<li>Поставить новую из лотка → закрыть кейс → готово</li></ol></div>';
+ ui();
+}
+
+const TUT_STEPS=[
+ {t:'Добро пожаловать в Phone Master!',p:'Ты — мастер по ремонту телефонов. Клиенты приносят сломанные аппараты, ты находишь поломку, меняешь деталь и получаешь деньги.'},
+ {t:'Шаг 1. Найти поломку',p:'Выбери инструмент «Тестер» 🔍 и касайся деталей внутри телефона. Если тестер пишет «0 Ом, замыкание» — это и есть неисправная деталь.'},
+ {t:'Шаг 2. Разобрать',p:'Сначала феном нагрей клей на крышке, потом присоской сними её. Дальше снимай детали по порядку: шлейф → динамик/вибро → батарея и камеры → плата (выкрути 4 винта битой T6) → экран.'},
+ {t:'Шаг 3. Купить запчасть',p:'Перейди во вкладку «Запчасти» 🛒 и купи нужную деталь (Б/У, Аналог или Оригинал). Чем лучше качество — тем больше заплатят за ремонт.'},
+ {t:'Шаг 4. Собрать',p:'Нанеси клей на место АКБ или экрана, перетащи новую деталь из лотка на телефон. Закрути винты платы, нанеси клей на рамку и поставь крышку.'},
+ {t:'Шаг 5. Проверить',p:'Нажми «Включить» 📱 и протестируй: звук, вибрацию, камеры, экран. Если всё ок — ремонт завершён, деньги твои!'},
+ {t:'Готово!',p:'Открой вкладку «Помощь» ❓ в любой момент — там схема всех деталей со стрелками и названиями. Удачного ремонта! 🔧'}
+];
+let tutStep=0;
+function startTutorial(){
+ tutStep=0;showTut();
+}
+function showTut(){
+ const s=TUT_STEPS[tutStep],ov=document.createElement('div');ov.className='tut';ov.id='tutOv';
+ ov.innerHTML='<div class="box"><h3>'+s.t+'</h3><p>'+s.p+'</p><div class="nav">'
+  +(tutStep>0?'<button class="btn" style="background:#456" onclick="tutStep--;showTut()">← Назад</button>':'')
+  +'<button class="btn g" onclick="'+(tutStep<TUT_STEPS.length-1?'tutStep++;showTut()':'closeTut()')+'">'+(tutStep<TUT_STEPS.length-1?'Далее →':'Понятно ✔')+'</button></div></div>';
+ const old=$('tutOv');if(old)old.remove();document.body.appendChild(ov);sfx.click();
+}
+function closeTut(){const o=$('tutOv');if(o)o.remove();sfx.ok();if(!S.tutDone){S.tutDone=1;save()}}
+
+/* ===== START ===== */
+daily();if(!S.cl)S.cl={t:'phone',m:MODELS[R(MODELS.length)],k:KINDS[R(KINDS.length)]};
+buildPhone();go(0);ui();iconify(document.body);setTimeout(function(){try{if(window.reset3d)reset3d();if(window.sync3d)sync3d()}catch(e){console.error(e)}},300);
+if(!S.tutDone)setTimeout(startTutorial,800);
+</script></body></html>
